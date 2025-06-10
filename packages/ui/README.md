@@ -1,15 +1,17 @@
-# ui
+# @leshi/ui
 
-To install dependencies:
+Reusable React Native component library powered by `react-native-unistyles`.
 
-```bash
-bun install
+## Installation
+
+This package isn't published to npm. Copy the components you need from this directory into your project.
+
+## Usage
+
+Import the components you copied and wrap your app with the `Unistyles` provider if needed.
+
+```tsx
+import { Button, Text } from './path-to-copied-components';
 ```
 
-To run:
-
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.1.33. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+Refer to the individual component documentation in `packages/ui/ui/*.md` for prop details.
