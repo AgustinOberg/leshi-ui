@@ -6,6 +6,7 @@ import {
   Badge,
   Button,
   Checkbox,
+  Surface,
   Input,
   Progress,
   Radio,
@@ -130,6 +131,13 @@ const ProfileScreen: React.FC = () => {
           />
           <Button loading text="Guardar cambios" variant="ghost" fullWidth />
         </View>
+
+        <Surface variant="elevated" align="center" style={{ minHeight: 120 }}>
+          <Text size="lg" weight="semibold">
+            Ejemplo de Surface
+          </Text>
+          <Button text="Aceptar" variant="primary" />
+        </Surface>
       </ScrollView>
     </SafeAreaView>
   );
