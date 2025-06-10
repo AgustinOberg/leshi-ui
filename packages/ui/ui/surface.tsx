@@ -1,5 +1,10 @@
-import React from "react";
-import { View, type ViewProps, type ViewStyle, type StyleProp } from "react-native";
+import React, { forwardRef, memo } from "react";
+import {
+  View,
+  type ViewProps,
+  type ViewStyle,
+  type StyleProp,
+} from "react-native";
 import { StyleSheet, type UnistylesVariants } from "react-native-unistyles";
 
 export type SurfaceVariant = "flat" | "outline" | "elevated";
@@ -14,21 +19,21 @@ export interface SurfaceProps
   children?: React.ReactNode;
 }
 
-export const Surface: React.FC<SurfaceProps> = ({
-  variant = "flat",
-  align = "start",
-  style,
-  children,
-  ...rest
-}) => {
-  styles.useVariants({ variant, align });
+export const Surface = memo(
+  forwardRef<React.ComponentRef<typeof View>, SurfaceProps>(
+    ({ variant = "flat", align = "start", style, children, ...rest }, ref) => {
+      styles.useVariants({ variant, align });
 
-  return (
-    <View {...rest} style={[styles.surface, style]}>
-      {children}
-    </View>
-  );
-};
+      return (
+        <View ref={ref} {...rest} style={[styles.surface, style]}>
+          {children}
+        </View>
+      );
+    },
+  ),
+);
+
+Surface.displayName = "Surface";
 
 const styles = StyleSheet.create((theme) => ({
   surface: {

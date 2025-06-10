@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, forwardRef } from "react";
 import {
   Text as RNText,
   type TextProps as RNTextProps,
@@ -7,7 +7,6 @@ import {
 } from "react-native";
 import { StyleSheet, type UnistylesVariants } from "react-native-unistyles";
 
-/* ────────── variantes públicas ────────── */
 export type TextSize = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
 export type TextWeight = "regular" | "medium" | "semibold" | "bold";
 export type TextTone =
@@ -30,9 +29,7 @@ export interface TypoProps
   italic?: boolean;
 }
 
-/* ────────── mapa estático de tamaños ────────── */
 
-/* ────────── StyleSheet ────────── */
 const textStyles = StyleSheet.create((theme) => ({
   base: {
     variants: {
@@ -90,31 +87,36 @@ const textStyles = StyleSheet.create((theme) => ({
 }));
 type VariantKeys = UnistylesVariants<typeof textStyles>;
 
-/* ────────── Componente ────────── */
-export const Text = memo<TypoProps>(
-  ({
-    size = "md",
-    weight = "regular",
-    tone = "primary",
-    align = "auto",
-    style,
-    children,
-    ...rest
-  }) => {
-    // sólo pasamos 'tone' si existe para no romper tipado
-    const variantObj = { size, weight } as VariantKeys;
-    if (tone) variantObj.tone = tone;
-    textStyles.useVariants(variantObj);
+export const Text = memo(
+  forwardRef<React.ComponentRef<typeof RNText>, TypoProps>(
+    (
+      {
+        size = "md",
+        weight = "regular",
+        tone = "primary",
+        align = "auto",
+        style,
+        children,
+        ...rest
+      },
+      ref,
+    ) => {
+      // only set tone when defined to satisfy typing
+      const variantObj = { size, weight } as VariantKeys;
+      if (tone) variantObj.tone = tone;
+      textStyles.useVariants(variantObj);
 
-    return (
-      <RNText
-        {...rest}
-        allowFontScaling={false}
-        style={[textStyles.base, { textAlign: align }, style]}
-      >
-        {children}
-      </RNText>
-    );
-  }
+      return (
+        <RNText
+          ref={ref}
+          {...rest}
+          allowFontScaling={false}
+          style={[textStyles.base, { textAlign: align }, style]}
+        >
+          {children}
+        </RNText>
+      );
+    },
+  ),
 );
 Text.displayName = "Text";

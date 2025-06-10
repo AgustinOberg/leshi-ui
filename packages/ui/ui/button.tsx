@@ -1,5 +1,4 @@
-// TODO: improve loading
-import React, { memo, useCallback } from "react";
+import React, { memo, forwardRef, useCallback } from "react";
 import {
   Pressable,
   View,
@@ -44,81 +43,87 @@ export interface ButtonProps
   fullWidth?: boolean;
 }
 
-export const Button = memo<ButtonProps>(
-  ({
-    text,
-    icon,
-    loading = false,
-    disabled = false,
-    variant = "primary",
-    size = "md",
-    fullWidth = false,
-    accessibilityLabel,
-    ...rest
-  }) => {
-    const { theme } = useUnistyles();
+export const Button = memo(
+  forwardRef<React.ComponentRef<typeof Pressable>, ButtonProps>(
+    (
+      {
+        text,
+        icon,
+        loading = false,
+        disabled = false,
+        variant = "primary",
+        size = "md",
+        fullWidth = false,
+        accessibilityLabel,
+        ...rest
+      },
+      ref,
+    ) => {
+      const { theme } = useUnistyles();
 
-    styles.useVariants({
-      variant,
-      size,
-      disabled: disabled || loading,
-    });
+      styles.useVariants({
+        variant,
+        size,
+        disabled: disabled || loading,
+      });
 
-    const handlePress = useCallback(() => {
-      if (!disabled && !loading) rest.onPress?.({} as any);
-    }, [disabled, loading, rest]);
+      const handlePress = useCallback(() => {
+        if (!disabled && !loading) rest.onPress?.({} as any);
+      }, [disabled, loading, rest]);
 
-    const textToneMap: Record<ButtonVariant, TextTone> = {
-      primary: "secondary",
-      secondary: "primary",
-      destructive: "accent",
-      outline: "primary",
-      ghost: "primary",
-      link: "link",
-    };
+      const textToneMap: Record<ButtonVariant, TextTone> = {
+        primary: "secondary",
+        secondary: "primary",
+        destructive: "accent",
+        outline: "primary",
+        ghost: "primary",
+        link: "link",
+      };
 
-    const spinnerColorMap: Record<ButtonVariant, string> = {
-      primary: theme.colors.primary,
-      secondary: theme.colors.secondary,
-      destructive: theme.colors.destructive,
-      outline: theme.colors.foreground,
-      ghost: theme.colors.foreground,
-      link: theme.colors.foreground,
-    };
+      const spinnerColorMap: Record<ButtonVariant, string> = {
+        primary: theme.colors.primary,
+        secondary: theme.colors.secondary,
+        destructive: theme.colors.destructive,
+        outline: theme.colors.foreground,
+        ghost: theme.colors.foreground,
+        link: theme.colors.foreground,
+      };
 
-    return (
-      <Pressable
-        {...rest}
-        onPress={handlePress}
-        accessibilityRole="button"
-        accessibilityLabel={accessibilityLabel ?? text}
-        accessibilityState={{ disabled: disabled || loading, busy: loading }}
-        disabled={disabled || loading}
-        style={({ pressed }) => [
-          styles.button,
-          fullWidth && styles.fullWidth,
-          pressed && !disabled && !loading && styles.pressed,
-        ]}
-      >
-        {loading && (
-          <View style={styles.loadingOverlay}>
-            <ActivityIndicator color={spinnerColorMap[variant]} />
+      return (
+        <Pressable
+          ref={ref}
+          {...rest}
+          onPress={handlePress}
+          accessibilityRole="button"
+          accessibilityLabel={accessibilityLabel ?? text}
+          accessibilityState={{ disabled: disabled || loading, busy: loading }}
+          disabled={disabled || loading}
+          style={({ pressed }) => [
+            styles.button,
+            fullWidth && styles.fullWidth,
+            pressed && !disabled && !loading && styles.pressed,
+          ]}
+        >
+          {loading && (
+            <View style={styles.loadingOverlay}>
+              <ActivityIndicator color={spinnerColorMap[variant]} />
+            </View>
+          )}
+
+          <View style={[styles.content, styles[`gap_${size}`]]}>
+            {icon}
+            <Text
+              size={SIZE_CFG[size].textSize}
+              tone={disabled ? "muted" : textToneMap[variant]}
+              weight="semibold"
+            >
+              {text}
+            </Text>
           </View>
-        )}
-
-        <View style={[styles.content, styles[`gap_${size}`]]}>
-          {icon}
-          <Text
-            size={SIZE_CFG[size].textSize}
-            tone={disabled ? "muted" : textToneMap[variant]}
-            weight="semibold"
-          >
-            {text}
-          </Text>
-        </View>
-      </Pressable>
-    );
-  }
+        </Pressable>
+      );
+    },
+  ),
 );
 
 Button.displayName = "Button";

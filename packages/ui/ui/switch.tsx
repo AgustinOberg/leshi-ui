@@ -1,5 +1,4 @@
-// packages/ui/ui/switch.tsx
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, forwardRef, memo } from "react";
 import { Pressable, View, type PressableProps } from "react-native";
 import Animated, {
   useSharedValue,
@@ -12,24 +11,20 @@ import {
   useUnistyles,
 } from "react-native-unistyles";
 
-/* ───────────────────────────────
- *  Variantes & tipos públicos
- * ────────────────────────────── */
 export type SwitchSize = "sm" | "md" | "lg";
 
 export type SwitchProps = {
-  /** Estado actual */
+  /** Current state */
   value: boolean;
-  /** Callback al alternar */
+  /** Callback when toggled */
   onValueChange: (val: boolean) => void;
-  /** Tamaño predefinido */
+  /** Predefined size */
   size?: SwitchSize;
-  /** Deshabilitado */
+  /** Disabled state */
   disabled?: boolean;
 } & Omit<PressableProps, "style" | "onPress"> &
   UnistylesVariants<typeof styles>;
 
-/* Tabla de tamaños centralizada (no se recrea por render) */
 const SIZE_CONFIG: Record<
   SwitchSize,
   { trackW: number; trackH: number; pad: number; thumb: number }
@@ -39,97 +34,90 @@ const SIZE_CONFIG: Record<
   lg: { trackW: 56, trackH: 32, pad: 4, thumb: 24 },
 };
 
-/* ───────────────────────────────
- *  Componente
- * ────────────────────────────── */
-export const Switch: React.FC<SwitchProps> = ({
-  value,
-  onValueChange,
-  size = "md",
-  disabled = false,
-  accessibilityLabel,
-  ...rest
-}) => {
-  /* Theme (para colores runtime) */
-  const { theme } = useUnistyles();
+export const Switch = memo(
+  forwardRef<React.ComponentRef<typeof Pressable>, SwitchProps>(
+    (
+      {
+        value,
+        onValueChange,
+        size = "md",
+        disabled = false,
+        accessibilityLabel,
+        ...rest
+      },
+      ref,
+    ) => {
+      const { theme } = useUnistyles();
 
-  /* Vinculamos variantes */
-  styles.useVariants({ size, disabled });
+      styles.useVariants({ size, disabled });
 
-  /* SharedValue para animar el thumb */
-  const progress = useSharedValue(value ? 1 : 0);
+      const progress = useSharedValue(value ? 1 : 0);
 
-  /* Actualizamos animación cuando cambia `value` */
-  React.useEffect(() => {
-    progress.value = withSpring(value ? 1 : 0, {
-      damping: 20,
-      stiffness: 200,
-    });
-  }, [value]);
+      React.useEffect(() => {
+        progress.value = withSpring(value ? 1 : 0, {
+          damping: 20,
+          stiffness: 200,
+        });
+      }, [value]);
 
-  /* Datos de tamaño */
-  const cfg = SIZE_CONFIG[size];
-  const maxTranslate = cfg.trackW - cfg.thumb - cfg.pad * 2;
+      const cfg = SIZE_CONFIG[size];
+      const maxTranslate = cfg.trackW - cfg.thumb - cfg.pad * 2;
 
-  /* Estilo animado del thumb */
-  const thumbAnimated = useAnimatedStyle(() => ({
-    transform: [{ translateX: progress.value * maxTranslate }],
-  }));
+      const thumbAnimated = useAnimatedStyle(() => ({
+        transform: [{ translateX: progress.value * maxTranslate }],
+      }));
 
-  /* Estilo del track (memo para evitar flatten continuo) */
-  const trackBgStyle = useMemo(
-    () =>
-      StyleSheet.flatten([
-        styles.trackBg,
-        value && !disabled && { backgroundColor: theme.colors.primary },
-        disabled && { backgroundColor: theme.colors.disabledBg },
-      ]),
-    [value, disabled, theme]
-  );
+      const trackBgStyle = useMemo(
+        () =>
+          StyleSheet.flatten([
+            styles.trackBg,
+            value && !disabled && { backgroundColor: theme.colors.primary },
+            disabled && { backgroundColor: theme.colors.disabledBg },
+          ]),
+        [value, disabled, theme],
+      );
 
-  /* Color del thumb */
-  const thumbColor =
-    disabled && !value
-      ? theme.colors.disabledText // gris claro
-      : theme.colors.background; // normal
+      const thumbColor =
+        disabled && !value
+          ? theme.colors.disabledText // light gray
+          : theme.colors.background; // default
 
-  /* onPress callback memorizado */
-  const handlePress = useCallback(() => {
-    if (!disabled) onValueChange(!value);
-  }, [disabled, onValueChange, value]);
+      const handlePress = useCallback(() => {
+        if (!disabled) onValueChange(!value);
+      }, [disabled, onValueChange, value]);
 
-  return (
-    <Pressable
-      {...rest}
-      accessibilityRole="switch"
-      accessibilityLabel={accessibilityLabel}
-      /* Para lectores de pantalla: 0 = off, 1 = on */
-      accessibilityValue={{ min: 0, max: 1, now: value ? 1 : 0 }}
-      accessibilityState={{ disabled, checked: value }}
-      disabled={disabled}
-      /* Track wrapper */
-      style={[styles.track]}
-      onPress={handlePress}
-    >
-      <View style={trackBgStyle} />
-      <Animated.View
-        style={[
-          styles.thumb,
-          {
-            width: cfg.thumb,
-            height: cfg.thumb,
-            backgroundColor: thumbColor,
-          },
-          thumbAnimated,
-        ]}
-      />
-    </Pressable>
-  );
-};
+      return (
+        <Pressable
+          ref={ref}
+          {...rest}
+          accessibilityRole="switch"
+          accessibilityLabel={accessibilityLabel}
+          accessibilityValue={{ min: 0, max: 1, now: value ? 1 : 0 }}
+          accessibilityState={{ disabled, checked: value }}
+          disabled={disabled}
+          style={[styles.track]}
+          onPress={handlePress}
+        >
+          <View style={trackBgStyle} />
+          <Animated.View
+            style={[
+              styles.thumb,
+              {
+                width: cfg.thumb,
+                height: cfg.thumb,
+                backgroundColor: thumbColor,
+              },
+              thumbAnimated,
+            ]}
+          />
+        </Pressable>
+      );
+    },
+  ),
+);
 
-/* ───────────────────────────────
- *  StyleSheet (variants inside)
- * ────────────────────────────── */
+Switch.displayName = "Switch";
+
 const styles = StyleSheet.create((theme) => ({
   track: {
     justifyContent: "center",
@@ -153,6 +141,5 @@ const styles = StyleSheet.create((theme) => ({
 
   thumb: {
     borderRadius: theme.radii.full,
-    /* El color se sobre-escribe dinámicamente */
   },
 }));
