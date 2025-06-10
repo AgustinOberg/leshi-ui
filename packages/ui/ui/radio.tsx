@@ -27,7 +27,6 @@ import {
 } from "react-native-unistyles";
 import { Text } from "./text";
 
-/* ───────────────── context ───────────────── */
 interface RadioCtx {
   value: string | null;
   onChange: (v: string) => void;
@@ -41,7 +40,6 @@ const useRadioCtx = () => {
   return ctx;
 };
 
-/* tamaños */
 export type RadioSize = "sm" | "md" | "lg";
 const SIZE_CFG: Record<RadioSize, { box: number; dot: number }> = {
   sm: { box: 16, dot: 8 },
@@ -49,7 +47,6 @@ const SIZE_CFG: Record<RadioSize, { box: number; dot: number }> = {
   lg: { box: 24, dot: 12 },
 };
 
-/* ───────────────── RadioGroup ───────────────── */
 export interface RadioGroupProps {
   value: string | null;
   onValueChange: (val: string) => void;
@@ -62,7 +59,7 @@ export interface RadioGroupProps {
 }
 
 export const RadioGroup = memo(
-  forwardRef<React.ElementRef<typeof View>, RadioGroupProps>(
+  forwardRef<React.ComponentRef<typeof View>, RadioGroupProps>(
     (
       {
         value,
@@ -101,7 +98,6 @@ export const RadioGroup = memo(
 
 RadioGroup.displayName = "RadioGroup";
 
-/* ───────────────── RadioGroupItem ───────────────── */
 export interface RadioGroupItemProps
   extends Omit<PressableProps, "style" | "children" | "onPress" | "disabled">,
     UnistylesVariants<typeof itemStyles> {
@@ -110,11 +106,11 @@ export interface RadioGroupItemProps
   labelStyle?: StyleProp<TextStyle>;
   wrapperStyle?: StyleProp<ViewStyle>;
   indicator?: ReactNode;
-  disabled?: boolean; // nuestra prop (boolean)
+  disabled?: boolean
 }
 
 export const RadioGroupItem = memo(
-  forwardRef<React.ElementRef<typeof Pressable>, RadioGroupItemProps>(
+  forwardRef<React.ComponentRef<typeof Pressable>, RadioGroupItemProps>(
     (
       {
         value,
@@ -138,10 +134,8 @@ export const RadioGroupItem = memo(
       const isChecked = selected === value;
       const isDisabled = groupDisabled || propDisabled;
 
-      /* notificar variante */
       itemStyles.useVariants({ disabled: isDisabled });
 
-      /* animación */
       const prog = useSharedValue(isChecked ? 1 : 0);
       React.useEffect(() => {
         prog.value = withTiming(isChecked ? 1 : 0, {
@@ -206,7 +200,6 @@ export const RadioGroupItem = memo(
 
 RadioGroupItem.displayName = "RadioGroupItem";
 
-/* ───────────────── StyleSheet ───────────────── */
 const itemStyles = StyleSheet.create((theme) => ({
   center: { justifyContent: "center", alignItems: "center" },
 
@@ -228,5 +221,4 @@ const itemStyles = StyleSheet.create((theme) => ({
   pressed: { opacity: 0.75 },
 }));
 
-/* export conveniencia */
 export const Radio = { Group: RadioGroup, Item: RadioGroupItem };

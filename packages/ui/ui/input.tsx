@@ -1,4 +1,3 @@
-// ui/input.tsx
 import React, { useCallback, useMemo, useState, forwardRef, memo } from "react";
 import {
   View,
@@ -15,7 +14,6 @@ import {
   type UnistylesVariants,
 } from "react-native-unistyles";
 
-/* ───────────────– variantes públicas ───────────────– */
 export type InputSize = "sm" | "md" | "lg";
 export type InputTextSize = "xs" | "sm" | "md" | "lg" | "xl";
 
@@ -31,16 +29,14 @@ export type InputProps = {
 } & Omit<TextInputProps, "style"> &
   UnistylesVariants<typeof styles>;
 
-/* Tabla de tamaños centralizada (fácil de ajustar) */
 const SIZE_CFG: Record<InputSize, { height: number; padX: number }> = {
   sm: { height: 40, padX: 12 },
   md: { height: 48, padX: 14 },
   lg: { height: 56, padX: 16 },
 };
 
-/* ───────────────── componente ───────────────── */
 export const Input = memo(
-  forwardRef<React.ElementRef<typeof TextInput>, InputProps>(
+  forwardRef<React.ComponentRef<typeof TextInput>, InputProps>(
     (
       {
         label,
@@ -63,11 +59,9 @@ export const Input = memo(
       const [focused, setFocused] = useState(false);
       const { theme } = useUnistyles();
 
-      /* Solo avisamos de variantes que realmente existen en el StyleSheet */
-      styles.useVariants({ textSize, disabled });
+            styles.useVariants({ textSize, disabled });
 
-      /* Handlers memorizados */
-      const handleFocus = useCallback(
+            const handleFocus = useCallback(
         (e: any) => {
           setFocused(true);
           onFocus?.(e);
@@ -82,8 +76,7 @@ export const Input = memo(
         [onBlur],
       );
 
-      /* Borde / fondo dinámico */
-      const dynamicBorder = useMemo(() => {
+            const dynamicBorder = useMemo(() => {
         if (disabled) return { backgroundColor: theme.colors.disabledBg };
         if (error) return { borderColor: theme.colors.destructive };
         if (focused) return { borderColor: theme.colors.ring };
@@ -131,7 +124,6 @@ export const Input = memo(
 
 Input.displayName = "Input";
 
-/* ───────────────── StyleSheet ───────────────── */
 const styles = StyleSheet.create((theme) => ({
   container: { gap: theme.gap(0.5), width: "100%" },
 

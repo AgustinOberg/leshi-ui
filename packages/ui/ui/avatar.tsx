@@ -42,14 +42,13 @@ const useAvatar = () => {
   return v;
 };
 
-/*──── Root ────*/
 export interface AvatarProps {
   size?: AvatarSize;
   style?: StyleProp<ViewStyle>;
   children: ReactNode;
 }
 const Avatar = memo(
-  forwardRef<React.ElementRef<typeof View>, AvatarProps>(
+  forwardRef<React.ComponentRef<typeof View>, AvatarProps>(
     ({ size = "md", style, children }, ref) => {
       const dim = PX[size];
       const [hasImage, setHasImage] = useState(false);
@@ -89,7 +88,7 @@ export interface AvatarImageProps extends Omit<ImageProps, "style" | "source"> {
   alt?: string;
 }
 const AvatarImage = memo(
-  forwardRef<React.ElementRef<typeof Image>, AvatarImageProps>(
+  forwardRef<React.ComponentRef<typeof Image>, AvatarImageProps>(
     ({ source, style, alt = "avatar", onLoad, onError, ...rest }, ref) => {
       const { dim, setHasImage } = useAvatar();
       const radius = dim / 2;
@@ -133,7 +132,7 @@ export interface AvatarFallbackProps {
   style?: StyleProp<ViewStyle>;
 }
 const AvatarFallback = memo(
-  forwardRef<React.ElementRef<typeof View>, AvatarFallbackProps>(
+  forwardRef<React.ComponentRef<typeof View>, AvatarFallbackProps>(
     ({ children, style }, ref) => {
       const { dim, hasImage } = useAvatar();
       const { theme } = useUnistyles();

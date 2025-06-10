@@ -37,7 +37,7 @@ const TONE_MAP: Record<BadgeVariant, TextTone> = {
 };
 
 export const Badge = memo(
-  forwardRef<React.ElementRef<typeof View>, BadgeProps>(
+  forwardRef<React.ComponentRef<typeof View>, BadgeProps>(
     (
       {
         children,
@@ -74,7 +74,6 @@ export const Badge = memo(
 
 Badge.displayName = "Badge";
 
-/* StyleSheet */
 const styles = StyleSheet.create((theme) => ({
   container: {
     flexDirection: "row",

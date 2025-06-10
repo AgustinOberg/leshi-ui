@@ -1,4 +1,3 @@
-// packages/ui/ui/switch.tsx
 import React, { useCallback, useMemo, forwardRef, memo } from "react";
 import { Pressable, View, type PressableProps } from "react-native";
 import Animated, {
@@ -12,24 +11,20 @@ import {
   useUnistyles,
 } from "react-native-unistyles";
 
-/* ───────────────────────────────
- *  Variantes & tipos públicos
- * ────────────────────────────── */
 export type SwitchSize = "sm" | "md" | "lg";
 
 export type SwitchProps = {
-  /** Estado actual */
+  /** Current state */
   value: boolean;
-  /** Callback al alternar */
+  /** Callback when toggled */
   onValueChange: (val: boolean) => void;
-  /** Tamaño predefinido */
+  /** Predefined size */
   size?: SwitchSize;
-  /** Deshabilitado */
+  /** Disabled state */
   disabled?: boolean;
 } & Omit<PressableProps, "style" | "onPress"> &
   UnistylesVariants<typeof styles>;
 
-/* Tabla de tamaños centralizada (no se recrea por render) */
 const SIZE_CONFIG: Record<
   SwitchSize,
   { trackW: number; trackH: number; pad: number; thumb: number }
@@ -39,11 +34,8 @@ const SIZE_CONFIG: Record<
   lg: { trackW: 56, trackH: 32, pad: 4, thumb: 24 },
 };
 
-/* ───────────────────────────────
- *  Componente
- * ────────────────────────────── */
 export const Switch = memo(
-  forwardRef<React.ElementRef<typeof Pressable>, SwitchProps>(
+  forwardRef<React.ComponentRef<typeof Pressable>, SwitchProps>(
     (
       {
         value,
@@ -55,16 +47,12 @@ export const Switch = memo(
       },
       ref,
     ) => {
-      /* Theme (para colores runtime) */
       const { theme } = useUnistyles();
 
-      /* Vinculamos variantes */
       styles.useVariants({ size, disabled });
 
-      /* SharedValue para animar el thumb */
       const progress = useSharedValue(value ? 1 : 0);
 
-      /* Actualizamos animación cuando cambia `value` */
       React.useEffect(() => {
         progress.value = withSpring(value ? 1 : 0, {
           damping: 20,
@@ -72,16 +60,13 @@ export const Switch = memo(
         });
       }, [value]);
 
-      /* Datos de tamaño */
       const cfg = SIZE_CONFIG[size];
       const maxTranslate = cfg.trackW - cfg.thumb - cfg.pad * 2;
 
-      /* Estilo animado del thumb */
       const thumbAnimated = useAnimatedStyle(() => ({
         transform: [{ translateX: progress.value * maxTranslate }],
       }));
 
-      /* Estilo del track (memo para evitar flatten continuo) */
       const trackBgStyle = useMemo(
         () =>
           StyleSheet.flatten([
@@ -92,13 +77,11 @@ export const Switch = memo(
         [value, disabled, theme],
       );
 
-      /* Color del thumb */
       const thumbColor =
         disabled && !value
-          ? theme.colors.disabledText // gris claro
-          : theme.colors.background; // normal
+          ? theme.colors.disabledText // light gray
+          : theme.colors.background; // default
 
-      /* onPress callback memorizado */
       const handlePress = useCallback(() => {
         if (!disabled) onValueChange(!value);
       }, [disabled, onValueChange, value]);
@@ -109,11 +92,9 @@ export const Switch = memo(
           {...rest}
           accessibilityRole="switch"
           accessibilityLabel={accessibilityLabel}
-          /* Para lectores de pantalla: 0 = off, 1 = on */
           accessibilityValue={{ min: 0, max: 1, now: value ? 1 : 0 }}
           accessibilityState={{ disabled, checked: value }}
           disabled={disabled}
-          /* Track wrapper */
           style={[styles.track]}
           onPress={handlePress}
         >
@@ -137,9 +118,6 @@ export const Switch = memo(
 
 Switch.displayName = "Switch";
 
-/* ───────────────────────────────
- *  StyleSheet (variants inside)
- * ────────────────────────────── */
 const styles = StyleSheet.create((theme) => ({
   track: {
     justifyContent: "center",
@@ -163,6 +141,5 @@ const styles = StyleSheet.create((theme) => ({
 
   thumb: {
     borderRadius: theme.radii.full,
-    /* El color se sobre-escribe dinámicamente */
   },
 }));

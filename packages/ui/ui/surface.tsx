@@ -20,7 +20,7 @@ export interface SurfaceProps
 }
 
 export const Surface = memo(
-  forwardRef<React.ElementRef<typeof View>, SurfaceProps>(
+  forwardRef<React.ComponentRef<typeof View>, SurfaceProps>(
     ({ variant = "flat", align = "start", style, children, ...rest }, ref) => {
       styles.useVariants({ variant, align });
 

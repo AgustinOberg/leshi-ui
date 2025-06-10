@@ -1,4 +1,3 @@
-// ui/progress.tsx
 import React, { useCallback, forwardRef, memo } from "react";
 import {
   View,
@@ -29,28 +28,25 @@ export interface ProgressProps extends UnistylesVariants<typeof styles> {
 const SIZE_CFG: Record<ProgressSize, number> = { sm: 4, md: 6, lg: 8 };
 
 export const Progress = memo(
-  forwardRef<React.ElementRef<typeof View>, ProgressProps>(
+  forwardRef<React.ComponentRef<typeof View>, ProgressProps>(
     ({ value = 0, size = "md", trackStyle }, ref) => {
       styles.useVariants({ size });
 
       const progress = useSharedValue(Math.max(0, Math.min(value, 100)));
       const trackW = useSharedValue(0);
 
-      /* animamos cuando cambia value */
-      React.useEffect(() => {
+            React.useEffect(() => {
         progress.value = withTiming(Math.max(0, Math.min(value, 100)), {
           duration: 300,
           easing: Easing.out(Easing.quad),
         });
       }, [value]);
 
-      /* guardamos ancho real */
-      const onLayoutTrack = useCallback((e: LayoutChangeEvent) => {
+            const onLayoutTrack = useCallback((e: LayoutChangeEvent) => {
         trackW.value = e.nativeEvent.layout.width;
       }, []);
 
-      /* estilo animado: width proporcional */
-      const indicatorAnim = useAnimatedStyle(() => ({
+            const indicatorAnim = useAnimatedStyle(() => ({
         width: (trackW.value * progress.value) / 100,
       }));
 
@@ -71,7 +67,6 @@ export const Progress = memo(
 
 Progress.displayName = "Progress";
 
-/* ───── StyleSheet ───── */
 const styles = StyleSheet.create((theme) => ({
   track: {
     width: "100%",

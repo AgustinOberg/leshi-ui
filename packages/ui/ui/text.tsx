@@ -7,7 +7,6 @@ import {
 } from "react-native";
 import { StyleSheet, type UnistylesVariants } from "react-native-unistyles";
 
-/* ────────── variantes públicas ────────── */
 export type TextSize = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
 export type TextWeight = "regular" | "medium" | "semibold" | "bold";
 export type TextTone =
@@ -30,9 +29,7 @@ export interface TypoProps
   italic?: boolean;
 }
 
-/* ────────── mapa estático de tamaños ────────── */
 
-/* ────────── StyleSheet ────────── */
 const textStyles = StyleSheet.create((theme) => ({
   base: {
     variants: {
@@ -90,9 +87,8 @@ const textStyles = StyleSheet.create((theme) => ({
 }));
 type VariantKeys = UnistylesVariants<typeof textStyles>;
 
-/* ────────── Componente ────────── */
 export const Text = memo(
-  forwardRef<React.ElementRef<typeof RNText>, TypoProps>(
+  forwardRef<React.ComponentRef<typeof RNText>, TypoProps>(
     (
       {
         size = "md",
@@ -105,7 +101,7 @@ export const Text = memo(
       },
       ref,
     ) => {
-      // sólo pasamos 'tone' si existe para no romper tipado
+      // only set tone when defined to satisfy typing
       const variantObj = { size, weight } as VariantKeys;
       if (tone) variantObj.tone = tone;
       textStyles.useVariants(variantObj);

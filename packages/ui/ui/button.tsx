@@ -1,4 +1,3 @@
-// TODO: improve loading
 import React, { memo, forwardRef, useCallback } from "react";
 import {
   Pressable,
@@ -45,7 +44,7 @@ export interface ButtonProps
 }
 
 export const Button = memo(
-  forwardRef<React.ElementRef<typeof Pressable>, ButtonProps>(
+  forwardRef<React.ComponentRef<typeof Pressable>, ButtonProps>(
     (
       {
         text,

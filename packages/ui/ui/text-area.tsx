@@ -1,4 +1,3 @@
-// ui/textarea.tsx
 import React, { useCallback, useMemo, useState, forwardRef, memo } from "react";
 import {
   TextInput,
@@ -15,7 +14,6 @@ import {
   type UnistylesVariants,
 } from "react-native-unistyles";
 
-/* ───────────────– variantes públicas ───────────────– */
 export type TextareaSize = "sm" | "md" | "lg";
 export type TextareaTextSize = "xs" | "sm" | "md" | "lg" | "xl";
 
@@ -31,14 +29,12 @@ export type TextareaProps = {
 } & Omit<TextInputProps, "style" | "multiline"> &
   UnistylesVariants<typeof styles>;
 
-/* Tabla de tamaños (alto mínimo + padding lateral)  */
 const SIZE_CFG: Record<TextareaSize, { minH: number; padX: number }> = {
   sm: { minH: 72, padX: 12 },
   md: { minH: 96, padX: 14 },
   lg: { minH: 120, padX: 16 },
 };
 
-/* ───────────────── componente ───────────────── */
 export const Textarea = memo(
   forwardRef<React.ElementRef<typeof TextInput>, TextareaProps>(
     (
@@ -63,10 +59,7 @@ export const Textarea = memo(
       const { theme } = useUnistyles();
       const [focused, setFocused] = useState(false);
 
-      /* Sólo las variantes presentes en StyleSheet */
       styles.useVariants({ textSize, disabled });
-
-      /* Handlers memorizados */
       const handleFocus = useCallback(
         (e: any) => {
           setFocused(true);
@@ -80,9 +73,7 @@ export const Textarea = memo(
           onBlur?.(e);
         },
         [onBlur],
-      );
-
-      /* Color/estado de borde y fondo */
+);
       const dynamicBorder = useMemo(() => {
         if (disabled) return { backgroundColor: theme.colors.disabledBg };
         if (error) return { borderColor: theme.colors.destructive };
@@ -133,7 +124,6 @@ export const Textarea = memo(
 
 Textarea.displayName = "Textarea";
 
-/* ───────────────── StyleSheet ───────────────── */
 const styles = StyleSheet.create((theme) => ({
   container: { gap: theme.gap(0.5), width: "100%" },
 

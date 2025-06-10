@@ -47,7 +47,7 @@ const SIZE_CFG: Record<
 };
 
 export const Checkbox = memo(
-  forwardRef<React.ElementRef<typeof Pressable>, CheckboxProps>(
+  forwardRef<React.ComponentRef<typeof Pressable>, CheckboxProps>(
     (
       {
         checked = false,
