@@ -11,6 +11,7 @@ export type TextSize = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
 export type TextWeight = "regular" | "medium" | "semibold" | "bold";
 export type TextTone =
   | "muted"
+  | "foreground"
   | "primary"
   | "secondary"
   | "destructive"
@@ -76,6 +77,7 @@ const textStyles = StyleSheet.create((theme) => ({
 
       tone: {
         muted: { color: theme.colors.onMuted },
+        foreground: { color: theme.colors.foreground },
         primary: { color: theme.colors.primary },
         secondary: { color: theme.colors.secondary },
         destructive: { color: theme.colors.destructive },
@@ -93,7 +95,7 @@ export const Text = memo(
       {
         size = "md",
         weight = "regular",
-        tone = "primary",
+        tone = "foreground",
         align = "auto",
         style,
         children,

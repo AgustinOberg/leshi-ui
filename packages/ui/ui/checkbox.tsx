@@ -106,7 +106,7 @@ export const Checkbox = memo(
         typeof label === "string" ? (
           <Text
             size={SIZE_CFG[size].textSize}
-            tone="primary"
+            tone="foreground"
             weight="regular"
             align="left"
           >
