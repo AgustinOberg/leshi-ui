@@ -1,5 +1,5 @@
 // ui/input.tsx
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState, forwardRef, memo } from "react";
 import {
   View,
   Text,
@@ -39,85 +39,97 @@ const SIZE_CFG: Record<InputSize, { height: number; padX: number }> = {
 };
 
 /* ───────────────── componente ───────────────── */
-export const Input: React.FC<InputProps> = ({
-  label,
-  error,
-  size = "md",
-  textSize = "md",
-  leftIcon,
-  rightIcon,
-  inputStyle,
-  wrapperStyle,
-  editable = true,
-  placeholderTextColor,
-  onFocus,
-  onBlur,
-  ...rest
-}) => {
-  const disabled = !editable;
-  const [focused, setFocused] = useState(false);
-  const { theme } = useUnistyles();
+export const Input = memo(
+  forwardRef<React.ElementRef<typeof TextInput>, InputProps>(
+    (
+      {
+        label,
+        error,
+        size = "md",
+        textSize = "md",
+        leftIcon,
+        rightIcon,
+        inputStyle,
+        wrapperStyle,
+        editable = true,
+        placeholderTextColor,
+        onFocus,
+        onBlur,
+        ...rest
+      },
+      ref,
+    ) => {
+      const disabled = !editable;
+      const [focused, setFocused] = useState(false);
+      const { theme } = useUnistyles();
 
-  /* Solo avisamos de variantes que realmente existen en el StyleSheet */
-  styles.useVariants({ textSize, disabled });
+      /* Solo avisamos de variantes que realmente existen en el StyleSheet */
+      styles.useVariants({ textSize, disabled });
 
-  /* Handlers memorizados */
-  const handleFocus = useCallback(
-    (e: any) => {
-      setFocused(true);
-      onFocus?.(e);
+      /* Handlers memorizados */
+      const handleFocus = useCallback(
+        (e: any) => {
+          setFocused(true);
+          onFocus?.(e);
+        },
+        [onFocus],
+      );
+      const handleBlur = useCallback(
+        (e: any) => {
+          setFocused(false);
+          onBlur?.(e);
+        },
+        [onBlur],
+      );
+
+      /* Borde / fondo dinámico */
+      const dynamicBorder = useMemo(() => {
+        if (disabled) return { backgroundColor: theme.colors.disabledBg };
+        if (error) return { borderColor: theme.colors.destructive };
+        if (focused) return { borderColor: theme.colors.ring };
+        return null;
+      }, [disabled, error, focused, theme]);
+
+      return (
+        <View style={[styles.container, wrapperStyle]}>
+          {label && <Text style={styles.label}>{label}</Text>}
+
+          <View
+            style={[
+              styles.inputWrapper,
+              {
+                height: SIZE_CFG[size].height,
+                paddingHorizontal: SIZE_CFG[size].padX,
+              },
+              dynamicBorder,
+            ]}
+            accessibilityState={{ disabled }}
+          >
+            {leftIcon && <View style={styles.icon}>{leftIcon}</View>}
+
+            <TextInput
+              ref={ref}
+              {...rest}
+              editable={!disabled}
+              placeholderTextColor={
+                placeholderTextColor ?? theme.colors.onMuted
+              }
+              style={[styles.input, inputStyle]}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+            />
+
+            {rightIcon && <View style={styles.icon}>{rightIcon}</View>}
+          </View>
+
+          {error && <Text style={styles.error}>{error}</Text>}
+        </View>
+      );
     },
-    [onFocus]
-  );
-  const handleBlur = useCallback(
-    (e: any) => {
-      setFocused(false);
-      onBlur?.(e);
-    },
-    [onBlur]
-  );
+  ),
+);
 
-  /* Borde / fondo dinámico */
-  const dynamicBorder = useMemo(() => {
-    if (disabled) return { backgroundColor: theme.colors.disabledBg };
-    if (error) return { borderColor: theme.colors.destructive };
-    if (focused) return { borderColor: theme.colors.ring };
-    return null;
-  }, [disabled, error, focused, theme]);
-
-  return (
-    <View style={[styles.container, wrapperStyle]}>
-      {label && <Text style={styles.label}>{label}</Text>}
-
-      <View
-        style={[
-          styles.inputWrapper,
-          {
-            height: SIZE_CFG[size].height,
-            paddingHorizontal: SIZE_CFG[size].padX,
-          },
-          dynamicBorder,
-        ]}
-        accessibilityState={{ disabled }}
-      >
-        {leftIcon && <View style={styles.icon}>{leftIcon}</View>}
-
-        <TextInput
-          {...rest}
-          editable={!disabled}
-          placeholderTextColor={placeholderTextColor ?? theme.colors.onMuted}
-          style={[styles.input, inputStyle]}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-        />
-
-        {rightIcon && <View style={styles.icon}>{rightIcon}</View>}
-      </View>
-
-      {error && <Text style={styles.error}>{error}</Text>}
-    </View>
-  );
-};
+Input.displayName = "Input";
 
 /* ───────────────── StyleSheet ───────────────── */
 const styles = StyleSheet.create((theme) => ({

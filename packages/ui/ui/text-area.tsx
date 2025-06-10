@@ -1,5 +1,5 @@
 // ui/textarea.tsx
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState, forwardRef, memo } from "react";
 import {
   TextInput,
   View,
@@ -39,87 +39,99 @@ const SIZE_CFG: Record<TextareaSize, { minH: number; padX: number }> = {
 };
 
 /* ───────────────── componente ───────────────── */
-export const Textarea: React.FC<TextareaProps> = ({
-  label,
-  error,
-  size = "md",
-  textSize = "md",
-  leftIcon,
-  rightIcon,
-  inputStyle,
-  wrapperStyle,
-  editable = true,
-  placeholderTextColor,
-  onFocus,
-  onBlur,
-  ...rest
-}) => {
-  const disabled = !editable;
-  const { theme } = useUnistyles();
-  const [focused, setFocused] = useState(false);
+export const Textarea = memo(
+  forwardRef<React.ElementRef<typeof TextInput>, TextareaProps>(
+    (
+      {
+        label,
+        error,
+        size = "md",
+        textSize = "md",
+        leftIcon,
+        rightIcon,
+        inputStyle,
+        wrapperStyle,
+        editable = true,
+        placeholderTextColor,
+        onFocus,
+        onBlur,
+        ...rest
+      },
+      ref,
+    ) => {
+      const disabled = !editable;
+      const { theme } = useUnistyles();
+      const [focused, setFocused] = useState(false);
 
-  /* Sólo las variantes presentes en StyleSheet */
-  styles.useVariants({ textSize, disabled });
+      /* Sólo las variantes presentes en StyleSheet */
+      styles.useVariants({ textSize, disabled });
 
-  /* Handlers memorizados */
-  const handleFocus = useCallback(
-    (e: any) => {
-      setFocused(true);
-      onFocus?.(e);
+      /* Handlers memorizados */
+      const handleFocus = useCallback(
+        (e: any) => {
+          setFocused(true);
+          onFocus?.(e);
+        },
+        [onFocus],
+      );
+      const handleBlur = useCallback(
+        (e: any) => {
+          setFocused(false);
+          onBlur?.(e);
+        },
+        [onBlur],
+      );
+
+      /* Color/estado de borde y fondo */
+      const dynamicBorder = useMemo(() => {
+        if (disabled) return { backgroundColor: theme.colors.disabledBg };
+        if (error) return { borderColor: theme.colors.destructive };
+        if (focused) return { borderColor: theme.colors.ring };
+        return null;
+      }, [disabled, error, focused, theme]);
+
+      return (
+        <View style={[styles.container, wrapperStyle]}>
+          {label && <Text style={styles.label}>{label}</Text>}
+
+          <View
+            style={[
+              styles.inputWrapper,
+              {
+                minHeight: SIZE_CFG[size].minH,
+                paddingHorizontal: SIZE_CFG[size].padX,
+              },
+              dynamicBorder,
+            ]}
+            accessibilityState={{ disabled }}
+          >
+            {leftIcon && <View style={styles.icon}>{leftIcon}</View>}
+
+            <TextInput
+              ref={ref}
+              {...rest}
+              multiline
+              editable={!disabled}
+              style={[styles.input, inputStyle]}
+              placeholderTextColor={
+                placeholderTextColor ?? theme.colors.onMuted
+              }
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              textAlignVertical="top"
+            />
+
+            {rightIcon && <View style={styles.icon}>{rightIcon}</View>}
+          </View>
+
+          {error && <Text style={styles.error}>{error}</Text>}
+        </View>
+      );
     },
-    [onFocus]
-  );
-  const handleBlur = useCallback(
-    (e: any) => {
-      setFocused(false);
-      onBlur?.(e);
-    },
-    [onBlur]
-  );
+  ),
+);
 
-  /* Color/estado de borde y fondo */
-  const dynamicBorder = useMemo(() => {
-    if (disabled) return { backgroundColor: theme.colors.disabledBg };
-    if (error) return { borderColor: theme.colors.destructive };
-    if (focused) return { borderColor: theme.colors.ring };
-    return null;
-  }, [disabled, error, focused, theme]);
-
-  return (
-    <View style={[styles.container, wrapperStyle]}>
-      {label && <Text style={styles.label}>{label}</Text>}
-
-      <View
-        style={[
-          styles.inputWrapper,
-          {
-            minHeight: SIZE_CFG[size].minH,
-            paddingHorizontal: SIZE_CFG[size].padX,
-          },
-          dynamicBorder,
-        ]}
-        accessibilityState={{ disabled }}
-      >
-        {leftIcon && <View style={styles.icon}>{leftIcon}</View>}
-
-        <TextInput
-          {...rest}
-          multiline
-          editable={!disabled}
-          style={[styles.input, inputStyle]}
-          placeholderTextColor={placeholderTextColor ?? theme.colors.onMuted}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          textAlignVertical="top"
-        />
-
-        {rightIcon && <View style={styles.icon}>{rightIcon}</View>}
-      </View>
-
-      {error && <Text style={styles.error}>{error}</Text>}
-    </View>
-  );
-};
+Textarea.displayName = "Textarea";
 
 /* ───────────────── StyleSheet ───────────────── */
 const styles = StyleSheet.create((theme) => ({

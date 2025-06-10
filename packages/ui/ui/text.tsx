@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, forwardRef } from "react";
 import {
   Text as RNText,
   type TextProps as RNTextProps,
@@ -91,30 +91,36 @@ const textStyles = StyleSheet.create((theme) => ({
 type VariantKeys = UnistylesVariants<typeof textStyles>;
 
 /* ────────── Componente ────────── */
-export const Text = memo<TypoProps>(
-  ({
-    size = "md",
-    weight = "regular",
-    tone = "primary",
-    align = "auto",
-    style,
-    children,
-    ...rest
-  }) => {
-    // sólo pasamos 'tone' si existe para no romper tipado
-    const variantObj = { size, weight } as VariantKeys;
-    if (tone) variantObj.tone = tone;
-    textStyles.useVariants(variantObj);
+export const Text = memo(
+  forwardRef<React.ElementRef<typeof RNText>, TypoProps>(
+    (
+      {
+        size = "md",
+        weight = "regular",
+        tone = "primary",
+        align = "auto",
+        style,
+        children,
+        ...rest
+      },
+      ref,
+    ) => {
+      // sólo pasamos 'tone' si existe para no romper tipado
+      const variantObj = { size, weight } as VariantKeys;
+      if (tone) variantObj.tone = tone;
+      textStyles.useVariants(variantObj);
 
-    return (
-      <RNText
-        {...rest}
-        allowFontScaling={false}
-        style={[textStyles.base, { textAlign: align }, style]}
-      >
-        {children}
-      </RNText>
-    );
-  }
+      return (
+        <RNText
+          ref={ref}
+          {...rest}
+          allowFontScaling={false}
+          style={[textStyles.base, { textAlign: align }, style]}
+        >
+          {children}
+        </RNText>
+      );
+    },
+  ),
 );
 Text.displayName = "Text";

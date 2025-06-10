@@ -3,6 +3,8 @@ import React, {
   useContext,
   useMemo,
   type ReactNode,
+  memo,
+  forwardRef,
 } from "react";
 import {
   Pressable,
@@ -59,32 +61,45 @@ export interface RadioGroupProps {
   children: ReactNode;
 }
 
-export const RadioGroup: React.FC<RadioGroupProps> = ({
-  value,
-  onValueChange,
-  size = "md",
-  disabled = false,
-  direction = "column",
-  gap,
-  style,
-  children,
-}) => {
-  const { theme } = useUnistyles();
-  const ctxVal = useMemo<RadioCtx>(
-    () => ({ value, onChange: onValueChange, size, disabled }),
-    [value, onValueChange, size, disabled]
-  );
+export const RadioGroup = memo(
+  forwardRef<React.ElementRef<typeof View>, RadioGroupProps>(
+    (
+      {
+        value,
+        onValueChange,
+        size = "md",
+        disabled = false,
+        direction = "column",
+        gap,
+        style,
+        children,
+      },
+      ref,
+    ) => {
+      const { theme } = useUnistyles();
+      const ctxVal = useMemo<RadioCtx>(
+        () => ({ value, onChange: onValueChange, size, disabled }),
+        [value, onValueChange, size, disabled],
+      );
 
-  return (
-    <RadioContext.Provider value={ctxVal}>
-      <View
-        style={[{ flexDirection: direction, gap: gap ?? theme.gap(1) }, style]}
-      >
-        {children}
-      </View>
-    </RadioContext.Provider>
-  );
-};
+      return (
+        <RadioContext.Provider value={ctxVal}>
+          <View
+            ref={ref}
+            style={[
+              { flexDirection: direction, gap: gap ?? theme.gap(1) },
+              style,
+            ]}
+          >
+            {children}
+          </View>
+        </RadioContext.Provider>
+      );
+    },
+  ),
+);
+
+RadioGroup.displayName = "RadioGroup";
 
 /* ───────────────── RadioGroupItem ───────────────── */
 export interface RadioGroupItemProps
@@ -98,88 +113,98 @@ export interface RadioGroupItemProps
   disabled?: boolean; // nuestra prop (boolean)
 }
 
-export const RadioGroupItem: React.FC<RadioGroupItemProps> = ({
-  value,
-  label,
-  labelStyle,
-  wrapperStyle,
-  indicator,
-  disabled: propDisabled = false,
-  ...rest
-}) => {
-  const {
-    size,
-    value: selected,
-    onChange,
-    disabled: groupDisabled,
-  } = useRadioCtx();
-  const { theme } = useUnistyles();
-
-  const isChecked = selected === value;
-  const isDisabled = groupDisabled || propDisabled;
-
-  /* notificar variante */
-  itemStyles.useVariants({ disabled: isDisabled });
-
-  /* animación */
-  const prog = useSharedValue(isChecked ? 1 : 0);
-  React.useEffect(() => {
-    prog.value = withTiming(isChecked ? 1 : 0, {
-      duration: 150,
-      easing: Easing.out(Easing.quad),
-    });
-  }, [isChecked]);
-
-  const dotAnim = useAnimatedStyle(() => ({
-    opacity: prog.value,
-    transform: [{ scale: prog.value }],
-  }));
-
-  const { box, dot } = SIZE_CFG[size];
-
-  const boxStyle: StyleProp<ViewStyle> = [
-    itemStyles.boxBase,
-    {
-      width: box,
-      height: box,
-      borderRadius: box / 2,
-      borderColor: isChecked ? theme.colors.primary : theme.colors.border,
-    },
-  ];
-
-  const dotNode = indicator ?? (
-    <View
-      style={{
-        width: dot,
-        height: dot,
-        borderRadius: dot / 2,
-        backgroundColor: theme.colors.primary,
-      }}
-    />
-  );
-
-  return (
-    <Pressable
-      {...rest}
-      accessibilityRole="radio"
-      accessibilityState={{ disabled: isDisabled, selected: isChecked }}
-      disabled={isDisabled}
-      onPress={() => !isDisabled && onChange(value)}
-      style={({ pressed }) => [
-        itemStyles.wrapper,
+export const RadioGroupItem = memo(
+  forwardRef<React.ElementRef<typeof Pressable>, RadioGroupItemProps>(
+    (
+      {
+        value,
+        label,
+        labelStyle,
         wrapperStyle,
-        pressed && !isDisabled && itemStyles.pressed,
-      ]}
-    >
-      <View style={boxStyle}>
-        <Animated.View style={[dotAnim, itemStyles.center]}>
-          {dotNode}
-        </Animated.View>
-      </View>
-      {label && <Text style={labelStyle}>{label}</Text>}
-    </Pressable>
-  );
-};
+        indicator,
+        disabled: propDisabled = false,
+        ...rest
+      },
+      ref,
+    ) => {
+      const {
+        size,
+        value: selected,
+        onChange,
+        disabled: groupDisabled,
+      } = useRadioCtx();
+      const { theme } = useUnistyles();
+
+      const isChecked = selected === value;
+      const isDisabled = groupDisabled || propDisabled;
+
+      /* notificar variante */
+      itemStyles.useVariants({ disabled: isDisabled });
+
+      /* animación */
+      const prog = useSharedValue(isChecked ? 1 : 0);
+      React.useEffect(() => {
+        prog.value = withTiming(isChecked ? 1 : 0, {
+          duration: 150,
+          easing: Easing.out(Easing.quad),
+        });
+      }, [isChecked]);
+
+      const dotAnim = useAnimatedStyle(() => ({
+        opacity: prog.value,
+        transform: [{ scale: prog.value }],
+      }));
+
+      const { box, dot } = SIZE_CFG[size];
+
+      const boxStyle: StyleProp<ViewStyle> = [
+        itemStyles.boxBase,
+        {
+          width: box,
+          height: box,
+          borderRadius: box / 2,
+          borderColor: isChecked ? theme.colors.primary : theme.colors.border,
+        },
+      ];
+
+      const dotNode = indicator ?? (
+        <View
+          style={{
+            width: dot,
+            height: dot,
+            borderRadius: dot / 2,
+            backgroundColor: theme.colors.primary,
+          }}
+        />
+      );
+
+      return (
+        <Pressable
+          ref={ref}
+          {...rest}
+          accessibilityRole="radio"
+          accessibilityState={{ disabled: isDisabled, selected: isChecked }}
+          disabled={isDisabled}
+          onPress={() => !isDisabled && onChange(value)}
+          style={({ pressed }) => [
+            itemStyles.wrapper,
+            wrapperStyle,
+            pressed && !isDisabled && itemStyles.pressed,
+          ]}
+        >
+          <View style={boxStyle}>
+            <Animated.View style={[dotAnim, itemStyles.center]}>
+              {dotNode}
+            </Animated.View>
+          </View>
+          {label && <Text style={labelStyle}>{label}</Text>}
+        </Pressable>
+      );
+    },
+  ),
+);
+
+RadioGroupItem.displayName = "RadioGroupItem";
 
 /* ───────────────── StyleSheet ───────────────── */
 const itemStyles = StyleSheet.create((theme) => ({

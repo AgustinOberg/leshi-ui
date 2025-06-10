@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, forwardRef, memo } from "react";
 import {
   Pressable,
   View,
@@ -46,100 +46,110 @@ const SIZE_CFG: Record<
   lg: { box: 24, icon: 14, textSize: "sm" },
 };
 
-export const Checkbox: React.FC<CheckboxProps> = ({
-  checked = false,
-  onCheckedChange,
-  size = "md",
-  disabled = false,
-  label,
-  labelPos = "right",
-  indicator,
-  wrapperStyle,
-  ...rest
-}) => {
-  const { theme } = useUnistyles();
-
-  styles.useVariants({ disabled });
-
-  const progress = useSharedValue(checked ? 1 : 0);
-  useEffect(() => {
-    progress.value = withTiming(checked ? 1 : 0, {
-      duration: 160,
-      easing: Easing.out(Easing.quad),
-    });
-  }, [checked]);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    opacity: progress.value,
-    transform: [{ scale: progress.value }],
-  }));
-
-  const boxDim = SIZE_CFG[size].box;
-
-  const baseBoxStyle: ViewStyle = {
-    width: boxDim,
-    height: boxDim,
-    borderRadius: theme.radii.sm,
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 1.5,
-    borderColor: checked ? theme.colors.primary : theme.colors.border,
-    backgroundColor: checked ? theme.colors.primary : "transparent",
-  };
-
-  const iconNode = indicator ?? (
-    <Text
-      size={SIZE_CFG[size].textSize}
-      tone={checked ? "secondary" : "muted"}
-      weight="bold"
-    >
-      ✓
-    </Text>
-  );
-
-  const renderLabel = () =>
-    typeof label === "string" ? (
-      <Text
-        size={SIZE_CFG[size].textSize}
-        tone="primary"
-        weight="regular"
-        align="left"
-      >
-        {label}
-      </Text>
-    ) : (
-      label
-    );
-
-  const handlePress = () => {
-    if (!disabled && onCheckedChange) {
-      onCheckedChange(!checked);
-    }
-  };
-
-  return (
-    <Pressable
-      {...rest}
-      accessibilityRole="checkbox"
-      accessibilityState={{ disabled, checked }}
-      onPress={handlePress}
-      disabled={disabled}
-      style={({ pressed }) => [
-        styles.wrapper,
+export const Checkbox = memo(
+  forwardRef<React.ElementRef<typeof Pressable>, CheckboxProps>(
+    (
+      {
+        checked = false,
+        onCheckedChange,
+        size = "md",
+        disabled = false,
+        label,
+        labelPos = "right",
+        indicator,
         wrapperStyle,
-        pressed && !disabled && styles.pressed,
-      ]}
-    >
-      {label && labelPos === "left" && renderLabel()}
+        ...rest
+      },
+      ref,
+    ) => {
+      const { theme } = useUnistyles();
 
-      <View style={baseBoxStyle}>
-        <Animated.View style={[animatedStyle]}>{iconNode}</Animated.View>
-      </View>
+      styles.useVariants({ disabled });
 
-      {label && labelPos === "right" && renderLabel()}
-    </Pressable>
-  );
-};
+      const progress = useSharedValue(checked ? 1 : 0);
+      useEffect(() => {
+        progress.value = withTiming(checked ? 1 : 0, {
+          duration: 160,
+          easing: Easing.out(Easing.quad),
+        });
+      }, [checked]);
+
+      const animatedStyle = useAnimatedStyle(() => ({
+        opacity: progress.value,
+        transform: [{ scale: progress.value }],
+      }));
+
+      const boxDim = SIZE_CFG[size].box;
+
+      const baseBoxStyle: ViewStyle = {
+        width: boxDim,
+        height: boxDim,
+        borderRadius: theme.radii.sm,
+        justifyContent: "center",
+        alignItems: "center",
+        borderWidth: 1.5,
+        borderColor: checked ? theme.colors.primary : theme.colors.border,
+        backgroundColor: checked ? theme.colors.primary : "transparent",
+      };
+
+      const iconNode = indicator ?? (
+        <Text
+          size={SIZE_CFG[size].textSize}
+          tone={checked ? "secondary" : "muted"}
+          weight="bold"
+        >
+          ✓
+        </Text>
+      );
+
+      const renderLabel = () =>
+        typeof label === "string" ? (
+          <Text
+            size={SIZE_CFG[size].textSize}
+            tone="primary"
+            weight="regular"
+            align="left"
+          >
+            {label}
+          </Text>
+        ) : (
+          label
+        );
+
+      const handlePress = () => {
+        if (!disabled && onCheckedChange) {
+          onCheckedChange(!checked);
+        }
+      };
+
+      return (
+        <Pressable
+          ref={ref}
+          {...rest}
+          accessibilityRole="checkbox"
+          accessibilityState={{ disabled, checked }}
+          onPress={handlePress}
+          disabled={disabled}
+          style={({ pressed }) => [
+            styles.wrapper,
+            wrapperStyle,
+            pressed && !disabled && styles.pressed,
+          ]}
+        >
+          {label && labelPos === "left" && renderLabel()}
+
+          <View style={baseBoxStyle}>
+            <Animated.View style={[animatedStyle]}>{iconNode}</Animated.View>
+          </View>
+
+          {label && labelPos === "right" && renderLabel()}
+        </Pressable>
+      );
+    },
+  ),
+);
+
+Checkbox.displayName = "Checkbox";
 
 const styles = StyleSheet.create((theme) => ({
   wrapper: {

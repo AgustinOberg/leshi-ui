@@ -1,5 +1,5 @@
 // packages/ui/ui/switch.tsx
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, forwardRef, memo } from "react";
 import { Pressable, View, type PressableProps } from "react-native";
 import Animated, {
   useSharedValue,
@@ -42,90 +42,100 @@ const SIZE_CONFIG: Record<
 /* ───────────────────────────────
  *  Componente
  * ────────────────────────────── */
-export const Switch: React.FC<SwitchProps> = ({
-  value,
-  onValueChange,
-  size = "md",
-  disabled = false,
-  accessibilityLabel,
-  ...rest
-}) => {
-  /* Theme (para colores runtime) */
-  const { theme } = useUnistyles();
+export const Switch = memo(
+  forwardRef<React.ElementRef<typeof Pressable>, SwitchProps>(
+    (
+      {
+        value,
+        onValueChange,
+        size = "md",
+        disabled = false,
+        accessibilityLabel,
+        ...rest
+      },
+      ref,
+    ) => {
+      /* Theme (para colores runtime) */
+      const { theme } = useUnistyles();
 
-  /* Vinculamos variantes */
-  styles.useVariants({ size, disabled });
+      /* Vinculamos variantes */
+      styles.useVariants({ size, disabled });
 
-  /* SharedValue para animar el thumb */
-  const progress = useSharedValue(value ? 1 : 0);
+      /* SharedValue para animar el thumb */
+      const progress = useSharedValue(value ? 1 : 0);
 
-  /* Actualizamos animación cuando cambia `value` */
-  React.useEffect(() => {
-    progress.value = withSpring(value ? 1 : 0, {
-      damping: 20,
-      stiffness: 200,
-    });
-  }, [value]);
+      /* Actualizamos animación cuando cambia `value` */
+      React.useEffect(() => {
+        progress.value = withSpring(value ? 1 : 0, {
+          damping: 20,
+          stiffness: 200,
+        });
+      }, [value]);
 
-  /* Datos de tamaño */
-  const cfg = SIZE_CONFIG[size];
-  const maxTranslate = cfg.trackW - cfg.thumb - cfg.pad * 2;
+      /* Datos de tamaño */
+      const cfg = SIZE_CONFIG[size];
+      const maxTranslate = cfg.trackW - cfg.thumb - cfg.pad * 2;
 
-  /* Estilo animado del thumb */
-  const thumbAnimated = useAnimatedStyle(() => ({
-    transform: [{ translateX: progress.value * maxTranslate }],
-  }));
+      /* Estilo animado del thumb */
+      const thumbAnimated = useAnimatedStyle(() => ({
+        transform: [{ translateX: progress.value * maxTranslate }],
+      }));
 
-  /* Estilo del track (memo para evitar flatten continuo) */
-  const trackBgStyle = useMemo(
-    () =>
-      StyleSheet.flatten([
-        styles.trackBg,
-        value && !disabled && { backgroundColor: theme.colors.primary },
-        disabled && { backgroundColor: theme.colors.disabledBg },
-      ]),
-    [value, disabled, theme]
-  );
+      /* Estilo del track (memo para evitar flatten continuo) */
+      const trackBgStyle = useMemo(
+        () =>
+          StyleSheet.flatten([
+            styles.trackBg,
+            value && !disabled && { backgroundColor: theme.colors.primary },
+            disabled && { backgroundColor: theme.colors.disabledBg },
+          ]),
+        [value, disabled, theme],
+      );
 
-  /* Color del thumb */
-  const thumbColor =
-    disabled && !value
-      ? theme.colors.disabledText // gris claro
-      : theme.colors.background; // normal
+      /* Color del thumb */
+      const thumbColor =
+        disabled && !value
+          ? theme.colors.disabledText // gris claro
+          : theme.colors.background; // normal
 
-  /* onPress callback memorizado */
-  const handlePress = useCallback(() => {
-    if (!disabled) onValueChange(!value);
-  }, [disabled, onValueChange, value]);
+      /* onPress callback memorizado */
+      const handlePress = useCallback(() => {
+        if (!disabled) onValueChange(!value);
+      }, [disabled, onValueChange, value]);
 
-  return (
-    <Pressable
-      {...rest}
-      accessibilityRole="switch"
-      accessibilityLabel={accessibilityLabel}
-      /* Para lectores de pantalla: 0 = off, 1 = on */
-      accessibilityValue={{ min: 0, max: 1, now: value ? 1 : 0 }}
-      accessibilityState={{ disabled, checked: value }}
-      disabled={disabled}
-      /* Track wrapper */
-      style={[styles.track]}
-      onPress={handlePress}
-    >
-      <View style={trackBgStyle} />
-      <Animated.View
-        style={[
-          styles.thumb,
-          {
-            width: cfg.thumb,
-            height: cfg.thumb,
-            backgroundColor: thumbColor,
-          },
-          thumbAnimated,
-        ]}
-      />
-    </Pressable>
-  );
-};
+      return (
+        <Pressable
+          ref={ref}
+          {...rest}
+          accessibilityRole="switch"
+          accessibilityLabel={accessibilityLabel}
+          /* Para lectores de pantalla: 0 = off, 1 = on */
+          accessibilityValue={{ min: 0, max: 1, now: value ? 1 : 0 }}
+          accessibilityState={{ disabled, checked: value }}
+          disabled={disabled}
+          /* Track wrapper */
+          style={[styles.track]}
+          onPress={handlePress}
+        >
+          <View style={trackBgStyle} />
+          <Animated.View
+            style={[
+              styles.thumb,
+              {
+                width: cfg.thumb,
+                height: cfg.thumb,
+                backgroundColor: thumbColor,
+              },
+              thumbAnimated,
+            ]}
+          />
+        </Pressable>
+      );
+    },
+  ),
+);
+
+Switch.displayName = "Switch";
 
 /* ───────────────────────────────
  *  StyleSheet (variants inside)

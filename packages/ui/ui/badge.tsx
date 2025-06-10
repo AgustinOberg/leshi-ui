@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef, memo } from "react";
 import {
   View,
   type ViewProps,
@@ -36,34 +36,43 @@ const TONE_MAP: Record<BadgeVariant, TextTone> = {
   outline: "primary",
 };
 
-export const Badge: React.FC<BadgeProps> = ({
-  children,
-  variant = "primary",
-  size = "md",
-  leftIcon,
-  rightIcon,
-  style,
-  ...rest
-}) => {
-  styles.useVariants({ variant, size });
+export const Badge = memo(
+  forwardRef<React.ElementRef<typeof View>, BadgeProps>(
+    (
+      {
+        children,
+        variant = "primary",
+        size = "md",
+        leftIcon,
+        rightIcon,
+        style,
+        ...rest
+      },
+      ref,
+    ) => {
+      styles.useVariants({ variant, size });
 
-  return (
-    <View {...rest} style={[styles.container, style]}>
-      {leftIcon && <View style={styles.icon}>{leftIcon}</View>}
+      return (
+        <View ref={ref} {...rest} style={[styles.container, style]}>
+          {leftIcon && <View style={styles.icon}>{leftIcon}</View>}
 
-      <Text
-        size={SIZE_MAP[size]}
-        tone={TONE_MAP[variant]}
-        weight="semibold"
-        align="center"
-      >
-        {children}
-      </Text>
+          <Text
+            size={SIZE_MAP[size]}
+            tone={TONE_MAP[variant]}
+            weight="semibold"
+            align="center"
+          >
+            {children}
+          </Text>
 
-      {rightIcon && <View style={styles.icon}>{rightIcon}</View>}
-    </View>
-  );
-};
+          {rightIcon && <View style={styles.icon}>{rightIcon}</View>}
+        </View>
+      );
+    },
+  ),
+);
+
+Badge.displayName = "Badge";
 
 /* StyleSheet */
 const styles = StyleSheet.create((theme) => ({
