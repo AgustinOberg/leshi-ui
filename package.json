@@ -1,0 +1,12 @@
+{
+  "name": "leshi",
+  "module": "index.ts",
+  "type": "module",
+  "workspaces": ["packages/*", "apps/*"],
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

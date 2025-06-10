@@ -1,0 +1,32 @@
+{
+  "name": "demo",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "entryPoint": "./index.ts",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "@expo-google-fonts/chathura": "^0.4.0",
+    "@expo-google-fonts/inter": "^0.4.1",
+    "@leshi/ui": "workspace:*",
+    "expo": "~53.0.10",
+    "expo-font": "~13.3.1",
+    "expo-status-bar": "~2.2.3",
+    "react": "19.0.0",
+    "react-native": "0.79.3",
+    "react-native-edge-to-edge": "^1.6.1",
+    "react-native-nitro-modules": "^0.26.2",
+    "react-native-reanimated": "~3.17.4",
+    "react-native-unistyles": "^3.0.0-rc.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@types/react": "~19.0.10",
+    "typescript": "~5.8.3"
+  },
+  "private": true
+}
