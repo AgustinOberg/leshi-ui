@@ -10,15 +10,12 @@ import {
   type UnistylesVariants,
   useUnistyles,
 } from "react-native-unistyles";
-import { Text, type TextSize, type TextTone } from "./text";
-
-export type ButtonVariant =
-  | "primary"
-  | "secondary"
-  | "destructive"
-  | "outline"
-  | "ghost"
-  | "link";
+import { Text, type TextSize } from "./text";
+import {
+  getVariantColors,
+  type ButtonVariant,
+  type InternalButtonVariant,
+} from "../theme/color-utils";
 
 export type ButtonSize = "sm" | "md" | "lg";
 
@@ -71,23 +68,13 @@ export const Button = memo(
         if (!disabled && !loading) rest.onPress?.({} as any);
       }, [disabled, loading, rest]);
 
-      const textToneMap: Record<ButtonVariant, TextTone> = {
-        primary: "secondary",
-        secondary: "primary",
-        destructive: "accent",
-        outline: "primary",
-        ghost: "primary",
-        link: "link",
-      };
-
-      const spinnerColorMap: Record<ButtonVariant, string> = {
-        primary: theme.colors.primary,
-        secondary: theme.colors.secondary,
-        destructive: theme.colors.destructive,
-        outline: theme.colors.foreground,
-        ghost: theme.colors.foreground,
-        link: theme.colors.foreground,
-      };
+      const variantKey: InternalButtonVariant =
+        disabled || loading ? "disabled" : variant;
+      const { backgroundColor, textColor, borderColor } = getVariantColors(
+        theme,
+        "button",
+        variantKey,
+      );
 
       return (
         <Pressable
@@ -101,12 +88,16 @@ export const Button = memo(
           style={({ pressed }) => [
             styles.button,
             fullWidth && styles.fullWidth,
+            {
+              backgroundColor,
+              borderColor,
+            },
             pressed && !disabled && !loading && styles.pressed,
           ]}
         >
           {loading && (
             <View style={styles.loadingOverlay}>
-              <ActivityIndicator color={spinnerColorMap[variant]} />
+              <ActivityIndicator color={textColor} />
             </View>
           )}
 
@@ -114,7 +105,7 @@ export const Button = memo(
             {icon}
             <Text
               size={SIZE_CFG[size].textSize}
-              tone={disabled ? "muted" : textToneMap[variant]}
+              style={{ color: textColor }}
               weight="semibold"
             >
               {text}
@@ -152,21 +143,16 @@ const styles = StyleSheet.create((theme) => ({
       },
 
       variant: {
-        primary: { backgroundColor: theme.colors.primary },
-        secondary: { backgroundColor: theme.colors.secondary },
-        destructive: { backgroundColor: theme.colors.destructive },
-        outline: {
-          backgroundColor: "transparent",
-          borderWidth: 1.5,
-          borderColor: theme.colors.border,
-        },
-        ghost: { backgroundColor: "transparent" },
-        link: { backgroundColor: "transparent" },
+        primary: {},
+        secondary: {},
+        destructive: {},
+        outline: { borderWidth: 1.5 },
+        ghost: {},
+        link: {},
       },
 
       disabled: {
         true: {
-          backgroundColor: theme.colors.disabledBg,
           opacity: 0.8,
         },
       },

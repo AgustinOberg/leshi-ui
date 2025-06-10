@@ -10,6 +10,7 @@ import {
   type UnistylesVariants,
   useUnistyles,
 } from "react-native-unistyles";
+import { getVariantColors, type SwitchVariant } from "../theme/color-utils";
 
 export type SwitchSize = "sm" | "md" | "lg";
 
@@ -67,20 +68,23 @@ export const Switch = memo(
         transform: [{ translateX: progress.value * maxTranslate }],
       }));
 
-      const trackBgStyle = useMemo(
-        () =>
-          StyleSheet.flatten([
-            styles.trackBg,
-            value && !disabled && { backgroundColor: theme.colors.primary },
-            disabled && { backgroundColor: theme.colors.disabledBg },
-          ]),
-        [value, disabled, theme],
+      const switchVariant: SwitchVariant = disabled
+        ? value
+          ? "disabledOn"
+          : "disabledOff"
+        : value
+        ? "on"
+        : "off";
+      const { trackColor, thumbColor } = getVariantColors(
+        theme,
+        "switch",
+        switchVariant,
       );
 
-      const thumbColor =
-        disabled && !value
-          ? theme.colors.disabledText // light gray
-          : theme.colors.background; // default
+      const trackBgStyle = useMemo(
+        () => StyleSheet.flatten([styles.trackBg, { backgroundColor: trackColor }]),
+        [trackColor],
+      );
 
       const handlePress = useCallback(() => {
         if (!disabled) onValueChange(!value);
