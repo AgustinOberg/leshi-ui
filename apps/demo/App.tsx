@@ -1,4 +1,5 @@
-// ProfileScreen.tsx
+import { StyleSheet, View } from "react-native";
+import React, { useState } from "react";
 import {
   Avatar,
   AvatarFallback,
@@ -6,141 +7,64 @@ import {
   Badge,
   Button,
   Checkbox,
-  Surface,
-  Input,
   Progress,
-  Radio,
+  Surface,
   Switch,
-  Text,
-  Textarea,
+  TextInput,
 } from "@leshi/ui";
-import React from "react";
-import { ScrollView, View, SafeAreaView } from "react-native";
-import { useUnistyles } from "react-native-unistyles";
-import { useFonts } from "@expo-google-fonts/chathura/useFonts";
-import { Chathura_100Thin } from "@expo-google-fonts/chathura/100Thin";
-import { Chathura_300Light } from "@expo-google-fonts/chathura/300Light";
-import { Chathura_400Regular } from "@expo-google-fonts/chathura/400Regular";
-import { Chathura_700Bold } from "@expo-google-fonts/chathura/700Bold";
-import { Chathura_800ExtraBold } from "@expo-google-fonts/chathura/800ExtraBold";
 
-const ProfileScreen: React.FC = () => {
-  const { theme } = useUnistyles();
-  const [marketing, setMarketing] = React.useState(true);
-  const [gender, setGender] = React.useState("female");
-  const [terms, setTerms] = React.useState(false);
-  const [progress, setProgress] = React.useState(80);
-  let [fontsLoaded] = useFonts({
-    Chathura_100Thin,
-    Chathura_300Light,
-    Chathura_400Regular,
-    Chathura_700Bold,
-    Chathura_800ExtraBold,
-  });
-  if (!fontsLoaded) {
-    return null;
-  }
+const App = () => {
+  const [checked, setChecked] = useState(false);
   return (
-    <SafeAreaView>
-      <ScrollView
-        contentContainerStyle={{
-          padding: theme.gap(4),
-          gap: theme.gap(6),
-          backgroundColor: theme.colors.background,
-        }}
-      >
-        {/* aHeader */}
-        <View style={{ alignItems: "center", gap: theme.gap(1) }}>
-          <Avatar size="xl">
-            <AvatarImage source={{ uri: "https://i.praevatar.cc/300" }} />
-            <AvatarFallback>AG</AvatarFallback>
-          </Avatar>
-          <Text size="3xl" weight="bold">
-            Hola, fuente
-          </Text>
-          <Text
-            style={{
-              fontSize: 20,
-              fontWeight: "600",
-              color: theme.colors.foreground,
-            }}
-          >
-            Ana Gómez
-          </Text>
-          <Badge variant="secondary" style={{ marginHorizontal: "auto" }}>
-            Activa
-          </Badge>
-        </View>
-
-        {/* Inputs */}
-        <View style={{ gap: theme.gap(2) }}>
-          <Input label="Nombre" placeholder="Ana" size="md" />
-          <Input label="Apellido" placeholder="Gómez" size="md" />
-          <Input
-            label="Email"
-            placeholder="ana@email.com"
-            keyboardType="email-address"
-            size="md"
-          />
-          <Textarea label="Bio" placeholder="Algo sobre ti..." size="md" />
-        </View>
-
-        {/* Preferencias */}
-        <View style={{ gap: theme.gap(1) }}>
-          <Text style={{ fontSize: 16, fontWeight: "600" }}>Género</Text>
-          <Radio.Group value={gender} onValueChange={setGender} direction="row">
-            <Radio.Item value="female" label="Femenino" />
-            <Radio.Item value="male" label="Masculino" />
-            <Radio.Item value="other" label="Otro" />
-          </Radio.Group>
-
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              gap: theme.gap(2),
-              marginTop: theme.gap(4),
-            }}
-          >
-            <Switch
-              value={marketing}
-              onValueChange={setMarketing}
-              size="md"
-              accessibilityLabel="Recibir novedades"
-            />
-            <Text style={{ fontSize: 14 }}>
-              Recibir novedades y promociones
-            </Text>
-          </View>
-        </View>
-
-        {/* Seguridad */}
-        <View style={{ gap: theme.gap(1) }}>
-          <Text style={{ fontSize: 16, fontWeight: "600" }}>Progreso</Text>
-          <Progress value={progress} size="lg" />
-        </View>
-
-        {/* Términos y botón */}
-        <View style={{ gap: theme.gap(2) }}>
-          <Checkbox
-            size="lg"
-            labelPos="right"
-            checked={terms}
-            onCheckedChange={setTerms}
-            label="Acepto los términos y condiciones"
-          />
-          <Button loading text="Guardar cambios" variant="ghost" fullWidth />
-        </View>
-
-        <Surface variant="elevated" align="center" style={{ minHeight: 120 }}>
-          <Text size="lg" weight="semibold">
-            Ejemplo de Surface
-          </Text>
-          <Button text="Aceptar" variant="primary" />
-        </Surface>
-      </ScrollView>
-    </SafeAreaView>
+    <View style={styles.container}>
+      <Button variant="primary" size="lg" text="Hola mundo" />
+      <Surface style={{ width: "100%" }}>
+        <TextInput
+          description="This is your public display name."
+          label="Input"
+          placeholder="Type here..."
+        />
+      </Surface>
+      <Badge variant="destructive">Hola mundo</Badge>
+      <Checkbox checked size="lg" />
+      <Switch
+        size="sm"
+        checked={checked}
+        onCheckedChange={() => setChecked(!checked)}
+      />
+      <Switch
+        size="md"
+        checked={checked}
+        onCheckedChange={() => setChecked(!checked)}
+      />
+      <Switch
+        size="lg"
+        checked={checked}
+        onCheckedChange={() => setChecked(!checked)}
+      />
+      <Avatar size="lg">
+        <AvatarImage
+          source={{
+            uri: "https://avatars.githubusercontent.com/u/1000105?v=4",
+          }}
+        />
+        <AvatarFallback>{"Agustin"}</AvatarFallback>
+      </Avatar>
+      <Progress value={44} />
+      <Progress value={75} size="lg" />
+      <Progress value={90} variant="secondary" />
+    </View>
   );
 };
 
-export default ProfileScreen;
+export default App;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 10,
+    paddingHorizontal: 32,
+  },
+});
