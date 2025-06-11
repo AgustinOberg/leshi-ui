@@ -1,193 +1,146 @@
-import React, { memo, forwardRef, useCallback } from "react";
 import {
   Pressable,
-  View,
-  ActivityIndicator,
   type PressableProps,
+  type StyleProp,
+  type ViewStyle,
 } from "react-native";
-import {
-  StyleSheet,
-  type UnistylesVariants,
-  useUnistyles,
-} from "react-native-unistyles";
-import { Text, type TextSize, type TextTone } from "./text";
+import { StyleSheet } from "react-native-unistyles";
+import Text, { type TextVariant } from "./text";
 
 export type ButtonVariant =
   | "primary"
-  | "secondary"
   | "destructive"
   | "outline"
-  | "ghost"
-  | "link";
+  | "secondary"
+  | "ghost";
 
-export type ButtonSize = "sm" | "md" | "lg";
+export type ButtonSize = "base" | "sm" | "lg" | "icon";
 
-const SIZE_CFG: Record<
-  ButtonSize,
-  { padY: number; padX: number; gap: number; textSize: TextSize }
-> = {
-  sm: { padY: 12, padX: 24, gap: 6, textSize: "sm" },
-  md: { padY: 16, padX: 32, gap: 6, textSize: "md" },
-  lg: { padY: 20, padX: 48, gap: 8, textSize: "lg" },
-};
-
-export interface ButtonProps
-  extends Omit<PressableProps, "style">,
-    UnistylesVariants<typeof styles> {
-  text: string;
-  icon?: React.ReactNode;
-  loading?: boolean;
-  disabled?: boolean;
+export interface ButtonProps extends PressableProps {
   variant?: ButtonVariant;
+  text?: string;
   size?: ButtonSize;
   fullWidth?: boolean;
+  prefix?: React.JSX.Element;
+  suffix?: React.JSX.Element;
+  style?: StyleProp<ViewStyle>;
 }
 
-export const Button = memo(
-  forwardRef<React.ComponentRef<typeof Pressable>, ButtonProps>(
-    (
-      {
-        text,
-        icon,
-        loading = false,
-        disabled = false,
-        variant = "primary",
-        size = "md",
-        fullWidth = false,
-        accessibilityLabel,
-        ...rest
-      },
-      ref,
-    ) => {
-      const { theme } = useUnistyles();
+const TEXT_VARIANT: Record<ButtonVariant, TextVariant> = {
+  primary: "primaryForeground",
+  destructive: "destructiveForeground",
+  ghost: "primary",
+  outline: "primary",
+  secondary: "secondaryForeground",
+};
 
-      styles.useVariants({
-        variant,
-        size,
-        disabled: disabled || loading,
-      });
-
-      const handlePress = useCallback(() => {
-        if (!disabled && !loading) rest.onPress?.({} as any);
-      }, [disabled, loading, rest]);
-
-      const textToneMap: Record<ButtonVariant, TextTone> = {
-        primary: "secondary",
-        secondary: "primary",
-        destructive: "accent",
-        outline: "primary",
-        ghost: "primary",
-        link: "link",
-      };
-
-      const spinnerColorMap: Record<ButtonVariant, string> = {
-        primary: theme.colors.primary,
-        secondary: theme.colors.secondary,
-        destructive: theme.colors.destructive,
-        outline: theme.colors.foreground,
-        ghost: theme.colors.foreground,
-        link: theme.colors.foreground,
-      };
-
-      return (
-        <Pressable
-          ref={ref}
-          {...rest}
-          onPress={handlePress}
-          accessibilityRole="button"
-          accessibilityLabel={accessibilityLabel ?? text}
-          accessibilityState={{ disabled: disabled || loading, busy: loading }}
-          disabled={disabled || loading}
-          style={({ pressed }) => [
-            styles.button,
-            fullWidth && styles.fullWidth,
-            pressed && !disabled && !loading && styles.pressed,
-          ]}
-        >
-          {loading && (
-            <View style={styles.loadingOverlay}>
-              <ActivityIndicator color={spinnerColorMap[variant]} />
-            </View>
-          )}
-
-          <View style={[styles.content, styles[`gap_${size}`]]}>
-            {icon}
-            <Text
-              size={SIZE_CFG[size].textSize}
-              tone={disabled ? "muted" : textToneMap[variant]}
-              weight="semibold"
-            >
-              {text}
-            </Text>
-          </View>
-        </Pressable>
-      );
-    },
-  ),
-);
-
-Button.displayName = "Button";
+export const Button = ({
+  variant,
+  size,
+  fullWidth,
+  text,
+  prefix,
+  suffix,
+  disabled,
+  style,
+  ...rest
+}: ButtonProps) => {
+  styles.useVariants({
+    variant: variant ?? "primary",
+    size: size ?? "base",
+    fullWidth: fullWidth,
+  });
+  return (
+    <Pressable
+      accessibilityRole={rest.accessibilityRole ?? "button"}
+      accessibilityState={{ disabled: disabled ?? false }}
+      style={(state) => [
+        styles.container,
+        disabled && styles.disabled,
+        state.pressed && styles.pressed,
+        style,
+      ]}
+      disabled={disabled}
+      {...rest}
+    >
+      <>
+        {prefix && <>{prefix}</>}
+        {text && (
+          <Text weight="medium" variant={TEXT_VARIANT[variant ?? "primary"]}>
+            {text}
+          </Text>
+        )}
+        {suffix && <>{suffix}</>}
+      </>
+    </Pressable>
+  );
+};
 
 const styles = StyleSheet.create((theme) => ({
-  button: {
-    flexDirection: "row",
-    justifyContent: "center",
+  pressed: {
+    opacity: 0.8,
+  },
+  disabled: {
+    opacity: 0.6,
+  },
+  container: {
     alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    gap: theme.sizes.p(2),
     borderRadius: theme.radii.md,
-
     variants: {
-      size: {
-        sm: {
-          paddingVertical: SIZE_CFG.sm.padY,
-          paddingHorizontal: SIZE_CFG.sm.padX,
+      fullWidth: {
+        true: {
+          width: "100%",
         },
-        md: {
-          paddingVertical: SIZE_CFG.md.padY,
-          paddingHorizontal: SIZE_CFG.md.padX,
+        false: {
+          width: "auto",
+        },
+      },
+      variant: {
+        primary: {
+          backgroundColor: theme.colors.primary,
+          ...theme.shadow.xs,
+        },
+        secondary: {
+          backgroundColor: theme.colors.secondary,
+          ...theme.shadow.xs,
+        },
+        outline: {
+          borderColor: theme.colors.border,
+          borderWidth: 1,
+          backgroundColor: theme.colors.background,
+          ...theme.shadow.xs,
+        },
+        ghost: {
+          backgroundColor: theme.colors.background,
+        },
+        destructive: {
+          backgroundColor: theme.colors.destructive,
+          ...theme.shadow.xs,
+        },
+      },
+      size: {
+        base: {
+          height: theme.sizes.h(9),
+          paddingHorizontal: theme.sizes.p(4),
+          paddingVertical: theme.sizes.p(2),
+        },
+        sm: {
+          height: theme.sizes.h(8),
+          paddingHorizontal: theme.sizes.p(3),
         },
         lg: {
-          paddingVertical: SIZE_CFG.lg.padY,
-          paddingHorizontal: SIZE_CFG.lg.padX,
+          height: theme.sizes.h(10),
+          paddingHorizontal: theme.sizes.p(5),
         },
-      },
-
-      variant: {
-        primary: { backgroundColor: theme.colors.primary },
-        secondary: { backgroundColor: theme.colors.secondary },
-        destructive: { backgroundColor: theme.colors.destructive },
-        outline: {
-          backgroundColor: "transparent",
-          borderWidth: 1.5,
-          borderColor: theme.colors.border,
-        },
-        ghost: { backgroundColor: "transparent" },
-        link: { backgroundColor: "transparent" },
-      },
-
-      disabled: {
-        true: {
-          backgroundColor: theme.colors.disabledBg,
-          opacity: 0.8,
+        icon: {
+          aspectRatio: 1,
+          height: theme.sizes.h(9),
+          borderRadius: theme.radii.full,
         },
       },
     },
   },
-
-  pressed: { opacity: 0.85 },
-
-  fullWidth: {
-    alignSelf: "stretch",
-  },
-  loadingOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  content: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  gap_sm: { columnGap: SIZE_CFG.sm.gap },
-  gap_md: { columnGap: SIZE_CFG.md.gap },
-  gap_lg: { columnGap: SIZE_CFG.lg.gap },
 }));

@@ -1,10 +1,8 @@
-import React, {
+import {
   createContext,
   useContext,
   useMemo,
   useState,
-  forwardRef,
-  memo,
   type ReactNode,
 } from "react";
 import {
@@ -15,14 +13,15 @@ import {
   type StyleProp,
   type ViewStyle,
   type NativeSyntheticEvent,
-  type ImageErrorEventData,
   type ImageLoadEventData,
+  type ImageErrorEventData,
 } from "react-native";
 import { StyleSheet, useUnistyles } from "react-native-unistyles";
-
-import { Text } from "./text";
+import Text from "./text";
 
 export type AvatarSize = "sm" | "md" | "lg" | "xl";
+
+// TODO: use "w" function here instead of hardcoded pixel values
 const PX: Record<AvatarSize, number> = {
   sm: 24,
   md: 32,
@@ -35,11 +34,12 @@ interface Ctx {
   hasImage: boolean;
   setHasImage: (v: boolean) => void;
 }
-const Ctx = createContext<Ctx | null>(null);
+const AvatarCtx = createContext<Ctx | null>(null);
+
 const useAvatar = () => {
-  const v = useContext(Ctx);
-  if (!v) throw new Error("Avatar primitives must be inside <Avatar>");
-  return v;
+  const ctx = useContext(AvatarCtx);
+  if (!ctx) throw new Error("Avatar primitives must be inside <Avatar>");
+  return ctx;
 };
 
 export interface AvatarProps {
@@ -47,147 +47,127 @@ export interface AvatarProps {
   style?: StyleProp<ViewStyle>;
   children: ReactNode;
 }
-const Avatar = memo(
-  forwardRef<React.ComponentRef<typeof View>, AvatarProps>(
-    ({ size = "md", style, children }, ref) => {
-      const dim = PX[size];
-      const [hasImage, setHasImage] = useState(false);
 
-      const context = useMemo<Ctx>(
-        () => ({ dim, hasImage, setHasImage }),
-        [dim, hasImage],
-      );
+export const Avatar = ({ size = "md", style, children }: AvatarProps) => {
+  const dim = PX[size];
+  const [hasImage, setHasImage] = useState(false);
 
-      return (
-        <Ctx.Provider value={context}>
-          <View
-            ref={ref}
-            data-slot="avatar"
-            style={[
-              styles.wrapper,
-              {
-                width: dim,
-                height: dim,
-                borderRadius: dim / 2,
-              },
-              style,
-            ]}
-          >
-            {children}
-          </View>
-        </Ctx.Provider>
-      );
-    },
-  ),
-);
-Avatar.displayName = "Avatar";
+  const value = useMemo<Ctx>(
+    () => ({ dim, hasImage, setHasImage }),
+    [dim, hasImage]
+  );
+
+  styles.useVariants({ size });
+
+  return (
+    <AvatarCtx.Provider value={value}>
+      <View data-slot="avatar" style={[styles.container, style]}>
+        {children}
+      </View>
+    </AvatarCtx.Provider>
+  );
+};
 
 export interface AvatarImageProps extends Omit<ImageProps, "style" | "source"> {
   source: ImageProps["source"];
   style?: StyleProp<ImageStyle>;
   alt?: string;
 }
-const AvatarImage = memo(
-  forwardRef<React.ComponentRef<typeof Image>, AvatarImageProps>(
-    ({ source, style, alt = "avatar", onLoad, onError, ...rest }, ref) => {
-      const { dim, setHasImage } = useAvatar();
-      const radius = dim / 2;
 
-      const handleLoad = (e: NativeSyntheticEvent<ImageLoadEventData>) => {
-        setHasImage(true);
-        onLoad?.(e);
-      };
-      const handleError = (e: NativeSyntheticEvent<ImageErrorEventData>) => {
-        setHasImage(false);
-        onError?.(e);
-      };
+export const AvatarImage = ({
+  source,
+  style,
+  alt = "avatar",
+  onLoad,
+  onError,
+  ...rest
+}: AvatarImageProps) => {
+  const { dim, setHasImage } = useAvatar();
 
-      return (
-        <Image
-          ref={ref}
-          {...rest}
-          accessibilityLabel={alt}
-          accessibilityIgnoresInvertColors
-          source={source}
-          onLoad={handleLoad}
-          onError={handleError}
-          resizeMode="cover"
-          style={[
-            {
-              width: dim,
-              height: dim,
-              borderRadius: radius,
-            },
-            style,
-          ]}
-        />
-      );
-    },
-  ),
-);
-AvatarImage.displayName = "AvatarImage";
+  const handleLoad = (e: NativeSyntheticEvent<ImageLoadEventData>) => {
+    setHasImage(true);
+    onLoad?.(e);
+  };
+
+  const handleError = (e: NativeSyntheticEvent<ImageErrorEventData>) => {
+    setHasImage(false);
+    onError?.(e);
+  };
+
+  return (
+    <Image
+      {...rest}
+      accessibilityLabel={alt}
+      accessibilityIgnoresInvertColors
+      source={source}
+      onLoad={handleLoad}
+      onError={handleError}
+      resizeMode="cover"
+      style={[
+        {
+          width: dim,
+          height: dim,
+          borderRadius: dim / 2,
+        },
+        style,
+      ]}
+    />
+  );
+};
 
 export interface AvatarFallbackProps {
   children?: ReactNode;
   style?: StyleProp<ViewStyle>;
 }
-const AvatarFallback = memo(
-  forwardRef<React.ComponentRef<typeof View>, AvatarFallbackProps>(
-    ({ children, style }, ref) => {
-      const { dim, hasImage } = useAvatar();
-      const { theme } = useUnistyles();
-      if (hasImage) return null;
 
-      const initials =
-        typeof children === "string"
-          ? children.slice(0, 2).toUpperCase()
-          : null;
+export const AvatarFallback = ({ children, style }: AvatarFallbackProps) => {
+  const { dim, hasImage } = useAvatar();
+  const { theme } = useUnistyles();
 
-      return (
-        <View
-          ref={ref}
-          data-slot="avatar-fallback"
-          style={[
-            styles.fallback,
-            {
-              borderRadius: dim / 2,
-              backgroundColor: theme.colors.muted,
-            },
-            style,
-          ]}
+  if (hasImage) return null;
+
+  const initials =
+    typeof children === "string" ? children.slice(0, 2).toUpperCase() : null;
+
+  return (
+    <View
+      data-slot="avatar-fallback"
+      style={[styles.fallback, { backgroundColor: theme.colors.muted }, style]}
+    >
+      {initials ? (
+        <Text
+          weight="semibold"
+          style={{ fontSize: dim * 0.3, lineHeight: dim }}
         >
-          {initials ? (
-            <Text
-              weight="semibold"
-              style={{
-                fontSize: dim * 0.3,
-                lineHeight: dim,
-              }}
-            >
-              {initials}
-            </Text>
-          ) : (
-            children
-          )}
-        </View>
-      );
-    },
-  ),
-);
-AvatarFallback.displayName = "AvatarFallback";
+          {initials}
+        </Text>
+      ) : (
+        children
+      )}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create((theme) => ({
-  wrapper: {
+  container: {
     overflow: "hidden",
-    justifyContent: "center",
     alignItems: "center",
+    justifyContent: "center",
+    aspectRatio: 1,
+    borderRadius: theme.radii.full,
+    variants: {
+      size: {
+        sm: { width: theme.sizes.w(6) },
+        md: { width: theme.sizes.w(8) },
+        lg: { width: theme.sizes.w(10) },
+        xl: { width: theme.sizes.w(16) },
+      },
+    },
   },
   fallback: {
-    position: "absolute",
-    inset: 0,
-    justifyContent: "center",
+    ...StyleSheet.absoluteFillObject,
     alignItems: "center",
+    justifyContent: "center",
+    borderRadius: theme.radii.full,
   },
 }));
-
-export { Avatar, AvatarImage, AvatarFallback };

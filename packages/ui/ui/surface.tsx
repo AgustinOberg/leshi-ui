@@ -1,65 +1,52 @@
-import React, { forwardRef, memo } from "react";
-import {
-  View,
-  type ViewProps,
-  type ViewStyle,
-  type StyleProp,
-} from "react-native";
-import { StyleSheet, type UnistylesVariants } from "react-native-unistyles";
+import { View, type ViewProps } from "react-native";
+import { StyleSheet } from "react-native-unistyles";
 
-export type SurfaceVariant = "flat" | "outline" | "elevated";
-export type SurfaceAlign = "start" | "center" | "end";
-
-export interface SurfaceProps
-  extends Omit<ViewProps, "style" | "children">,
-    UnistylesVariants<typeof styles> {
+export type SurfaceElevation = "xs" | "md" | "xl" | "2xl" | "3xl" | "none";
+export type SurfaceVariant = "filled" | "outlined";
+export interface SurfaceProps extends ViewProps {
+  elevation?: SurfaceElevation;
   variant?: SurfaceVariant;
-  align?: SurfaceAlign;
-  style?: StyleProp<ViewStyle>;
-  children?: React.ReactNode;
 }
-
-export const Surface = memo(
-  forwardRef<React.ComponentRef<typeof View>, SurfaceProps>(
-    ({ variant = "flat", align = "start", style, children, ...rest }, ref) => {
-      styles.useVariants({ variant, align });
-
-      return (
-        <View ref={ref} {...rest} style={[styles.surface, style]}>
-          {children}
-        </View>
-      );
-    },
-  ),
-);
-
-Surface.displayName = "Surface";
+export const Surface = ({
+  children,
+  elevation,
+  style,
+  variant = "filled",
+  ...rest
+}: SurfaceProps) => {
+  styles.useVariants({
+    elevation: elevation ?? "md",
+    variant,
+  });
+  return (
+    <View style={[styles.container, style]} {...rest}>
+      {children}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create((theme) => ({
-  surface: {
-    flexDirection: "column",
-    borderRadius: theme.radii.lg,
-    borderWidth: 1.5,
+  container: {
+    borderRadius: theme.radii.xl,
+    borderWidth: 1,
+
     borderColor: theme.colors.border,
-    backgroundColor: theme.colors.card,
-    padding: theme.gap(6),
-    rowGap: theme.gap(6),
     variants: {
       variant: {
-        flat: {},
-        outline: { backgroundColor: "transparent" },
-        elevated: {
-          shadowColor: "#000",
-          shadowOpacity: 0.1,
-          shadowRadius: 3,
-          shadowOffset: { width: 0, height: 1 },
-          elevation: 3,
+        filled: {
+          backgroundColor: theme.colors.card,
+        },
+        outlined: {
+          backgroundColor: "transparent",
         },
       },
-      align: {
-        start: { alignItems: "flex-start" },
-        center: { alignItems: "center" },
-        end: { alignItems: "flex-end" },
+      elevation: {
+        xs: theme.shadow.xs,
+        md: theme.shadow.md,
+        xl: theme.shadow.xl,
+        "2xl": theme.shadow["2xl"],
+        "3xl": theme.shadow["3xl"],
+        none: {},
       },
     },
   },

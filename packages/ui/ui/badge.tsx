@@ -1,118 +1,80 @@
-import React, { forwardRef, memo } from "react";
-import {
-  View,
-  type ViewProps,
-  type StyleProp,
-  type ViewStyle,
-} from "react-native";
-import { StyleSheet, type UnistylesVariants } from "react-native-unistyles";
-
-import { Text, type TextSize, type TextTone } from "./text";
+import { View, type ViewProps } from "react-native";
+import { StyleSheet } from "react-native-unistyles";
+import { Text, type TextProps, type TextSize, type TextVariant } from "./text";
 
 export type BadgeVariant = "primary" | "secondary" | "destructive" | "outline";
-export type BadgeSize = "sm" | "md" | "lg";
-
-export interface BadgeProps
-  extends Omit<ViewProps, "style" | "children">,
-    UnistylesVariants<typeof styles> {
-  children: React.ReactNode;
+const TEXT_VARIANT: Record<BadgeVariant, TextVariant> = {
+  primary: "primaryForeground",
+  secondary: "secondaryForeground",
+  destructive: "destructiveForeground",
+  outline: "foreground",
+};
+export interface BadgeProps extends ViewProps {
   variant?: BadgeVariant;
-  size?: BadgeSize;
-  leftIcon?: React.ReactNode;
-  rightIcon?: React.ReactNode;
-  style?: StyleProp<ViewStyle>;
+  textOptions?: TextProps;
+  size?: TextSize;
+  prefix?: React.JSX.Element;
+  suffix?: React.JSX.Element;
 }
-
-const SIZE_MAP: Record<BadgeSize, TextSize> = {
-  sm: "xs",
-  md: "sm",
-  lg: "md",
+export const Badge = ({
+  children,
+  size = "xs",
+  style,
+  textOptions,
+  prefix,
+  suffix,
+  variant = "primary",
+}: BadgeProps) => {
+  styles.useVariants({
+    variant,
+  });
+  return (
+    <View style={[styles.container, style]}>
+      {prefix && <View>{prefix}</View>}
+      <Text
+        variant={textOptions?.variant ?? TEXT_VARIANT[variant]}
+        {...textOptions}
+        size={size}
+        weight={textOptions?.weight ?? "medium"}
+      >
+        {children}
+      </Text>
+      {suffix && <View>{suffix}</View>}
+    </View>
+  );
 };
-
-const TONE_MAP: Record<BadgeVariant, TextTone> = {
-  primary: "secondary",
-  secondary: "primary",
-  destructive: "accent",
-  outline: "primary",
-};
-
-export const Badge = memo(
-  forwardRef<React.ComponentRef<typeof View>, BadgeProps>(
-    (
-      {
-        children,
-        variant = "primary",
-        size = "md",
-        leftIcon,
-        rightIcon,
-        style,
-        ...rest
-      },
-      ref,
-    ) => {
-      styles.useVariants({ variant, size });
-
-      return (
-        <View ref={ref} {...rest} style={[styles.container, style]}>
-          {leftIcon && <View style={styles.icon}>{leftIcon}</View>}
-
-          <Text
-            size={SIZE_MAP[size]}
-            tone={TONE_MAP[variant]}
-            weight="semibold"
-            align="center"
-          >
-            {children}
-          </Text>
-
-          {rightIcon && <View style={styles.icon}>{rightIcon}</View>}
-        </View>
-      );
-    },
-  ),
-);
-
-Badge.displayName = "Badge";
 
 const styles = StyleSheet.create((theme) => ({
   container: {
-    flexDirection: "row",
     alignItems: "center",
-    gap: theme.gap?.(0.5) ?? 4,
+    justifyContent: "center",
     borderRadius: theme.radii.md,
-    borderWidth: 1.5,
+    borderWidth: 1,
+    gap: theme.sizes.gap(0.5),
+    flexDirection: "row",
+    paddingHorizontal: theme.sizes.p(2),
+    paddingVertical: theme.sizes.p(0.5),
     alignSelf: "flex-start",
-
+    flexShrink: 0,
     variants: {
-      size: {
-        sm: { paddingHorizontal: 4, paddingVertical: 2 },
-        md: { paddingHorizontal: 8, paddingVertical: 4 },
-        lg: { paddingHorizontal: 10, paddingVertical: 4 },
-      },
-
       variant: {
         primary: {
-          backgroundColor: theme.colors.primary,
           borderColor: "transparent",
+          backgroundColor: theme.colors.primary,
         },
         secondary: {
-          backgroundColor: theme.colors.secondary,
           borderColor: "transparent",
+          backgroundColor: theme.colors.secondary,
         },
         destructive: {
-          backgroundColor: theme.colors.destructive,
           borderColor: "transparent",
+          backgroundColor: theme.colors.destructive,
         },
         outline: {
-          backgroundColor: "transparent",
           borderColor: theme.colors.border,
+          backgroundColor: "transparent",
         },
       },
     },
-  },
-
-  icon: {
-    width: 14,
-    height: 14,
   },
 }));

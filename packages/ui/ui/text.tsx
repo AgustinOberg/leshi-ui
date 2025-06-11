@@ -1,122 +1,180 @@
-import React, { memo, forwardRef } from "react";
-import {
-  Text as RNText,
-  type TextProps as RNTextProps,
-  type StyleProp,
-  type TextStyle,
-} from "react-native";
-import { StyleSheet, type UnistylesVariants } from "react-native-unistyles";
-
-export type TextSize = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
-export type TextWeight = "regular" | "medium" | "semibold" | "bold";
-export type TextTone =
-  | "muted"
+import { Text as RNText, type TextProps as RNTextProps } from "react-native";
+import React from "react";
+import { StyleSheet } from "react-native-unistyles";
+export type TextVariant =
+  | "primaryForeground"
   | "primary"
+  | "secondaryForeground"
   | "secondary"
+  | "destructiveForeground"
   | "destructive"
-  | "link"
-  | "accent";
+  | "mutedForeground"
+  | "foreground";
 
-export interface TypoProps
-  extends Omit<RNTextProps, "style" | "children">,
-    UnistylesVariants<typeof textStyles> {
+export type TextSize =
+  | "xs"
+  | "sm"
+  | "base"
+  | "lg"
+  | "xl"
+  | "2xl"
+  | "3xl"
+  | "4xl"
+  | "5xl"
+  | "6xl"
+  | "7xl"
+  | "8xl"
+  | "9xl";
+
+export type Weight =
+  | "thin"
+  | "extralight"
+  | "light"
+  | "regular"
+  | "medium"
+  | "semibold"
+  | "bold"
+  | "extrabold"
+  | "black";
+
+export interface TextProps extends RNTextProps {
+  children?: React.ReactNode;
+  variant?: TextVariant;
   size?: TextSize;
-  weight?: TextWeight;
-  tone?: TextTone;
-  align?: "auto" | "left" | "right" | "center" | "justify";
-  style?: StyleProp<TextStyle>;
-  children: React.ReactNode;
-  italic?: boolean;
+  weight?: Weight;
+  style?: RNTextProps["style"];
 }
+export const Text = ({
+  children,
+  variant,
+  size,
+  weight,
+  style,
+  ...rest
+}: TextProps) => {
+  styles.useVariants({
+    color: variant ?? "primary",
+    size: size ?? "base",
+    weight: weight ?? "regular",
+  });
+  return (
+    <RNText style={[styles.text, style]} {...rest}>
+      {children}
+    </RNText>
+  );
+};
 
+export default Text;
 
-const textStyles = StyleSheet.create((theme) => ({
-  base: {
+const styles = StyleSheet.create((theme) => ({
+  text: {
     variants: {
-      size: {
-        xs: {
-          fontSize: theme.fonts.size.xs,
-          lineHeight: theme.fonts.size.xs * 1.3,
-        },
-        sm: {
-          fontSize: theme.fonts.size.sm,
-          lineHeight: theme.fonts.size.sm * 1.3,
-        },
-        md: {
-          fontSize: theme.fonts.size.md,
-          lineHeight: theme.fonts.size.md * 1.3,
-        },
-        lg: {
-          fontSize: theme.fonts.size.lg,
-          lineHeight: theme.fonts.size.lg * 1.3,
-        },
-        xl: {
-          fontSize: theme.fonts.size.xl,
-          lineHeight: theme.fonts.size.xl * 1.3,
-        },
-        "2xl": {
-          fontSize: theme.fonts.size["2xl"],
-          lineHeight: theme.fonts.size["2xl"] * 1.3,
-        },
-        "3xl": {
-          fontSize: theme.fonts.size["3xl"],
-          lineHeight: theme.fonts.size["3xl"] * 1.3,
-        },
-      },
-
       weight: {
-        regular: { fontFamily: theme.fonts.family.regular, fontWeight: "400" },
-        medium: { fontFamily: theme.fonts.family.medium, fontWeight: "500" },
+        thin: {
+          fontFamily: theme.fonts.thin,
+          fontWeight: "100",
+        },
+        extralight: {
+          fontFamily: theme.fonts.extralight,
+          fontWeight: "200",
+        },
+        light: {
+          fontFamily: theme.fonts.light,
+          fontWeight: "300",
+        },
+        regular: {
+          fontFamily: theme.fonts.regular,
+          fontWeight: "400",
+        },
+        medium: {
+          fontFamily: theme.fonts.medium,
+          fontWeight: "500",
+        },
         semibold: {
-          fontFamily: theme.fonts.family.semibold,
+          fontFamily: theme.fonts.semibold,
           fontWeight: "600",
         },
-        bold: { fontFamily: theme.fonts.family.bold, fontWeight: "700" },
+        bold: {
+          fontFamily: theme.fonts.bold,
+          fontWeight: "700",
+        },
+        extrabold: {
+          fontFamily: theme.fonts.extrabold,
+          fontWeight: "800",
+        },
+        black: {
+          fontFamily: theme.fonts.black,
+          fontWeight: "900",
+        },
       },
+      color: {
+        primaryForeground: {
+          color: theme.colors.primaryForeground,
+        },
+        primary: {
+          color: theme.colors.primary,
+        },
+        secondaryForeground: {
+          color: theme.colors.secondaryForeground,
+        },
+        secondary: {
+          color: theme.colors.secondary,
+        },
+        destructiveForeground: {
+          color: theme.colors.destructiveForeground,
+        },
+        mutedForeground: {
+          color: theme.colors.mutedForeground,
+        },
+        destructive: {
+          color: theme.colors.destructive,
+        },
+        foreground: {
+          color: theme.colors.foreground,
+        },
+      },
+      size: {
+        xs: {
+          fontSize: theme.sizes.fonts.xs,
+        },
+        sm: {
+          fontSize: theme.sizes.fonts.sm,
+        },
+        base: {
+          fontSize: theme.sizes.fonts.base,
+        },
 
-      tone: {
-        muted: { color: theme.colors.onMuted },
-        primary: { color: theme.colors.primary },
-        secondary: { color: theme.colors.secondary },
-        destructive: { color: theme.colors.destructive },
-        link: { color: theme.colors.link, textDecorationLine: "underline" },
-        accent: { color: theme.colors.accent },
+        lg: {
+          fontSize: theme.sizes.fonts.lg,
+        },
+        xl: {
+          fontSize: theme.sizes.fonts.xl,
+        },
+        "2xl": {
+          fontSize: theme.sizes.fonts["2xl"],
+        },
+        "3xl": {
+          fontSize: theme.sizes.fonts["3xl"],
+        },
+        "4xl": {
+          fontSize: theme.sizes.fonts["4xl"],
+        },
+        "5xl": {
+          fontSize: theme.sizes.fonts["5xl"],
+        },
+        "6xl": {
+          fontSize: theme.sizes.fonts["6xl"],
+        },
+        "7xl": {
+          fontSize: theme.sizes.fonts["7xl"],
+        },
+        "8xl": {
+          fontSize: theme.sizes.fonts["8xl"],
+        },
+        "9xl": {
+          fontSize: theme.sizes.fonts["9xl"],
+        },
       },
     },
   },
 }));
-type VariantKeys = UnistylesVariants<typeof textStyles>;
-
-export const Text = memo(
-  forwardRef<React.ComponentRef<typeof RNText>, TypoProps>(
-    (
-      {
-        size = "md",
-        weight = "regular",
-        tone = "primary",
-        align = "auto",
-        style,
-        children,
-        ...rest
-      },
-      ref,
-    ) => {
-      // only set tone when defined to satisfy typing
-      const variantObj = { size, weight } as VariantKeys;
-      if (tone) variantObj.tone = tone;
-      textStyles.useVariants(variantObj);
-
-      return (
-        <RNText
-          ref={ref}
-          {...rest}
-          allowFontScaling={false}
-          style={[textStyles.base, { textAlign: align }, style]}
-        >
-          {children}
-        </RNText>
-      );
-    },
-  ),
-);
-Text.displayName = "Text";

@@ -1,145 +1,129 @@
-import React, { useCallback, useMemo, forwardRef, memo } from "react";
-import { Pressable, View, type PressableProps } from "react-native";
+import { useEffect } from "react";
+import {
+  Pressable,
+  type PressableProps,
+  type StyleProp,
+  type ViewStyle,
+} from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
-  withSpring,
+  withTiming,
+  Easing,
 } from "react-native-reanimated";
-import {
-  StyleSheet,
-  type UnistylesVariants,
-  useUnistyles,
-} from "react-native-unistyles";
+import { StyleSheet } from "react-native-unistyles";
 
 export type SwitchSize = "sm" | "md" | "lg";
 
-export type SwitchProps = {
-  /** Current state */
-  value: boolean;
-  /** Callback when toggled */
-  onValueChange: (val: boolean) => void;
-  /** Predefined size */
-  size?: SwitchSize;
-  /** Disabled state */
+export interface SwitchProps extends Omit<PressableProps, "onPress" | "style"> {
+  checked: boolean;
+  onCheckedChange: (val: boolean) => void;
   disabled?: boolean;
-} & Omit<PressableProps, "style" | "onPress"> &
-  UnistylesVariants<typeof styles>;
+  size?: SwitchSize;
+  style?: StyleProp<ViewStyle>;
+}
 
-const SIZE_CONFIG: Record<
-  SwitchSize,
-  { trackW: number; trackH: number; pad: number; thumb: number }
-> = {
-  sm: { trackW: 34, trackH: 20, pad: 2, thumb: 16 },
-  md: { trackW: 44, trackH: 26, pad: 3, thumb: 20 },
-  lg: { trackW: 56, trackH: 32, pad: 4, thumb: 24 },
+// TODO: change it to use the theme.size and not hardcoded values
+const SIZE = {
+  sm: { trackW: 24, trackH: 12, thumb: 10, pad: 2 },
+  md: { trackW: 32, trackH: 20, thumb: 16, pad: 2 },
+  lg: { trackW: 40, trackH: 24, thumb: 20, pad: 3 },
+} as const;
+
+export const Switch = ({
+  checked,
+  onCheckedChange,
+  disabled = false,
+  size = "md",
+  style,
+  ...rest
+}: SwitchProps) => {
+  const dims = SIZE[size];
+
+  const OFFSET = dims.trackW - dims.thumb - dims.pad * 2;
+
+  const tx = useSharedValue(checked ? OFFSET : 0);
+
+  useEffect(() => {
+    tx.value = withTiming(checked ? OFFSET : 0, {
+      duration: 180,
+      easing: Easing.out(Easing.quad),
+    });
+  }, [checked, OFFSET]);
+
+  const thumbAnim = useAnimatedStyle(() => ({
+    transform: [{ translateX: tx.value }],
+  }));
+
+  styles.useVariants({ size, checked, disabled });
+
+  return (
+    <Pressable
+      accessibilityRole="switch"
+      accessibilityState={{ checked, disabled }}
+      accessibilityValue={{ text: checked ? "on" : "off" }}
+      disabled={disabled}
+      onPress={() => !disabled && onCheckedChange(!checked)}
+      data-slot="switch"
+      style={[styles.track, style]}
+      {...rest}
+    >
+      <Animated.View
+        data-slot="switch-thumb"
+        style={[styles.thumb, thumbAnim]}
+      />
+    </Pressable>
+  );
 };
-
-export const Switch = memo(
-  forwardRef<React.ComponentRef<typeof Pressable>, SwitchProps>(
-    (
-      {
-        value,
-        onValueChange,
-        size = "md",
-        disabled = false,
-        accessibilityLabel,
-        ...rest
-      },
-      ref,
-    ) => {
-      const { theme } = useUnistyles();
-
-      styles.useVariants({ size, disabled });
-
-      const progress = useSharedValue(value ? 1 : 0);
-
-      React.useEffect(() => {
-        progress.value = withSpring(value ? 1 : 0, {
-          damping: 20,
-          stiffness: 200,
-        });
-      }, [value]);
-
-      const cfg = SIZE_CONFIG[size];
-      const maxTranslate = cfg.trackW - cfg.thumb - cfg.pad * 2;
-
-      const thumbAnimated = useAnimatedStyle(() => ({
-        transform: [{ translateX: progress.value * maxTranslate }],
-      }));
-
-      const trackBgStyle = useMemo(
-        () =>
-          StyleSheet.flatten([
-            styles.trackBg,
-            value && !disabled && { backgroundColor: theme.colors.primary },
-            disabled && { backgroundColor: theme.colors.disabledBg },
-          ]),
-        [value, disabled, theme],
-      );
-
-      const thumbColor =
-        disabled && !value
-          ? theme.colors.disabledText // light gray
-          : theme.colors.background; // default
-
-      const handlePress = useCallback(() => {
-        if (!disabled) onValueChange(!value);
-      }, [disabled, onValueChange, value]);
-
-      return (
-        <Pressable
-          ref={ref}
-          {...rest}
-          accessibilityRole="switch"
-          accessibilityLabel={accessibilityLabel}
-          accessibilityValue={{ min: 0, max: 1, now: value ? 1 : 0 }}
-          accessibilityState={{ disabled, checked: value }}
-          disabled={disabled}
-          style={[styles.track]}
-          onPress={handlePress}
-        >
-          <View style={trackBgStyle} />
-          <Animated.View
-            style={[
-              styles.thumb,
-              {
-                width: cfg.thumb,
-                height: cfg.thumb,
-                backgroundColor: thumbColor,
-              },
-              thumbAnimated,
-            ]}
-          />
-        </Pressable>
-      );
-    },
-  ),
-);
-
-Switch.displayName = "Switch";
 
 const styles = StyleSheet.create((theme) => ({
   track: {
-    justifyContent: "center",
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: theme.radii.full,
+    borderWidth: 1,
+    borderColor: "transparent",
+    ...theme.shadow.xs,
     variants: {
       size: {
-        sm: { width: 34, height: 20, padding: 2 },
-        md: { width: 44, height: 26, padding: 3 },
-        lg: { width: 56, height: 32, padding: 4 },
+        sm: {
+          width: theme.sizes.w(6),
+          height: theme.sizes.h(3),
+          padding: theme.sizes.p(0.5),
+        },
+        md: {
+          width: theme.sizes.w(8),
+          height: theme.sizes.h(5),
+          padding: theme.sizes.p(0.5),
+        },
+        lg: {
+          width: theme.sizes.w(10),
+          height: theme.sizes.h(6),
+          padding: theme.sizes.p(0.75),
+        },
+      },
+      checked: {
+        true: { backgroundColor: theme.colors.primary },
+        false: { backgroundColor: theme.colors.inputSurface },
       },
       disabled: {
-        true: { opacity: 0.6 },
+        true: { opacity: 0.5 },
       },
     },
-  },
-
-  trackBg: {
-    ...StyleSheet.absoluteFillObject,
-    borderRadius: theme.radii.full,
-    backgroundColor: theme.colors.border,
   },
 
   thumb: {
     borderRadius: theme.radii.full,
+    variants: {
+      size: {
+        sm: { width: theme.sizes.w(2.5), height: theme.sizes.h(2.5) },
+        md: { width: theme.sizes.w(4), height: theme.sizes.h(4) },
+        lg: { width: theme.sizes.w(5), height: theme.sizes.h(5) },
+      },
+      checked: {
+        true: { backgroundColor: theme.colors.primaryForeground },
+        false: { backgroundColor: theme.colors.background },
+      },
+    },
   },
 }));

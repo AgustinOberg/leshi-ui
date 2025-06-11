@@ -1,7 +1,7 @@
-import React, { useCallback, forwardRef, memo } from "react";
+import { useEffect } from "react";
 import {
   View,
-  type LayoutChangeEvent,
+  type ViewProps,
   type StyleProp,
   type ViewStyle,
 } from "react-native";
@@ -9,82 +9,78 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
-  Easing,
 } from "react-native-reanimated";
-import {
-  StyleSheet,
-  type UnistylesVariants,
-  useUnistyles,
-} from "react-native-unistyles";
+import { StyleSheet, useUnistyles } from "react-native-unistyles";
 
 export type ProgressSize = "sm" | "md" | "lg";
+export type ProgressVariant = "primary" | "secondary" | "destructive";
 
-export interface ProgressProps extends UnistylesVariants<typeof styles> {
-  value?: number; // 0-100
+export interface ProgressProps extends ViewProps {
+  value?: number;
   size?: ProgressSize;
-  trackStyle?: StyleProp<ViewStyle>;
+  variant?: ProgressVariant;
+  style?: StyleProp<ViewStyle>;
 }
 
-const SIZE_CFG: Record<ProgressSize, number> = { sm: 4, md: 6, lg: 8 };
+export const Progress = ({
+  value = 0,
+  size = "md",
+  variant = "primary",
+  style,
+  ...rest
+}: ProgressProps) => {
+  const clamped = Math.max(0, Math.min(value, 100));
+  const { theme } = useUnistyles();
 
-export const Progress = memo(
-  forwardRef<React.ComponentRef<typeof View>, ProgressProps>(
-    ({ value = 0, size = "md", trackStyle }, ref) => {
-      styles.useVariants({ size });
+  styles.useVariants({ size });
 
-      const progress = useSharedValue(Math.max(0, Math.min(value, 100)));
-      const trackW = useSharedValue(0);
+  const progress = useSharedValue(clamped);
 
-            React.useEffect(() => {
-        progress.value = withTiming(Math.max(0, Math.min(value, 100)), {
-          duration: 300,
-          easing: Easing.out(Easing.quad),
-        });
-      }, [value]);
+  useEffect(() => {
+    progress.value = withTiming(clamped, { duration: 300 });
+  }, [clamped, progress]);
 
-            const onLayoutTrack = useCallback((e: LayoutChangeEvent) => {
-        trackW.value = e.nativeEvent.layout.width;
-      }, []);
+  const animatedStyle = useAnimatedStyle(() => ({
+    width: `${progress.value}%`,
+  }));
 
-            const indicatorAnim = useAnimatedStyle(() => ({
-        width: (trackW.value * progress.value) / 100,
-      }));
+  const backgroundColor = {
+    primary: theme.colors.primary,
+    secondary: theme.colors.secondary,
+    destructive: theme.colors.destructive,
+  }[variant];
 
-      const { theme } = useUnistyles();
-
-      return (
-        <View
-          ref={ref}
-          onLayout={onLayoutTrack}
-          style={[styles.track, trackStyle]}
-        >
-          <Animated.View style={[styles.indicator, indicatorAnim]} />
-        </View>
-      );
-    },
-  ),
-);
-
-Progress.displayName = "Progress";
+  return (
+    <View
+      accessibilityRole="progressbar"
+      accessibilityValue={{ min: 0, max: 100, now: clamped }}
+      data-slot="progress"
+      style={[styles.track, style]}
+      {...rest}
+    >
+      <Animated.View
+        data-slot="progress-indicator"
+        style={[styles.indicator, animatedStyle, { backgroundColor }]}
+      />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create((theme) => ({
   track: {
     width: "100%",
     overflow: "hidden",
-    backgroundColor: theme.colors.primary + "33", // 20 % opacity
     borderRadius: theme.radii.full,
+    backgroundColor: theme.colors.muted,
     variants: {
       size: {
-        sm: { height: SIZE_CFG.sm },
-        md: { height: SIZE_CFG.md },
-        lg: { height: SIZE_CFG.lg },
+        sm: { height: theme.sizes.h(1) },
+        md: { height: theme.sizes.h(2) },
+        lg: { height: theme.sizes.h(3) },
       },
     },
   },
-
   indicator: {
     height: "100%",
-    backgroundColor: theme.colors.primary,
-    borderRadius: theme.radii.full,
   },
 }));
