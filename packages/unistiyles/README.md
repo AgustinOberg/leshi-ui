@@ -14,4 +14,4 @@ Import the components you copied and wrap your app with the `Unistyles` provider
 import { Button, Text } from './path-to-copied-components';
 ```
 
-Refer to the individual component documentation in `packages/ui/ui/*.md` for prop details.
+Refer to the individual component documentation in `packages/unistiyles/ui/*.md` for prop details.

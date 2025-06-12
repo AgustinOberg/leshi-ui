@@ -1,6 +1,6 @@
 # Leshi UI Monorepo
 
-This repository contains a React Native component library (`packages/ui`) and an Expo demo application (`apps/demo`).
+This repository contains a React Native component library powered by Unistyles (`packages/unistiyles`) and a plain StyleSheet version (`packages/rn`). It also includes an Expo demo application (`apps/demo`).
 
 ## Requirements
 
@@ -37,14 +37,14 @@ This command installs dependencies for the root package, the UI library and the 
 
 ## Using the UI package
 
-All components live under `packages/ui`. This project isn't published to npm. Instead, copy the pieces you need into your own codebase—similar to the [shadcn/ui](https://ui.shadcn.com/) approach.
+The Unistyles components live under `packages/unistiyles` while the bare React Native version lives in `packages/rn`. This project isn't published to npm. Instead, copy the pieces you need into your own codebase—similar to the [shadcn/ui](https://ui.shadcn.com/) approach.
 
 ```tsx
 // after copying a component
 import { Button, Text } from './path-to-copied-components';
 ```
 
-The theme configuration is handled by `react-native-unistyles`. Edit `packages/ui/theme/unistyles.ts` to customise colors or add new themes. You can also override border radii per theme using the `createBase()` helper.
+The Unistyles theme configuration is handled by `react-native-unistyles`. Edit `packages/unistiyles/theme/unistyles.ts` to customise colors or add new themes. The bare RN package exposes a `useTheme` hook under `packages/rn/theme` with light and dark palettes.
 
 ## Project structure
 
@@ -53,7 +53,8 @@ leshi-ui/
 ├─ apps/            # Example applications
 │  └─ demo/         # Expo demo showcasing the components
 ├─ packages/
-│  └─ ui/           # Reusable UI library
+│  ├─ unistiyles/   # Unistyles based components
+│  └─ rn/           # Plain StyleSheet components
 ├─ index.ts         # Simple Bun entry point
 └─ bun.lockb        # Bun lockfile
 ```

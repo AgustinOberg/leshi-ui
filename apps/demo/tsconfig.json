@@ -3,7 +3,8 @@
   "compilerOptions": {
     "strict": true,    
     "paths": {
-      "@leshi/ui": ["../../packages/ui"] 
+      "@leshi/ui": ["../../packages/unistiyles"],
+      "@leshi/ui-rn": ["../../packages/rn"]
     }
   }
 }
