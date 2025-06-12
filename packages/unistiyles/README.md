@@ -1,4 +1,4 @@
-# @leshi/ui
+# @leshi/ui-unistyles
 
 Reusable React Native component library powered by `react-native-unistyles`.
 
