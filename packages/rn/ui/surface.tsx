@@ -42,11 +42,11 @@ const styles = (theme: Theme) => {
   } as const;
 
   const elevation = {
-    xs: theme.shadow.xs,
-    md: theme.shadow.md,
-    xl: theme.shadow.xl,
-    "2xl": theme.shadow["2xl"],
-    "3xl": theme.shadow["3xl"],
+    xs: theme.shadows.xs,
+    md: theme.shadows.md,
+    xl: theme.shadows.xl,
+    "2xl": theme.shadows["2xl"],
+    "3xl": theme.shadows["3xl"],
     none: {},
   } as const;
 

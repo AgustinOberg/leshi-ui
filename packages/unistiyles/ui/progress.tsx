@@ -74,9 +74,9 @@ const styles = StyleSheet.create((theme) => ({
     backgroundColor: theme.colors.muted,
     variants: {
       size: {
-        sm: { height: theme.sizes.h(1) },
-        md: { height: theme.sizes.h(2) },
-        lg: { height: theme.sizes.h(3) },
+        sm: { height: theme.sizes.height(1) },
+        md: { height: theme.sizes.height(2) },
+        lg: { height: theme.sizes.height(3) },
       },
     },
   },

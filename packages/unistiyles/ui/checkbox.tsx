@@ -32,17 +32,17 @@ const styles = StyleSheet.create((theme) => ({
     justifyContent: "center",
     borderWidth: 1,
     borderColor: theme.colors.border,
-    ...theme.shadow.xs,
+    ...theme.shadows.xs,
     variants: {
       size: {
         sm: {
-          width: theme.sizes.w(4),
+          width: theme.sizes.width(4),
         },
         md: {
-          width: theme.sizes.w(5),
+          width: theme.sizes.width(5),
         },
         lg: {
-          width: theme.sizes.w(6),
+          width: theme.sizes.width(6),
         },
       },
       checked: {

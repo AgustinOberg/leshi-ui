@@ -87,7 +87,7 @@ const styles = StyleSheet.create((theme) => ({
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
-    gap: theme.sizes.p(2),
+    gap: theme.sizes.gap(2),
     borderRadius: theme.radii.md,
     variants: {
       fullWidth: {
@@ -101,43 +101,43 @@ const styles = StyleSheet.create((theme) => ({
       variant: {
         primary: {
           backgroundColor: theme.colors.primary,
-          ...theme.shadow.xs,
+          ...theme.shadows.xs,
         },
         secondary: {
           backgroundColor: theme.colors.secondary,
-          ...theme.shadow.xs,
+          ...theme.shadows.xs,
         },
         outline: {
           borderColor: theme.colors.border,
           borderWidth: 1,
           backgroundColor: theme.colors.background,
-          ...theme.shadow.xs,
+          ...theme.shadows.xs,
         },
         ghost: {
           backgroundColor: theme.colors.background,
         },
         destructive: {
           backgroundColor: theme.colors.destructive,
-          ...theme.shadow.xs,
+          ...theme.shadows.xs,
         },
       },
       size: {
         base: {
-          height: theme.sizes.h(9),
-          paddingHorizontal: theme.sizes.p(4),
-          paddingVertical: theme.sizes.p(2),
+          height: theme.sizes.height(9),
+          paddingHorizontal: theme.sizes.padding(4),
+          paddingVertical: theme.sizes.padding(2),
         },
         sm: {
-          height: theme.sizes.h(8),
-          paddingHorizontal: theme.sizes.p(3),
+          height: theme.sizes.height(8),
+          paddingHorizontal: theme.sizes.padding(3),
         },
         lg: {
-          height: theme.sizes.h(10),
-          paddingHorizontal: theme.sizes.p(5),
+          height: theme.sizes.height(10),
+          paddingHorizontal: theme.sizes.padding(5),
         },
         icon: {
           aspectRatio: 1,
-          height: theme.sizes.h(9),
+          height: theme.sizes.height(9),
           borderRadius: theme.radii.full,
         },
       },

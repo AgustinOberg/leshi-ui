@@ -129,15 +129,15 @@ const styles = StyleSheet.create((theme) => ({
     borderColor: theme.colors.border,
     borderRadius: theme.radii.md,
     backgroundColor: theme.colors.input,
-    paddingHorizontal: theme.sizes.p(3),
-    ...theme.shadow.xs,
+    paddingHorizontal: theme.sizes.padding(3),
+    ...theme.shadows.xs,
 
     variants: {
       size: {
-        base: { height: theme.sizes.h(9.5) },
-        sm: { height: theme.sizes.h(8) },
-        lg: { height: theme.sizes.h(10) },
-        xl: { height: theme.sizes.h(12) },
+        base: { height: theme.sizes.height(9.5) },
+        sm: { height: theme.sizes.height(8) },
+        lg: { height: theme.sizes.height(10) },
+        xl: { height: theme.sizes.height(12) },
       },
       isFocused: {
         true: {},
@@ -170,7 +170,7 @@ const styles = StyleSheet.create((theme) => ({
   },
 
   affix: {
-    minWidth: theme.sizes.h(5),
+    minWidth: theme.sizes.height(5),
     alignItems: "center",
     justifyContent: "center",
     gap: theme.sizes.gap(1),

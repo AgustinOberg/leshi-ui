@@ -34,14 +34,14 @@ const styles = (theme: Theme) => {
       justifyContent: "center",
       borderWidth: 1,
       borderColor: theme.colors.border,
-      ...theme.shadow.xs,
+      ...theme.shadows.xs,
     },
   });
 
   const size = {
-    sm: { width: theme.sizes.w(4) },
-    md: { width: theme.sizes.w(5) },
-    lg: { width: theme.sizes.w(6) },
+    sm: { width: theme.sizes.width(4) },
+    md: { width: theme.sizes.width(5) },
+    lg: { width: theme.sizes.width(6) },
   } as const;
 
   const checked = {

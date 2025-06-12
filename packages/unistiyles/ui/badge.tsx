@@ -52,8 +52,8 @@ const styles = StyleSheet.create((theme) => ({
     borderWidth: 1,
     gap: theme.sizes.gap(0.5),
     flexDirection: "row",
-    paddingHorizontal: theme.sizes.p(2),
-    paddingVertical: theme.sizes.p(0.5),
+    paddingHorizontal: theme.sizes.padding(2),
+    paddingVertical: theme.sizes.padding(0.5),
     alignSelf: "flex-start",
     flexShrink: 0,
     variants: {
