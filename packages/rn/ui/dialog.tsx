@@ -19,28 +19,32 @@ import {
 } from "react-native";
 import { useTheme } from "../theme/native";
 import { Text, type TextProps } from "./text";
-import { Button, type ButtonProps } from "./button";
 import { Pressable as SlotPressable } from "./slot";
 
-/*──────── context ────────*/
+/*──────────────────── Context */
 type Ctx = { open: boolean; setOpen: (v: boolean) => void };
 const DialogCtx = createContext<Ctx | null>(null);
 const useDialog = () => {
   const ctx = useContext(DialogCtx);
-  if (!ctx)
-    throw new Error("AlertDialog primitives must be inside <AlertDialog.Root>");
+  if (!ctx) throw new Error("Dialog primitives must be inside <Dialog.Root>");
   return ctx;
 };
 
-/*──────── Root ────────*/
+/*──────────────────── Root */
 export interface RootProps {
   open?: boolean;
   defaultOpen?: boolean;
-  onOpenChange?: (o: boolean) => void;
+  onOpenChange?: (open: boolean) => void;
   children: ReactNode;
   unmountOnClose?: boolean;
 }
-function Root({ open: cOpen, defaultOpen, onOpenChange, children }: RootProps) {
+function Root({
+  open: cOpen,
+  defaultOpen,
+  onOpenChange,
+  children,
+  unmountOnClose,
+}: RootProps) {
   const [uOpen, setUOpen] = useState(defaultOpen ?? false);
   const open = cOpen ?? uOpen;
   const setOpen = useCallback(
@@ -50,21 +54,18 @@ function Root({ open: cOpen, defaultOpen, onOpenChange, children }: RootProps) {
     },
     [cOpen, onOpenChange]
   );
-
-  const ctx = useMemo(() => ({ open, setOpen }), [open, setOpen]);
-  if (!open && cOpen === undefined) return null;
-  return <DialogCtx.Provider value={ctx}>{children}</DialogCtx.Provider>;
+  const value = useMemo(() => ({ open, setOpen }), [open, setOpen]);
+  if (unmountOnClose && !open) return null;
+  return <DialogCtx.Provider value={value}>{children}</DialogCtx.Provider>;
 }
 
-/*──────── Trigger  */
+/*──────────────────── Trigger */
 interface TriggerProps extends PressableProps {
   children: React.ReactNode;
   asChild?: boolean;
 }
-
 function Trigger({ children, onPress, asChild, ...rest }: TriggerProps) {
   const { setOpen } = useDialog();
-
   const handlePress = (e: any) => {
     onPress?.(e);
     if (!e.defaultPrevented) setOpen(true);
@@ -84,7 +85,7 @@ function Trigger({ children, onPress, asChild, ...rest }: TriggerProps) {
   );
 }
 
-/*──────── Overlay */
+/*──────────────────── Overlay */
 interface OverlayProps extends ViewProps {
   style?: StyleProp<ViewStyle>;
 }
@@ -93,22 +94,59 @@ function Overlay({ style, ...rest }: OverlayProps) {
   return <View style={[s.overlay, style]} {...rest} />;
 }
 
-/*──────── Center wrapper */
+/*──────────────────── Center wrapper */
 function Center({ style, ...rest }: ViewProps) {
   const s = useStyles();
   return <View style={[s.center, style]} {...rest} />;
 }
 
-/*──────── Content = Modal + card */
+/*──────────────────── Close */
+interface CloseProps extends PressableProps {
+  children: React.ReactNode;
+  asChild?: boolean;
+}
+function Close({ children, onPress, asChild, ...rest }: CloseProps) {
+  const { setOpen } = useDialog();
+  const handlePress = (e: any) => {
+    onPress?.(e);
+    if (!e.defaultPrevented) setOpen(false);
+  };
+
+  if (asChild) {
+    if (!React.isValidElement(children))
+      throw new Error("Dialog.Close with asChild needs a single element child");
+
+    return React.cloneElement(
+      children as React.ReactElement<any>,
+      {
+        ...(rest as any),
+        onPress: (e: any) => {
+          (children as any).props?.onPress?.(e);
+          handlePress(e);
+        },
+      } as any
+    );
+  }
+
+  return (
+    <Pressable onPress={handlePress} {...rest}>
+      {children}
+    </Pressable>
+  );
+}
+
+/*──────────────────── Content (Modal + card) */
 interface ContentProps extends ViewProps {
   overlayStyle?: StyleProp<ViewStyle>;
   centerStyle?: StyleProp<ViewStyle>;
+  showCloseButton?: boolean;
 }
 function Content({
   children,
   style,
   overlayStyle,
   centerStyle,
+  showCloseButton = true,
   ...rest
 }: ContentProps) {
   const { open, setOpen } = useDialog();
@@ -128,13 +166,25 @@ function Content({
       <Center style={centerStyle}>
         <View style={[s.card, style]} {...rest}>
           {children}
+          {showCloseButton && (
+            <Close
+              style={s.closeBtn}
+              accessibilityRole="button"
+              accessibilityLabel="Close dialog"
+            >
+              {/* Usá tu icono preferido */}
+              <Text size="lg" weight="bold">
+                ×
+              </Text>
+            </Close>
+          )}
         </View>
       </Center>
     </Modal>
   );
 }
 
-/*──────── Header / Footer */
+/*──────────────────── Header / Footer */
 function Header({ style, ...rest }: ViewProps) {
   const s = useStyles();
   return <View style={[s.header, style]} {...rest} />;
@@ -152,7 +202,7 @@ function Footer({ orientation = "row", style, ...rest }: FooterProps) {
   );
 }
 
-/*──────── Title / Description */
+/*──────────────────── Title / Description */
 type TitleProps = TextProps & { style?: StyleProp<TextStyle> };
 const Title: React.FC<TitleProps> = ({
   children,
@@ -178,36 +228,7 @@ const Description: React.FC<DescriptionProps> = ({
   </Text>
 );
 
-/*──────── CTA Buttons */
-type CTAProps = ButtonProps & { text?: string };
-function Action({ text = "Confirm", onPress, ...btn }: CTAProps) {
-  const { setOpen } = useDialog();
-  return (
-    <Button
-      text={text}
-      onPress={(e) => {
-        onPress?.(e);
-        if (!e.defaultPrevented) setOpen(false);
-      }}
-      {...btn}
-    />
-  );
-}
-function Cancel({ text = "Cancel", variant, onPress, ...btn }: CTAProps) {
-  const { setOpen } = useDialog();
-  return (
-    <Button
-      variant={variant ?? "outline"}
-      text={text}
-      onPress={(e) => {
-        onPress?.(e);
-        if (!e.defaultPrevented) setOpen(false);
-      }}
-      {...btn}
-    />
-  );
-}
-
+/*──────────────────── styles hook */
 function useStyles() {
   const t = useTheme();
   return useMemo(
@@ -232,6 +253,12 @@ function useStyles() {
           gap: t.sizes.gap(6),
           ...t.shadows.xl,
         },
+        closeBtn: {
+          position: "absolute",
+          top: 16,
+          right: 16,
+          padding: 8,
+        },
         header: { gap: t.sizes.gap(2) },
         footer: {
           flexDirection: "row",
@@ -247,15 +274,15 @@ function useStyles() {
   );
 }
 
-export const AlertDialog = {
+/*──────────────────── Public API */
+export const Dialog = {
   Root,
   Trigger,
   Content,
+  Overlay,
   Header,
   Footer,
-  Overlay,
   Title,
   Description,
-  Action,
-  Cancel,
+  Close,
 };

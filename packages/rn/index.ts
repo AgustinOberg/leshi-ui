@@ -9,3 +9,5 @@ export { Badge } from "./ui/badge";
 export { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 export { Surface } from "./ui/surface";
 export { AlertDialog } from "./ui/alert-dialog";
+export { Dialog } from "./ui/dialog";
+export * from "./ui/slot";
