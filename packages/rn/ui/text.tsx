@@ -59,7 +59,10 @@ export const Text = ({
   const sizeStyle = stylesObj.size[size ?? "base"];
   const weightStyle = stylesObj.weight[weight ?? "regular"];
   return (
-    <RNText style={[stylesObj.text, colorStyle, sizeStyle, weightStyle, style]} {...rest}>
+    <RNText
+      style={[stylesObj.text, colorStyle, sizeStyle, weightStyle, style]}
+      {...rest}
+    >
       {children}
     </RNText>
   );
@@ -71,19 +74,23 @@ import type { Theme } from "../theme/native";
 
 const styles = (theme: Theme) => {
   const base = StyleSheet.create({
-    text: {},
+    text: {
+      includeFontPadding: false,
+      lineHeight: theme.sizes.fonts.base * 1.2,
+      textAlignVertical: "center",
+    },
   });
 
   const weight = {
-    thin: { fontFamily: theme.fonts.thin, fontWeight: "100" },
-    extralight: { fontFamily: theme.fonts.extralight, fontWeight: "200" },
-    light: { fontFamily: theme.fonts.light, fontWeight: "300" },
-    regular: { fontFamily: theme.fonts.regular, fontWeight: "400" },
-    medium: { fontFamily: theme.fonts.medium, fontWeight: "500" },
-    semibold: { fontFamily: theme.fonts.semibold, fontWeight: "600" },
-    bold: { fontFamily: theme.fonts.bold, fontWeight: "700" },
-    extrabold: { fontFamily: theme.fonts.extrabold, fontWeight: "800" },
-    black: { fontFamily: theme.fonts.black, fontWeight: "900" },
+    thin: { fontFamily: theme.fonts.thin },
+    extralight: { fontFamily: theme.fonts.extralight },
+    light: { fontFamily: theme.fonts.light },
+    regular: { fontFamily: theme.fonts.regular },
+    medium: { fontFamily: theme.fonts.medium },
+    semibold: { fontFamily: theme.fonts.semibold },
+    bold: { fontFamily: theme.fonts.bold },
+    extrabold: { fontFamily: theme.fonts.extrabold },
+    black: { fontFamily: theme.fonts.black },
   } as const;
 
   const color = {

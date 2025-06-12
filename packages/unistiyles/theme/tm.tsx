@@ -1,51 +1,50 @@
 // Theme definitions for Unistyles components
-import { StyleSheet } from 'react-native-unistyles';
 
 // --- Font families for each weight ---
 export const fonts = {
-  thin: 'System',
-  extralight: 'System',
-  light: 'System',
-  regular: 'System',
-  medium: 'System',
-  semibold: 'System',
-  bold: 'System',
-  extrabold: 'System',
-  black: 'System',
+  thin: "Inter_100Thin",
+  extralight: "Inter_200ExtraLight",
+  light: "Inter_300Light",
+  regular: "Inter_400Regular",
+  medium: "Inter_500Medium",
+  semibold: "Inter_600SemiBold",
+  bold: "Inter_700Bold",
+  extrabold: "Inter_800ExtraBold",
+  black: "Inter_900Black",
 } as const;
 
 // --- Shadow presets used across components ---
 export const shadows = {
   xs: {
-    shadowColor: 'rgba(0,0,0,0.05)',
+    shadowColor: "rgba(0,0,0,0.05)",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 1,
     shadowRadius: 2,
     elevation: 1,
   },
   md: {
-    shadowColor: 'rgba(0,0,0,0.08)',
+    shadowColor: "rgba(0,0,0,0.08)",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 1,
     shadowRadius: 6,
     elevation: 4,
   },
   xl: {
-    shadowColor: 'rgba(0,0,0,0.1)',
+    shadowColor: "rgba(0,0,0,0.1)",
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 1,
     shadowRadius: 12,
     elevation: 8,
   },
   "2xl": {
-    shadowColor: 'rgba(0,0,0,0.12)',
+    shadowColor: "rgba(0,0,0,0.12)",
     shadowOffset: { width: 0, height: 12 },
     shadowOpacity: 1,
     shadowRadius: 16,
     elevation: 12,
   },
   "3xl": {
-    shadowColor: 'rgba(0,0,0,0.15)',
+    shadowColor: "rgba(0,0,0,0.15)",
     shadowOffset: { width: 0, height: 16 },
     shadowOpacity: 1,
     shadowRadius: 24,
@@ -116,35 +115,35 @@ export const light: Theme = {
   radii,
   colors: {
     /** Main background color */
-    background: 'hsl(0 0% 100%)',
+    background: "hsl(0 0% 100%)",
     /** Default text color */
-    foreground: 'hsl(240 10% 3.9%)',
+    foreground: "hsl(240 10% 3.9%)",
     /** Brand color for primary actions */
-    primary: 'hsl(240 5.9% 10%)',
+    primary: "hsl(240 5.9% 10%)",
     /** Text on primary backgrounds */
-    primaryForeground: 'hsl(0 0% 98%)',
+    primaryForeground: "hsl(0 0% 98%)",
     /** Subtle backgrounds such as surfaces */
-    secondary: 'hsl(240 4.8% 95.9%)',
+    secondary: "hsl(240 4.8% 95.9%)",
     /** Text on secondary backgrounds */
-    secondaryForeground: 'hsl(240 5.9% 10%)',
+    secondaryForeground: "hsl(240 5.9% 10%)",
     /** Muted backgrounds like separators */
-    muted: 'hsl(240 4.8% 95.9%)',
+    muted: "hsl(240 4.8% 95.9%)",
     /** Text on muted elements */
-    mutedForeground: 'hsl(240 3.8% 46.1%)',
+    mutedForeground: "hsl(240 3.8% 46.1%)",
     /** Accent color used sparingly */
-    accent: 'hsl(240 4.8% 95.9%)',
+    accent: "hsl(240 4.8% 95.9%)",
     /** Danger and error color */
-    destructive: 'hsl(0 72.2% 50.6%)',
+    destructive: "hsl(0 72.2% 50.6%)",
     /** Text on destructive backgrounds */
-    destructiveForeground: 'hsl(0 0% 98%)',
+    destructiveForeground: "hsl(0 0% 98%)",
     /** Outline and border color */
-    border: 'hsl(240 5.9% 90%)',
+    border: "hsl(240 5.9% 90%)",
     /** Card background surfaces */
-    card: 'hsl(0 0% 100%)',
+    card: "hsl(0 0% 100%)",
     /** Input backgrounds */
-    input: 'hsl(240 5.9% 90%)',
+    input: "transparent",
     /** Track color for unchecked switches */
-    inputSurface: 'hsl(240 4.8% 95.9%)',
+    inputSurface: "hsl(240 4.8% 95.9%)",
   },
 };
 
@@ -156,35 +155,35 @@ export const dark: Theme = {
   radii,
   colors: {
     /** Main background color */
-    background: 'hsl(240 10% 3.9%)',
+    background: "hsl(240 10% 3.9%)",
     /** Default text color */
-    foreground: 'hsl(0 0% 98%)',
+    foreground: "hsl(0 0% 98%)",
     /** Brand color for primary actions */
-    primary: 'hsl(0 0% 98%)',
+    primary: "hsl(0 0% 98%)",
     /** Text on primary backgrounds */
-    primaryForeground: 'hsl(240 5.9% 10%)',
+    primaryForeground: "hsl(240 5.9% 10%)",
     /** Subtle backgrounds such as surfaces */
-    secondary: 'hsl(240 3.7% 15.9%)',
+    secondary: "hsl(240 3.7% 15.9%)",
     /** Text on secondary backgrounds */
-    secondaryForeground: 'hsl(0 0% 98%)',
+    secondaryForeground: "hsl(0 0% 98%)",
     /** Muted backgrounds like separators */
-    muted: 'hsl(240 3.7% 15.9%)',
+    muted: "hsl(240 3.7% 15.9%)",
     /** Text on muted elements */
-    mutedForeground: 'hsl(240 5% 64.9%)',
+    mutedForeground: "hsl(240 5% 64.9%)",
     /** Accent color used sparingly */
-    accent: 'hsl(240 3.7% 15.9%)',
+    accent: "hsl(240 3.7% 15.9%)",
     /** Danger and error color */
-    destructive: 'hsl(0 62.8% 30.6%)',
+    destructive: "hsl(0 62.8% 30.6%)",
     /** Text on destructive backgrounds */
-    destructiveForeground: 'hsl(0 0% 98%)',
+    destructiveForeground: "hsl(0 0% 98%)",
     /** Outline and border color */
-    border: 'hsl(240 3.7% 15.9%)',
+    border: "hsl(240 3.7% 15.9%)",
     /** Card background surfaces */
-    card: 'hsl(240 10% 3.9%)',
+    card: "hsl(240 10% 3.9%)",
     /** Input backgrounds */
-    input: 'hsl(240 3.7% 15.9%)',
+    input: "hsl(240 3.7% 15.9%)",
     /** Track color for unchecked switches */
-    inputSurface: 'hsl(240 3.7% 15.9%)',
+    inputSurface: "hsl(240 3.7% 15.9%)",
   },
 };
 
@@ -198,4 +197,3 @@ export const breakpoints = {
 } as const;
 
 export type Breakpoints = typeof breakpoints;
-

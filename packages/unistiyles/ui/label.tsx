@@ -1,4 +1,4 @@
-import Text, { type TextProps, type TextSize } from "./text";
+import Text, { type TextProps } from "./text";
 import { StyleSheet } from "react-native-unistyles";
 
 interface LabelProps extends Omit<TextProps, "style" | "children"> {

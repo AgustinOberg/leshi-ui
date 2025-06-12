@@ -66,19 +66,26 @@ export const TextInput = ({
   );
 
   return (
-    <View style={[styleObj.container, !rest.editable && styleObj.editable.false]}>
+    <View
+      style={[
+        styleObj.container,
+        rest.editable === false && styleObj.editable.false,
+      ]}
+    >
       {label && (
         <Label size={labelSize ?? LABEL_SIZE[size]} error={!!error}>
           {label}
         </Label>
       )}
 
-      <View style={[
-        styleObj.inputWrapper,
-        styleObj.size[size],
-        isFocused && styleObj.isFocused.true,
-        error && styleObj.error.true,
-      ]}>
+      <View
+        style={[
+          styleObj.inputWrapper,
+          styleObj.size[size],
+          isFocused && styleObj.isFocused.true,
+          error && styleObj.error.true,
+        ]}
+      >
         {prefix && <View style={styleObj.affix}>{prefix}</View>}
 
         <RNTextInput
