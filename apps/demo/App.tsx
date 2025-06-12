@@ -12,6 +12,7 @@ import {
   Switch,
   TextInput,
   Text,
+  AlertDialog,
 } from "@leshi/ui-rn";
 import { Inter_100Thin } from "@expo-google-fonts/inter/100Thin";
 import { Inter_200ExtraLight } from "@expo-google-fonts/inter/200ExtraLight";
@@ -157,6 +158,32 @@ export default function App() {
       <Surface style={{ width: "100%" }}>
         <TextInput label="Username" placeholder="Type here" />
       </Surface>
+
+      <AlertDialog.Root>
+        <AlertDialog.Trigger asChild>
+          <Button text="Delete account" variant="destructive" />
+        </AlertDialog.Trigger>
+
+        <AlertDialog.Content>
+          <AlertDialog.Header>
+            <AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+            <AlertDialog.Description>
+              This action cannot be undone. It will permanently delete your
+              account.
+            </AlertDialog.Description>
+          </AlertDialog.Header>
+
+          <AlertDialog.Footer orientation="column">
+            <AlertDialog.Cancel />
+            <AlertDialog.Action
+              text="Yes, delete"
+              onPress={() => {
+                /* tu lógica */
+              }}
+            />
+          </AlertDialog.Footer>
+        </AlertDialog.Content>
+      </AlertDialog.Root>
     </ScrollView>
   );
 }
@@ -165,7 +192,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
     gap: 12,
-    backgroundColor: "black",
+    backgroundColor: "white",
     flex: 1,
   },
   row: {
