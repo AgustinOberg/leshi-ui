@@ -66,19 +66,26 @@ export const TextInput = ({
   );
 
   return (
-    <View style={[styleObj.container, !rest.editable && styleObj.editable.false]}>
+    <View
+      style={[
+        styleObj.container,
+        rest.editable === false && styleObj.editable.false,
+      ]}
+    >
       {label && (
         <Label size={labelSize ?? LABEL_SIZE[size]} error={!!error}>
           {label}
         </Label>
       )}
 
-      <View style={[
-        styleObj.inputWrapper,
-        styleObj.size[size],
-        isFocused && styleObj.isFocused.true,
-        error && styleObj.error.true,
-      ]}>
+      <View
+        style={[
+          styleObj.inputWrapper,
+          styleObj.size[size],
+          isFocused && styleObj.isFocused.true,
+          error && styleObj.error.true,
+        ]}
+      >
         {prefix && <View style={styleObj.affix}>{prefix}</View>}
 
         <RNTextInput
@@ -123,8 +130,8 @@ const styles = (theme: Theme) => {
       borderColor: theme.colors.border,
       borderRadius: theme.radii.md,
       backgroundColor: theme.colors.input,
-      paddingHorizontal: theme.sizes.p(3),
-      ...theme.shadow.xs,
+      paddingHorizontal: theme.sizes.padding(3),
+      ...theme.shadows.xs,
     },
     input: {
       flex: 1,
@@ -136,7 +143,7 @@ const styles = (theme: Theme) => {
       textAlignVertical: "center",
     },
     affix: {
-      minWidth: theme.sizes.h(5),
+      minWidth: theme.sizes.height(5),
       alignItems: "center",
       justifyContent: "center",
       gap: theme.sizes.gap(1),
@@ -148,10 +155,10 @@ const styles = (theme: Theme) => {
   } as const;
 
   const size = {
-    base: { height: theme.sizes.h(9.5) },
-    sm: { height: theme.sizes.h(8) },
-    lg: { height: theme.sizes.h(10) },
-    xl: { height: theme.sizes.h(12) },
+    base: { height: theme.sizes.height(9.5) },
+    sm: { height: theme.sizes.height(8) },
+    lg: { height: theme.sizes.height(10) },
+    xl: { height: theme.sizes.height(12) },
   } as const;
 
   const isFocused = {

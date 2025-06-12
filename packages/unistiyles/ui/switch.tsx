@@ -83,23 +83,23 @@ const styles = StyleSheet.create((theme) => ({
     borderRadius: theme.radii.full,
     borderWidth: 1,
     borderColor: "transparent",
-    ...theme.shadow.xs,
+    ...theme.shadows.xs,
     variants: {
       size: {
         sm: {
-          width: theme.sizes.w(6),
-          height: theme.sizes.h(3),
-          padding: theme.sizes.p(0.5),
+          width: theme.sizes.width(6),
+          height: theme.sizes.height(3),
+          padding: theme.sizes.padding(0.5),
         },
         md: {
-          width: theme.sizes.w(8),
-          height: theme.sizes.h(5),
-          padding: theme.sizes.p(0.5),
+          width: theme.sizes.width(8),
+          height: theme.sizes.height(5),
+          padding: theme.sizes.padding(0.5),
         },
         lg: {
-          width: theme.sizes.w(10),
-          height: theme.sizes.h(6),
-          padding: theme.sizes.p(0.75),
+          width: theme.sizes.width(10),
+          height: theme.sizes.height(6),
+          padding: theme.sizes.padding(0.75),
         },
       },
       checked: {
@@ -116,9 +116,9 @@ const styles = StyleSheet.create((theme) => ({
     borderRadius: theme.radii.full,
     variants: {
       size: {
-        sm: { width: theme.sizes.w(2.5), height: theme.sizes.h(2.5) },
-        md: { width: theme.sizes.w(4), height: theme.sizes.h(4) },
-        lg: { width: theme.sizes.w(5), height: theme.sizes.h(5) },
+        sm: { width: theme.sizes.width(2.5), height: theme.sizes.height(2.5) },
+        md: { width: theme.sizes.width(4), height: theme.sizes.height(4) },
+        lg: { width: theme.sizes.width(5), height: theme.sizes.height(5) },
       },
       checked: {
         true: { backgroundColor: theme.colors.primaryForeground },

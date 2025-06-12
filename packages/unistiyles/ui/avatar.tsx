@@ -157,10 +157,10 @@ const styles = StyleSheet.create((theme) => ({
     borderRadius: theme.radii.full,
     variants: {
       size: {
-        sm: { width: theme.sizes.w(6) },
-        md: { width: theme.sizes.w(8) },
-        lg: { width: theme.sizes.w(10) },
-        xl: { width: theme.sizes.w(16) },
+        sm: { width: theme.sizes.width(6) },
+        md: { width: theme.sizes.width(8) },
+        lg: { width: theme.sizes.width(10) },
+        xl: { width: theme.sizes.width(16) },
       },
     },
   },

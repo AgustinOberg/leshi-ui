@@ -68,43 +68,37 @@ export default Text;
 
 const styles = StyleSheet.create((theme) => ({
   text: {
+    includeFontPadding: false,
+    lineHeight: theme.sizes.fonts.base * 1.2,
+    textAlignVertical: "center",
     variants: {
       weight: {
         thin: {
           fontFamily: theme.fonts.thin,
-          fontWeight: "100",
         },
         extralight: {
           fontFamily: theme.fonts.extralight,
-          fontWeight: "200",
         },
         light: {
           fontFamily: theme.fonts.light,
-          fontWeight: "300",
         },
         regular: {
           fontFamily: theme.fonts.regular,
-          fontWeight: "400",
         },
         medium: {
           fontFamily: theme.fonts.medium,
-          fontWeight: "500",
         },
         semibold: {
           fontFamily: theme.fonts.semibold,
-          fontWeight: "600",
         },
         bold: {
           fontFamily: theme.fonts.bold,
-          fontWeight: "700",
         },
         extrabold: {
           fontFamily: theme.fonts.extrabold,
-          fontWeight: "800",
         },
         black: {
           fontFamily: theme.fonts.black,
-          fontWeight: "900",
         },
       },
       color: {
