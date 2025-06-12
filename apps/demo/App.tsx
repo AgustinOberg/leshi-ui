@@ -1,5 +1,5 @@
-import { StyleSheet, View } from "react-native";
 import React, { useState } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
 import {
   Avatar,
   AvatarFallback,
@@ -11,60 +11,124 @@ import {
   Surface,
   Switch,
   TextInput,
-} from "@leshi/ui";
+  Text,
+} from "@leshi/ui-rn";
 
-const App = () => {
+export default function App() {
   const [checked, setChecked] = useState(false);
   return (
-    <View style={styles.container}>
-      <Button variant="primary" size="lg" text="Hola mundo" />
-      <Surface style={{ width: "100%" }}>
-        <TextInput
-          description="This is your public display name."
-          label="Input"
-          placeholder="Type here..."
-        />
-      </Surface>
-      <Badge variant="destructive">Hola mundo</Badge>
-      <Checkbox checked size="lg" />
-      <Switch
-        size="sm"
-        checked={checked}
-        onCheckedChange={() => setChecked(!checked)}
-      />
-      <Switch
-        size="md"
-        checked={checked}
-        onCheckedChange={() => setChecked(!checked)}
-      />
-      <Switch
-        size="lg"
-        checked={checked}
-        onCheckedChange={() => setChecked(!checked)}
-      />
-      <Avatar size="lg">
-        <AvatarImage
-          source={{
-            uri: "https://avatars.githubusercontent.com/u/1000105?v=4",
-          }}
-        />
-        <AvatarFallback>{"Agustin"}</AvatarFallback>
-      </Avatar>
-      <Progress value={44} />
-      <Progress value={75} size="lg" />
-      <Progress value={90} variant="secondary" />
-    </View>
-  );
-};
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text weight="bold" size="lg">
+        Buttons
+      </Text>
+      <View style={styles.row}>
+        <Button text="Primary" variant="primary" />
+        <Button text="Secondary" variant="secondary" />
+        <Button text="Outline" variant="outline" />
+        <Button text="Ghost" variant="ghost" />
+        <Button text="Destructive" variant="destructive" />
+      </View>
 
-export default App;
+      <Text weight="bold" size="lg">
+        Badges
+      </Text>
+      <View style={styles.row}>
+        <Badge variant="primary">Primary</Badge>
+        <Badge variant="secondary">Secondary</Badge>
+        <Badge variant="outline">Outline</Badge>
+        <Badge variant="destructive">Danger</Badge>
+      </View>
+
+      <Text weight="bold" size="lg">
+        Checkbox
+      </Text>
+      <View style={styles.row}>
+        <Checkbox size="sm" checked />
+        <Checkbox size="md" checked />
+        <Checkbox size="lg" checked />
+      </View>
+
+      <Text weight="bold" size="lg">
+        Switch
+      </Text>
+      <View style={styles.row}>
+        <Switch
+          size="sm"
+          checked={checked}
+          onCheckedChange={() => setChecked(!checked)}
+        />
+        <Switch
+          size="md"
+          checked={checked}
+          onCheckedChange={() => setChecked(!checked)}
+        />
+        <Switch
+          size="lg"
+          checked={checked}
+          onCheckedChange={() => setChecked(!checked)}
+        />
+      </View>
+
+      <Text weight="bold" size="lg">
+        Avatar
+      </Text>
+      <View style={styles.row}>
+        <Avatar size="sm">
+          <AvatarImage
+            source={{
+              uri: "https://avatars.githubusercontent.com/u/1000105?v=4",
+            }}
+          />
+          <AvatarFallback>A</AvatarFallback>
+        </Avatar>
+        <Avatar size="md">
+          <AvatarImage
+            source={{
+              uri: "https://avatars.githubusercontent.com/u/1000105?v=4",
+            }}
+          />
+          <AvatarFallback>A</AvatarFallback>
+        </Avatar>
+        <Avatar size="lg">
+          <AvatarImage
+            source={{
+              uri: "https://avatars.githubusercontent.com/u/1000105?v=4",
+            }}
+          />
+          <AvatarFallback>A</AvatarFallback>
+        </Avatar>
+      </View>
+
+      <Text weight="bold" size="lg">
+        Progress
+      </Text>
+      <View style={styles.row}>
+        <Progress value={25} size="sm" />
+        <Progress value={50} size="md" />
+        <Progress value={75} size="lg" />
+        <Progress value={40} variant="secondary" />
+        <Progress value={60} variant="destructive" />
+      </View>
+
+      <Text weight="bold" size="lg">
+        Text Input
+      </Text>
+      <Surface style={{ width: "100%" }}>
+        <TextInput label="Username" placeholder="Type here" />
+      </Surface>
+    </ScrollView>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: "center",
+    padding: 16,
+    gap: 12,
+  },
+  row: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
     alignItems: "center",
-    gap: 10,
-    paddingHorizontal: 32,
   },
 });

@@ -12,7 +12,8 @@
   "dependencies": {
     "@expo-google-fonts/chathura": "^0.4.0",
     "@expo-google-fonts/inter": "^0.4.1",
-    "@leshi/ui": "workspace:*",
+    "@leshi/ui-unistyles": "workspace:*",
+    "@leshi/ui-rn": "workspace:*",
     "expo": "~53.0.10",
     "expo-font": "~13.3.1",
     "expo-status-bar": "~2.2.3",
