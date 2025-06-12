@@ -40,7 +40,13 @@ export interface RootProps {
   children: ReactNode;
   unmountOnClose?: boolean;
 }
-function Root({ open: cOpen, defaultOpen, onOpenChange, children }: RootProps) {
+function Root({
+  open: cOpen,
+  defaultOpen,
+  onOpenChange,
+  children,
+  unmountOnClose,
+}: RootProps) {
   const [uOpen, setUOpen] = useState(defaultOpen ?? false);
   const open = cOpen ?? uOpen;
   const setOpen = useCallback(
@@ -52,7 +58,9 @@ function Root({ open: cOpen, defaultOpen, onOpenChange, children }: RootProps) {
   );
 
   const ctx = useMemo(() => ({ open, setOpen }), [open, setOpen]);
-  if (!open && cOpen === undefined) return null;
+  if (unmountOnClose && !open) {
+    return null;
+  }
   return <DialogCtx.Provider value={ctx}>{children}</DialogCtx.Provider>;
 }
 

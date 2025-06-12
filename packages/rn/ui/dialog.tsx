@@ -20,6 +20,7 @@ import {
 import { useTheme } from "../theme/native";
 import { Text, type TextProps } from "./text";
 import { Pressable as SlotPressable } from "./slot";
+import { Icon } from "./icon";
 
 /*──────────────────── Context */
 type Ctx = { open: boolean; setOpen: (v: boolean) => void };
@@ -172,10 +173,7 @@ function Content({
               accessibilityRole="button"
               accessibilityLabel="Close dialog"
             >
-              {/* Usá tu icono preferido */}
-              <Text size="lg" weight="bold">
-                ×
-              </Text>
+              <Icon name="x" size={18} color="#6b6b6b" />
             </Close>
           )}
         </View>
