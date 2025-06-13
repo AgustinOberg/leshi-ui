@@ -66,7 +66,7 @@ export const Slider = ({
   });
 
   const indicatorStyle = useAnimatedStyle(() => ({
-    width: `${progress.value}%`,
+    width: (progress.value / 100) * width.value,
   }));
 
   const thumbSize =
