@@ -13,7 +13,8 @@ import {
   TextInput,
   Text,
   useTheme,
-} from "@leshi/ui-rn";
+  ThemeProvider,
+} from "@leshi/ui-unistyles";
 import { Inter_100Thin } from "@expo-google-fonts/inter/100Thin";
 import { Inter_200ExtraLight } from "@expo-google-fonts/inter/200ExtraLight";
 import { Inter_300Light } from "@expo-google-fonts/inter/300Light";
@@ -34,7 +35,6 @@ import { Inter_800ExtraBold_Italic } from "@expo-google-fonts/inter/800ExtraBold
 import { Inter_900Black_Italic } from "@expo-google-fonts/inter/900Black_Italic";
 
 import { useFonts } from "@expo-google-fonts/inter";
-import { ThemeProvider } from "../../packages/rn/theme/theme.context";
 
 function App() {
   let [fontsLoaded] = useFonts({
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
 
 const MainApp = () => {
   return (
-    <ThemeProvider defaultTheme="spotify">
+    <ThemeProvider defaultTheme="light">
       <App />
     </ThemeProvider>
   );

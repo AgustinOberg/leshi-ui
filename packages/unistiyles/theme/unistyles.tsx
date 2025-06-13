@@ -68,7 +68,9 @@ export const ThemeProvider: React.FC<{
     [resolvedThemeName, themeName, mode]
   );
 
-  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
+  return (
+    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
+  );
 };
 
 export const useThemeContext = (): ThemeContextValue => {

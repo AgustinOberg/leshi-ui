@@ -36,7 +36,6 @@ export const ThemeProvider: React.FC<{
   const [themeName, setThemeName] = useState<ThemeName>(defaultTheme);
   const [mode, setMode] = useState<ThemeMode>(defaultMode);
   const resolvedThemeName = mode === "system" ? systemTheme : themeName;
-  console.log({ mode, themeName, resolvedThemeName, systemTheme });
 
   const value = useMemo<ThemeContextValue>(
     () => ({
