@@ -9,6 +9,7 @@ const componentScreens = [
   { name: "Button", href: "/components/Button" },
   { name: "Checkbox", href: "/components/Checkbox" },
   { name: "Dialog", href: "/components/Dialog" },
+  { name: "Slider", href: "/components/Slider" },
   { name: "Progress", href: "/components/Progress" },
   { name: "Surface", href: "/components/Surface" },
   { name: "Switch", href: "/components/Switch" },
