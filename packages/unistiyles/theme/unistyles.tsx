@@ -1,15 +1,19 @@
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from "react";
+import React, { createContext, useContext, useMemo, useState } from "react";
 import { useColorScheme } from "react-native";
+import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
 import { themes } from "./themes";
+import type { ThemeName } from "./themes";
+import type { Theme } from "./theme";
+import { breakpoints } from "./breakpoints";
 
-export type ThemeName = keyof typeof themes;
-export type Theme = (typeof themes)[ThemeName];
+type AppThemes = typeof themes;
+type AppBreakpoints = typeof breakpoints;
+
+declare module "react-native-unistyles" {
+  export interface UnistylesThemes extends AppThemes {}
+  export interface UnistylesBreakpoints extends AppBreakpoints {}
+}
+
 export type ThemeMode = "manual" | "system";
 
 interface ThemeContextValue {
@@ -27,6 +31,12 @@ const getSystemTheme = (): ThemeName => {
   return scheme === "dark" && "dark" in themes ? "dark" : "light";
 };
 
+StyleSheet.configure({
+  themes,
+  breakpoints,
+  settings: { initialTheme: "light" },
+});
+
 export const ThemeProvider: React.FC<{
   children: React.ReactNode;
   defaultTheme?: ThemeName;
@@ -35,7 +45,17 @@ export const ThemeProvider: React.FC<{
   const systemTheme = getSystemTheme();
   const [themeName, setThemeName] = useState<ThemeName>(defaultTheme);
   const [mode, setMode] = useState<ThemeMode>(defaultMode);
+
   const resolvedThemeName = mode === "system" ? systemTheme : themeName;
+
+  React.useEffect(() => {
+    if (mode === "system") {
+      UnistylesRuntime.setAdaptiveThemes(true);
+    } else {
+      UnistylesRuntime.setAdaptiveThemes(false);
+      UnistylesRuntime.setTheme(themeName);
+    }
+  }, [mode, themeName]);
 
   const value = useMemo<ThemeContextValue>(
     () => ({
@@ -68,3 +88,13 @@ export const useThemeContext = (): ThemeContextValue => {
       console.warn("[Theme] No ThemeProvider mounted — ignoring setMode"),
   };
 };
+
+export const useTheme = () => useThemeContext().theme;
+export const useThemeName = () => ({
+  themeName: useThemeContext().themeName,
+  setThemeName: useThemeContext().setThemeName,
+});
+export const useThemeMode = () => ({
+  mode: useThemeContext().mode,
+  setMode: useThemeContext().setMode,
+});
