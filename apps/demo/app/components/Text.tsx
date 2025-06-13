@@ -16,16 +16,22 @@ const variants: any[] = [
 export default function TextScreen() {
   return (
     <ScrollView contentContainerStyle={{ padding: 16 }}>
-      <Text weight="bold" size="xl" style={{ marginBottom: 12 }}>
-        Text Variants
+      <Text weight="bold" size="xl" style={{ marginBottom: 4 }}>
+        Text
+      </Text>
+      <Text style={{ marginBottom: 12 }}>
+        Typography component for displaying text.
+      </Text>
+      <Text weight="bold" size="lg" style={{ marginBottom: 8 }}>
+        Variants
       </Text>
       {variants.map((v) => (
         <Text key={v} color={v} style={{ marginBottom: 8 }}>
           {v}
         </Text>
       ))}
-      <Text weight="bold" size="xl" style={{ marginVertical: 12 }}>
-        Text Sizes
+      <Text weight="bold" size="lg" style={{ marginVertical: 12 }}>
+        Sizes
       </Text>
       {sizes.map((s) => (
         <Text key={s} size={s} style={{ marginBottom: 8 }}>

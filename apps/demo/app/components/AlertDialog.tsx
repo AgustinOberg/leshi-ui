@@ -6,6 +6,12 @@ export default function AlertDialogScreen() {
   const [open, setOpen] = useState(false);
   return (
     <ScrollView contentContainerStyle={{ padding: 16 }}>
+      <Text weight="bold" size="xl" style={{ marginBottom: 4 }}>
+        AlertDialog
+      </Text>
+      <Text style={{ marginBottom: 12 }}>
+        A modal dialog used for confirming destructive actions.
+      </Text>
       <AlertDialog.Root open={open} onOpenChange={setOpen}>
         <AlertDialog.Trigger asChild>
           <Button text="Show Alert" />

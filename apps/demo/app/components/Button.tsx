@@ -19,8 +19,14 @@ const sizes: any[] = [
 export default function ButtonScreen() {
   return (
     <ScrollView contentContainerStyle={{ padding: 16 }}>
-      <Text weight="bold" size="xl" style={{ marginBottom: 12 }}>
-        Button Variants
+      <Text weight="bold" size="xl" style={{ marginBottom: 4 }}>
+        Button
+      </Text>
+      <Text style={{ marginBottom: 12 }}>
+        Used to trigger an action or event.
+      </Text>
+      <Text weight="bold" size="lg" style={{ marginBottom: 8 }}>
+        Variants
       </Text>
       {variants.map((v) => (
         <Button
@@ -30,8 +36,8 @@ export default function ButtonScreen() {
           style={{ marginBottom: 8 }}
         />
       ))}
-      <Text weight="bold" size="xl" style={{ marginVertical: 12 }}>
-        Button Sizes
+      <Text weight="bold" size="lg" style={{ marginVertical: 12 }}>
+        Sizes
       </Text>
       {sizes.map((s) => (
         <Button

@@ -21,6 +21,8 @@ const exampleScreens = [
   { name: "Registration", href: "/examples/Registration" },
   { name: "User Profile", href: "/examples/UserProfile" },
   { name: "Settings", href: "/examples/Settings" },
+  { name: "Login", href: "/examples/Login" },
+  { name: "Gallery", href: "/examples/Gallery" },
 ];
 
 export default function Index() {

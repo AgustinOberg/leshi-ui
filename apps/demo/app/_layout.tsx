@@ -33,6 +33,8 @@ const App = () => {
       <Stack.Screen name="examples/Registration" options={{ title: "Registration" }} />
       <Stack.Screen name="examples/UserProfile" options={{ title: "User Profile" }} />
       <Stack.Screen name="examples/Settings" options={{ title: "Settings" }} />
+      <Stack.Screen name="examples/Login" options={{ title: "Login" }} />
+      <Stack.Screen name="examples/Gallery" options={{ title: "Gallery" }} />
     </Stack>
   );
 };

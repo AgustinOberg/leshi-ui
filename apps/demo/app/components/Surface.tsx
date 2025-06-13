@@ -7,16 +7,22 @@ const variants: any[] = ["filled", "outlined"];
 export default function SurfaceScreen() {
   return (
     <ScrollView contentContainerStyle={{ padding: 16 }}>
-      <Text weight="bold" size="xl" style={{ marginBottom: 12 }}>
-        Surface Variants
+      <Text weight="bold" size="xl" style={{ marginBottom: 4 }}>
+        Surface
+      </Text>
+      <Text style={{ marginBottom: 12 }}>
+        Container that applies elevation and background.
+      </Text>
+      <Text weight="bold" size="lg" style={{ marginBottom: 8 }}>
+        Variants
       </Text>
       {variants.map((v) => (
         <Surface key={v} variant={v} style={{ padding: 8, marginBottom: 12 }}>
           <Text>{v}</Text>
         </Surface>
       ))}
-      <Text weight="bold" size="xl" style={{ marginVertical: 12 }}>
-        Surface Elevation
+      <Text weight="bold" size="lg" style={{ marginVertical: 12 }}>
+        Elevation
       </Text>
       {elevations.map((e) => (
         <Surface
