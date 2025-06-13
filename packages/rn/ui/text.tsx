@@ -55,7 +55,7 @@ export const Text = ({
 }: TextProps) => {
   const theme = useTheme();
   const stylesObj = styles(theme);
-  const colorStyle = stylesObj.color[variant ?? "primary"];
+  const colorStyle = stylesObj.color[variant ?? "foreground"];
   const sizeStyle = stylesObj.size[size ?? "base"];
   const weightStyle = stylesObj.weight[weight ?? "regular"];
   return (
@@ -70,7 +70,7 @@ export const Text = ({
 
 export default Text;
 
-import type { Theme } from "../theme/native";
+import type { Theme } from "../theme/theme";
 
 const styles = (theme: Theme) => {
   const base = StyleSheet.create({

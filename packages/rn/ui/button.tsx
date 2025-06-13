@@ -7,6 +7,7 @@ import {
 import { StyleSheet } from "react-native";
 import { useTheme } from "../theme/native";
 import Text, { type TextVariant } from "./text";
+import type { Theme } from "../theme/theme";
 
 export type ButtonVariant =
   | "primary"
@@ -50,7 +51,9 @@ export const Button = ({
   const stylesObj = styles(theme);
   const containerVariant = stylesObj.variant[variant ?? "primary"];
   const sizeStyle = stylesObj.size[size ?? "base"];
-  const fullWidthStyle = fullWidth ? stylesObj.fullWidth.true : stylesObj.fullWidth.false;
+  const fullWidthStyle = fullWidth
+    ? stylesObj.fullWidth.true
+    : stylesObj.fullWidth.false;
 
   return (
     <Pressable
@@ -81,8 +84,6 @@ export const Button = ({
   );
 };
 
-import type { Theme } from "../theme/native";
-
 const styles = (theme: Theme) => {
   const base = StyleSheet.create({
     pressed: { opacity: 0.8 },
@@ -111,7 +112,10 @@ const styles = (theme: Theme) => {
       ...theme.shadows.xs,
     },
     ghost: { backgroundColor: theme.colors.background },
-    destructive: { backgroundColor: theme.colors.destructive, ...theme.shadows.xs },
+    destructive: {
+      backgroundColor: theme.colors.destructive,
+      ...theme.shadows.xs,
+    },
   } as const;
 
   const size = {

@@ -10,7 +10,8 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
-import { StyleSheet, useUnistyles } from "react-native-unistyles";
+import { StyleSheet } from "react-native-unistyles";
+import { useTheme } from "../theme/unistyles";
 
 export type ProgressSize = "sm" | "md" | "lg";
 export type ProgressVariant = "primary" | "secondary" | "destructive";
@@ -30,7 +31,7 @@ export const Progress = ({
   ...rest
 }: ProgressProps) => {
   const clamped = Math.max(0, Math.min(value, 100));
-  const { theme } = useUnistyles();
+  const theme = useTheme();
 
   styles.useVariants({ size });
 

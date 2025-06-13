@@ -6,9 +6,10 @@ import {
   type TextInputFocusEventData,
 } from "react-native";
 import { useCallback, useState } from "react";
-import { StyleSheet, useUnistyles } from "react-native-unistyles";
+import { StyleSheet } from "react-native-unistyles";
 import Label from "./label";
 import { Text, type TextSize } from "./text";
+import { useTheme } from "../theme/unistyles";
 
 export type TextInputSize = "sm" | "base" | "lg" | "xl";
 export type TextInputContentSize = "base" | "sm" | "lg" | "xl";
@@ -45,7 +46,7 @@ export const TextInput = ({
   ...rest
 }: TextInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
-  const { theme } = useUnistyles();
+  const theme = useTheme();
 
   styles.useVariants({
     error: !!error,

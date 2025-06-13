@@ -18,7 +18,7 @@ import {
 } from "react-native";
 import { StyleSheet } from "react-native";
 import { useTheme } from "../theme/native";
-import type { Theme } from "../theme/native";
+import type { Theme } from "../theme/theme";
 import Text from "./text";
 
 export type AvatarSize = "sm" | "md" | "lg" | "xl";
@@ -139,7 +139,11 @@ export const AvatarFallback = ({ children, style }: AvatarFallbackProps) => {
   return (
     <View
       data-slot="avatar-fallback"
-      style={[styles(theme).fallback, { backgroundColor: theme.colors.muted }, style]}
+      style={[
+        styles(theme).fallback,
+        { backgroundColor: theme.colors.muted },
+        style,
+      ]}
     >
       {initials ? (
         <Text
@@ -154,7 +158,6 @@ export const AvatarFallback = ({ children, style }: AvatarFallbackProps) => {
     </View>
   );
 };
-
 
 const styles = (theme: Theme) => {
   const base = StyleSheet.create({

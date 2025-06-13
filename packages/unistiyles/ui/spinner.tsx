@@ -1,12 +1,12 @@
 import { ActivityIndicator } from "react-native";
-import { useUnistyles } from "react-native-unistyles";
+import { useTheme } from "../theme/unistyles";
 
 interface Props {
   size?: "large" | "small" | number;
   color?: string;
 }
 const Spinner = ({ size = "large", color }: Props) => {
-  const { theme } = useUnistyles();
+  const theme = useTheme();
   return <ActivityIndicator size={size} color={color ?? theme.colors.accent} />;
 };
 

@@ -66,7 +66,7 @@ export const Progress = ({
   );
 };
 
-import type { Theme } from "../theme/native";
+import type { Theme } from "../theme/theme";
 
 const styles = (theme: Theme) => {
   const base = StyleSheet.create({

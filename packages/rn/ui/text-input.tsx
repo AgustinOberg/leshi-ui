@@ -115,7 +115,7 @@ export const TextInput = ({
 
 export default TextInput;
 
-import type { Theme } from "../theme/native";
+import type { Theme } from "../theme/theme";
 
 const styles = (theme: Theme) => {
   const base = StyleSheet.create({
@@ -135,7 +135,7 @@ const styles = (theme: Theme) => {
     },
     input: {
       flex: 1,
-      color: theme.colors.primary,
+      color: theme.colors.foreground,
       fontFamily: theme.fonts.medium,
       minHeight: 0,
       paddingVertical: 0,

@@ -12,6 +12,7 @@ import {
   Switch,
   TextInput,
   Text,
+  useTheme,
 } from "@leshi/ui-rn";
 import { Inter_100Thin } from "@expo-google-fonts/inter/100Thin";
 import { Inter_200ExtraLight } from "@expo-google-fonts/inter/200ExtraLight";
@@ -33,8 +34,9 @@ import { Inter_800ExtraBold_Italic } from "@expo-google-fonts/inter/800ExtraBold
 import { Inter_900Black_Italic } from "@expo-google-fonts/inter/900Black_Italic";
 
 import { useFonts } from "@expo-google-fonts/inter";
+import { ThemeProvider } from "../../packages/rn/theme/theme.context";
 
-export default function App() {
+function App() {
   let [fontsLoaded] = useFonts({
     Inter_100Thin,
     Inter_200ExtraLight,
@@ -56,9 +58,15 @@ export default function App() {
     Inter_900Black_Italic,
   });
   const [checked, setChecked] = useState(false);
+  const { colors } = useTheme();
   if (!fontsLoaded) return null;
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView
+      contentContainerStyle={[
+        styles.container,
+        { backgroundColor: colors.background },
+      ]}
+    >
       <Text weight="bold" size="lg">
         Buttons
       </Text>
@@ -165,7 +173,6 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
     gap: 12,
-    backgroundColor: "black",
     flex: 1,
   },
   row: {
@@ -175,3 +182,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+
+const MainApp = () => {
+  return (
+    <ThemeProvider defaultTheme="spotify">
+      <App />
+    </ThemeProvider>
+  );
+};
+export default MainApp;

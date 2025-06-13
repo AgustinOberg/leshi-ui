@@ -9,3 +9,4 @@ export { Progress } from "./ui/progress";
 export { Badge } from "./ui/badge";
 export { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 export { Surface } from "./ui/surface";
+export { useTheme } from "./theme/unistyles";

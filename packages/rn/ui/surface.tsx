@@ -19,13 +19,16 @@ export const Surface = ({
   const elevationStyle = styleObj.elevation[elevation ?? "md"];
   const variantStyle = styleObj.variant[variant];
   return (
-    <View style={[styleObj.container, elevationStyle, variantStyle, style]} {...rest}>
+    <View
+      style={[styleObj.container, elevationStyle, variantStyle, style]}
+      {...rest}
+    >
       {children}
     </View>
   );
 };
 
-import type { Theme } from "../theme/native";
+import type { Theme } from "../theme/theme";
 
 const styles = (theme: Theme) => {
   const base = StyleSheet.create({

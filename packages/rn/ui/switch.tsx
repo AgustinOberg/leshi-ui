@@ -89,7 +89,7 @@ export const Switch = ({
   );
 };
 
-import type { Theme } from "../theme/native";
+import type { Theme } from "../theme/theme";
 
 const styles = (theme: Theme) => {
   const base = StyleSheet.create({
@@ -107,9 +107,21 @@ const styles = (theme: Theme) => {
   });
 
   const size = {
-    sm: { width: theme.sizes.width(6), height: theme.sizes.height(3), padding: theme.sizes.padding(0.5) },
-    md: { width: theme.sizes.width(8), height: theme.sizes.height(5), padding: theme.sizes.padding(0.5) },
-    lg: { width: theme.sizes.width(10), height: theme.sizes.height(6), padding: theme.sizes.padding(0.75) },
+    sm: {
+      width: theme.sizes.width(6),
+      height: theme.sizes.height(3),
+      padding: theme.sizes.padding(0.5),
+    },
+    md: {
+      width: theme.sizes.width(8),
+      height: theme.sizes.height(5),
+      padding: theme.sizes.padding(0.5),
+    },
+    lg: {
+      width: theme.sizes.width(10),
+      height: theme.sizes.height(6),
+      padding: theme.sizes.padding(0.75),
+    },
   } as const;
 
   const checked = {
@@ -132,5 +144,12 @@ const styles = (theme: Theme) => {
     false: { backgroundColor: theme.colors.background },
   } as const;
 
-  return { ...base, size, checked, disabled: disabledStyle, thumbSize, thumbChecked };
+  return {
+    ...base,
+    size,
+    checked,
+    disabled: disabledStyle,
+    thumbSize,
+    thumbChecked,
+  };
 };

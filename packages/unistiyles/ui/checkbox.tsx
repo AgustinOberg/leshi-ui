@@ -1,6 +1,7 @@
 import { View, Text, type PressableProps, Pressable } from "react-native";
-import { StyleSheet, useUnistyles } from "react-native-unistyles";
+import { StyleSheet } from "react-native-unistyles";
 import { Icon } from "./icon";
+import { useTheme } from "../theme/unistyles";
 
 export type CheckboxSize = "sm" | "md" | "lg";
 
@@ -13,7 +14,7 @@ export const Checkbox = ({ checked, size, ...rest }: CheckboxProps) => {
     checked: checked ?? false,
     size: size ?? "md",
   });
-  const { theme } = useUnistyles();
+  const theme = useTheme();
 
   return (
     <Pressable style={styles.container} {...rest}>

@@ -14,7 +14,7 @@ const Label = ({ error, disabled, children, ...rest }: LabelProps) => {
       {...rest}
       weight="medium"
       style={[styleObj.text, disabled && styleObj.disabled]}
-      variant={error ? "destructive" : "primary"}
+      variant={error ? "destructive" : "foreground"}
     >
       {children}
     </Text>

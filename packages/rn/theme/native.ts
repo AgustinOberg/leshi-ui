@@ -1,11 +1,12 @@
-import { useColorScheme } from 'react-native';
-import { themes } from './tm';
-import type { Theme } from './tm';
+import { useThemeContext } from "./theme.context";
 
-export { themes } from './tm';
-export type { Theme } from './tm';
+export const useTheme = () => useThemeContext().theme;
+export const useThemeName = () => ({
+  themeName: useThemeContext().themeName,
+  setThemeName: useThemeContext().setThemeName,
+});
 
-export function useTheme(): Theme {
-  const scheme = useColorScheme();
-  return scheme === 'dark' ? themes.dark : themes.light;
-}
+export const useThemeMode = () => ({
+  mode: useThemeContext().mode,
+  setMode: useThemeContext().setMode,
+});
