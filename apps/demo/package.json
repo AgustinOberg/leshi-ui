@@ -11,8 +11,9 @@
     "lint": "expo lint"
   },
   "dependencies": {
-    "@leshi/ui-rn": "workspace:*",
+    "@expo-google-fonts/inter": "^0.4.1",
     "@expo/vector-icons": "^14.1.0",
+    "@leshi/ui-rn": "workspace:*",
     "@react-navigation/bottom-tabs": "^7.3.10",
     "@react-navigation/elements": "^2.3.8",
     "@react-navigation/native": "^7.1.6",
