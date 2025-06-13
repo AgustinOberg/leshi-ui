@@ -13,8 +13,10 @@ import {
   TextInput,
   Text,
   useTheme,
+  AlertDialog,
+  Dialog,
   ThemeProvider,
-} from "@leshi/ui-unistyles";
+} from "@leshi/ui-rn";
 import { Inter_100Thin } from "@expo-google-fonts/inter/100Thin";
 import { Inter_200ExtraLight } from "@expo-google-fonts/inter/200ExtraLight";
 import { Inter_300Light } from "@expo-google-fonts/inter/300Light";
@@ -165,6 +167,54 @@ function App() {
       <Surface style={{ width: "100%" }}>
         <TextInput label="Username" placeholder="Type here" />
       </Surface>
+
+      <AlertDialog.Root>
+        <AlertDialog.Trigger asChild>
+          <Button text="Delete account" variant="destructive" />
+        </AlertDialog.Trigger>
+
+        <AlertDialog.Content>
+          <AlertDialog.Header>
+            <AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+            <AlertDialog.Description>
+              This action cannot be undone. It will permanently delete your
+              account.
+            </AlertDialog.Description>
+          </AlertDialog.Header>
+
+          <AlertDialog.Footer orientation="column">
+            <AlertDialog.Cancel />
+            <AlertDialog.Action
+              text="Yes, delete"
+              onPress={() => {
+                /* tu lógica */
+              }}
+            />
+          </AlertDialog.Footer>
+        </AlertDialog.Content>
+      </AlertDialog.Root>
+
+      <Dialog.Root>
+        <Dialog.Trigger asChild>
+          <Button text="Open dialog" />
+        </Dialog.Trigger>
+
+        <Dialog.Content>
+          <Dialog.Header>
+            <Dialog.Title>Edit profile</Dialog.Title>
+            <Dialog.Description>Make changes and save them.</Dialog.Description>
+          </Dialog.Header>
+
+          {/* …contenido form… */}
+
+          <Dialog.Footer orientation="row">
+            <Dialog.Close asChild>
+              <Button variant="outline" text="Cancel" />
+            </Dialog.Close>
+            <Button text="Save" />
+          </Dialog.Footer>
+        </Dialog.Content>
+      </Dialog.Root>
     </ScrollView>
   );
 }
@@ -185,7 +235,7 @@ const styles = StyleSheet.create({
 
 const MainApp = () => {
   return (
-    <ThemeProvider defaultTheme="light">
+    <ThemeProvider defaultTheme="spotify">
       <App />
     </ThemeProvider>
   );

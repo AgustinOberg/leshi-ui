@@ -53,7 +53,7 @@ export const Text = ({
   ...rest
 }: TextProps) => {
   styles.useVariants({
-    color: variant ?? "primary",
+    color: variant ?? "foreground",
     size: size ?? "base",
     weight: weight ?? "regular",
   });
