@@ -8,5 +8,8 @@
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "react-native-modal": "^14.0.0-rc.1"
   }
 }

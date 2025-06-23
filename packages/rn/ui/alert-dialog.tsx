@@ -7,7 +7,6 @@ import React, {
   type ReactNode,
 } from "react";
 import {
-  Modal,
   Pressable,
   View,
   StyleSheet,
@@ -17,6 +16,7 @@ import {
   type ViewStyle,
   type TextStyle,
 } from "react-native";
+import { Modal } from "./modal";
 import { useTheme } from "../theme/native";
 import { Text, type TextProps } from "./text";
 import { Button, type ButtonProps } from "./button";
@@ -132,7 +132,6 @@ function Content({
       onRequestClose={() => setOpen(false)}
       animationType="fade"
     >
-      <Overlay style={overlayStyle} />
       <Center style={centerStyle}>
         <View style={[s.card, style]} {...rest}>
           {children}
