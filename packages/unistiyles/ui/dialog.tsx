@@ -15,7 +15,7 @@ import {
   type ViewStyle,
   type TextStyle,
 } from "react-native";
-import { Modal } from "./modal";
+import { Modal, type ModalProps } from "./modal";
 import { StyleSheet } from "react-native-unistyles";
 import { Text, type TextProps } from "./text";
 import { Icon } from "./icon";
@@ -95,31 +95,17 @@ function Trigger({ children, onPress, asChild, ...rest }: TriggerProps) {
   );
 }
 
-/*──────── Overlay */
-interface OverlayProps extends ViewProps {
-  style?: StyleProp<ViewStyle>;
-}
-function Overlay({ style, ...r }: OverlayProps) {
-  return <View style={[styles.overlay, style]} {...r} />;
-}
-
-/*──────── Center */
-function Center({ style, ...r }: ViewProps) {
-  return <View style={[styles.center, style]} {...r} />;
-}
-
 /*──────── Content */
-interface ContentProps extends ViewProps {
-  overlayStyle?: StyleProp<ViewStyle>;
+interface ContentProps extends ViewProps, ModalProps {
   centerStyle?: StyleProp<ViewStyle>;
   showCloseButton?: boolean;
 }
 function Content({
   children,
   style,
-  overlayStyle,
   centerStyle,
   showCloseButton = true,
+  statusBarTranslucent = true,
   ...rest
 }: ContentProps) {
   const { open, setOpen } = useDialog();
@@ -129,13 +115,14 @@ function Content({
   return (
     <Modal
       transparent
-      statusBarTranslucent
       visible
       onRequestClose={() => setOpen(false)}
       animationType="fade"
+      statusBarTranslucent={statusBarTranslucent}
+      {...rest}
     >
-      <Center style={centerStyle}>
-        <View style={[styles.card, style]} {...rest}>
+      <View style={[styles.center, centerStyle]}>
+        <View style={[styles.card, style]}>
           {children}
           {showCloseButton && (
             <Close
@@ -147,7 +134,7 @@ function Content({
             </Close>
           )}
         </View>
-      </Center>
+      </View>
     </Modal>
   );
 }
@@ -229,10 +216,6 @@ const Description: React.FC<DescriptionProps> = ({
 
 /*──────── styles */
 const styles = StyleSheet.create((t) => ({
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0,0,0,0.5)",
-  },
   center: {
     flex: 1,
     justifyContent: "center",
@@ -271,7 +254,6 @@ export const Dialog = {
   Root,
   Trigger,
   Content,
-  Overlay,
   Header,
   Footer,
   Title,

@@ -15,7 +15,7 @@ import {
   type ViewStyle,
   type TextStyle,
 } from "react-native";
-import { Modal } from "./modal";
+import { Modal, type ModalProps } from "./modal";
 import { StyleSheet } from "react-native-unistyles";
 import { Button, type ButtonProps } from "./button";
 import { Text, type TextProps } from "./text";
@@ -90,29 +90,17 @@ function Trigger({ children, onPress, asChild, ...rest }: TriggerProps) {
   );
 }
 
-/*──────── Overlay */
-interface OverlayProps extends ViewProps {
-  style?: StyleProp<ViewStyle>;
-}
-function Overlay({ style, ...rest }: OverlayProps) {
-  return <View style={[styles.overlay, style]} {...rest} />;
-}
-
-/*──────── Center wrapper */
-function Center({ style, ...rest }: ViewProps) {
-  return <View style={[styles.center, style]} {...rest} />;
-}
+/*──────── Center style wrapper */
 
 /*──────── Content (Modal + card) */
-interface ContentProps extends ViewProps {
-  overlayStyle?: StyleProp<ViewStyle>;
+interface ContentProps extends ViewProps, ModalProps {
   centerStyle?: StyleProp<ViewStyle>;
 }
 function Content({
   children,
   style,
-  overlayStyle,
   centerStyle,
+  statusBarTranslucent = true,
   ...rest
 }: ContentProps) {
   const { open, setOpen } = useDialog();
@@ -122,16 +110,17 @@ function Content({
   return (
     <Modal
       transparent
-      statusBarTranslucent
       visible
       onRequestClose={() => setOpen(false)}
       animationType="fade"
+      statusBarTranslucent={statusBarTranslucent}
+      {...rest}
     >
-      <Center style={centerStyle}>
-        <View style={[styles.card, style]} {...rest}>
+      <View style={[styles.center, centerStyle]}>
+        <View style={[styles.card, style]}>
           {children}
         </View>
-      </Center>
+      </View>
     </Modal>
   );
 }
@@ -215,10 +204,6 @@ function Cancel({ text = "Cancel", variant, onPress, ...btn }: CTAProps) {
 
 /*──────── Styles (Unistyles) */
 const styles = StyleSheet.create((t) => ({
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0,0,0,0.5)",
-  },
   center: {
     flex: 1,
     justifyContent: "center",
@@ -253,7 +238,6 @@ export const AlertDialog = {
   Content,
   Header,
   Footer,
-  Overlay,
   Title,
   Description,
   Action,

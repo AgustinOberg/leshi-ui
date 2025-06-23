@@ -16,7 +16,7 @@ import {
   type ViewStyle,
   type TextStyle,
 } from "react-native";
-import { Modal } from "./modal";
+import { Modal, type ModalProps } from "./modal";
 import { useTheme } from "../theme/native";
 import { Text, type TextProps } from "./text";
 import { Pressable as SlotPressable } from "./slot";
@@ -86,21 +86,6 @@ function Trigger({ children, onPress, asChild, ...rest }: TriggerProps) {
   );
 }
 
-/*──────────────────── Overlay */
-interface OverlayProps extends ViewProps {
-  style?: StyleProp<ViewStyle>;
-}
-function Overlay({ style, ...rest }: OverlayProps) {
-  const s = useStyles();
-  return <View style={[s.overlay, style]} {...rest} />;
-}
-
-/*──────────────────── Center wrapper */
-function Center({ style, ...rest }: ViewProps) {
-  const s = useStyles();
-  return <View style={[s.center, style]} {...rest} />;
-}
-
 /*──────────────────── Close */
 interface CloseProps extends PressableProps {
   children: React.ReactNode;
@@ -137,17 +122,16 @@ function Close({ children, onPress, asChild, ...rest }: CloseProps) {
 }
 
 /*──────────────────── Content (Modal + card) */
-interface ContentProps extends ViewProps {
-  overlayStyle?: StyleProp<ViewStyle>;
+interface ContentProps extends ViewProps, ModalProps {
   centerStyle?: StyleProp<ViewStyle>;
   showCloseButton?: boolean;
 }
 function Content({
   children,
   style,
-  overlayStyle,
   centerStyle,
   showCloseButton = true,
+  statusBarTranslucent = true,
   ...rest
 }: ContentProps) {
   const { open, setOpen } = useDialog();
@@ -158,13 +142,14 @@ function Content({
   return (
     <Modal
       transparent
-      statusBarTranslucent
       visible
       onRequestClose={() => setOpen(false)}
       animationType="fade"
+      statusBarTranslucent={statusBarTranslucent}
+      {...rest}
     >
-      <Center style={centerStyle}>
-        <View style={[s.card, style]} {...rest}>
+      <View style={[s.center, centerStyle]}>
+        <View style={[s.card, style]}>
           {children}
           {showCloseButton && (
             <Close
@@ -176,7 +161,7 @@ function Content({
             </Close>
           )}
         </View>
-      </Center>
+      </View>
     </Modal>
   );
 }
@@ -231,10 +216,6 @@ function useStyles() {
   return useMemo(
     () =>
       StyleSheet.create({
-        overlay: {
-          ...StyleSheet.absoluteFillObject,
-          backgroundColor: "rgba(0,0,0,0.5)",
-        },
         center: {
           flex: 1,
           justifyContent: "center",
@@ -276,7 +257,6 @@ export const Dialog = {
   Root,
   Trigger,
   Content,
-  Overlay,
   Header,
   Footer,
   Title,
