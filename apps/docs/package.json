@@ -1,0 +1,19 @@
+{
+  "name": "leshiui-docs",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "latest",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "fumadocs-ui": "^15.5.1",
+    "fumadocs-core": "^15.5.1",
+    "fumadocs-mdx": "^11.6.7"
+  }
+}

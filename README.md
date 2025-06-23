@@ -59,6 +59,19 @@ leshi-ui/
 └─ bun.lockb        # Bun lockfile
 ```
 
+## Documentation site
+
+The docs live under `apps/docs` and are powered by **Fumadocs**. To start the
+development server:
+
+```bash
+cd apps/docs
+bun install
+bun run dev
+```
+
+This launches a Next.js site with pages sourced from `content/docs`.
+
 ## Development scripts
 
 - `bun install` – install dependencies
