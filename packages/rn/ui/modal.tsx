@@ -1,8 +1,11 @@
 import React from "react";
-import RNModal, { type ModalProps as RNModalModalProps } from "react-native-modal";
+import RNModal, {
+  type ModalProps as RNModalModalProps,
+} from "react-native-modal";
 import type { ModalProps as BaseModalProps } from "react-native";
 
-export type ModalProps = BaseModalProps;
+export type ModalProps = BaseModalProps &
+  Omit<RNModalModalProps, "isVisible" | "children">;
 
 export const Modal: React.FC<ModalProps> = ({
   visible,
