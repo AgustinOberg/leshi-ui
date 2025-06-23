@@ -13,6 +13,7 @@ export { Button } from "./ui/button";
 export { Checkbox } from "./ui/checkbox";
 export { Dialog } from "./ui/dialog";
 export { Progress } from "./ui/progress";
+export { Divider } from "./ui/divider";
 export { Surface } from "./ui/surface";
 export { Switch } from "./ui/switch";
 export { Text } from "./ui/text";
