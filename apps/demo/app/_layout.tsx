@@ -23,6 +23,7 @@ const App = () => {
       <Stack.Screen name="components/Badge" options={{ title: "Badge" }} />
       <Stack.Screen name="components/Button" options={{ title: "Button" }} />
       <Stack.Screen name="components/Checkbox" options={{ title: "Checkbox" }} />
+      <Stack.Screen name="components/Divider" options={{ title: "Divider" }} />
       <Stack.Screen name="components/Dialog" options={{ title: "Dialog" }} />
       <Stack.Screen name="components/Progress" options={{ title: "Progress" }} />
       <Stack.Screen name="components/Surface" options={{ title: "Surface" }} />
