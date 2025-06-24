@@ -16,6 +16,7 @@ export { Progress } from "./ui/progress";
 export { Divider } from "./ui/divider";
 export { Surface } from "./ui/surface";
 export { Switch } from "./ui/switch";
+export { RadioGroup, RadioGroupItem } from "./ui/radio";
 export { Text } from "./ui/text";
 export { TextInput } from "./ui/text-input";
 export { themes } from "./theme/themes";
