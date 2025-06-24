@@ -10,7 +10,7 @@ bun add -g leshi-ui
 
 | Command | Description |
 |---------|-------------|
-| `bunx leshi-ui init` | Copy React Native themes into `theme/` |
+| `bunx leshi-ui init` | Copy base themes (light & dark) |
 | `bunx leshi-ui init rn` | Same as `init` (explicit React Native) |
 | `bunx leshi-ui init unistyles` | Copy Unistyles themes |
 | `bunx leshi-ui add component <name>` | Add a RN component to `components/ui/` |
@@ -34,6 +34,7 @@ bunx leshi-ui add theme spotify --unistyles
 # See help
 bunx leshi-ui help
 ```
+The `init` command installs only the **light** and **dark** themes. Run `bunx leshi-ui add theme <name>` to add more.
 
 Certain components print extra notes after installation. For example:
 
