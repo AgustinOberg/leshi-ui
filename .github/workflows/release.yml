@@ -20,16 +20,12 @@ jobs:
 
       - run: bun install
 
-      # 1️⃣ Aumenta versión, hace commit + tag
       - run: npm version patch
 
-      # 2️⃣ Push de commit + tag al repo
       - run: git push --follow-tags
 
-      # 3️⃣ Auth de npm
       - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
-      # 4️⃣ Publica en npm
       - run: npm publish
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
