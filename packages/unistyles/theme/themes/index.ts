@@ -15,6 +15,16 @@ import { oceanLight } from "./ocean-light";
 import { oceanDark } from "./ocean-dark";
 import { bubblegumLight } from "./bubblegum-light";
 import { bubblegumDark } from "./bubblegum-dark";
+import { t3ChatLight } from "./t3-chat-light";
+import { t3ChatDark } from "./t3-chat-dark";
+import { twitterLight } from "./twitter-light";
+import { twitterDark } from "./twitter-dark";
+import { mochaMousseLight } from "./mocha-mousse-light";
+import { mochaMousseDark } from "./mocha-mousse-dark";
+import { amethystHazeLight } from "./amethyst-haze-light";
+import { amethystHazeDark } from "./amethyst-haze-dark";
+import { supabaseLight } from "./supabase-light";
+import { supabaseDark } from "./supabase-dark";
 export {
   light,
   dark,
@@ -32,6 +42,16 @@ export {
   oceanDark,
   bubblegumLight,
   bubblegumDark,
+  t3ChatLight,
+  t3ChatDark,
+  twitterLight,
+  twitterDark,
+  mochaMousseLight,
+  mochaMousseDark,
+  amethystHazeLight,
+  amethystHazeDark,
+  supabaseLight,
+  supabaseDark,
 };
 
 export const themes = {
@@ -51,5 +71,15 @@ export const themes = {
   oceanDark,
   bubblegumLight,
   bubblegumDark,
+  t3ChatLight,
+  t3ChatDark,
+  twitterLight,
+  twitterDark,
+  mochaMousseLight,
+  mochaMousseDark,
+  amethystHazeLight,
+  amethystHazeDark,
+  supabaseLight,
+  supabaseDark,
 } as const;
 export type ThemeName = keyof typeof themes;
