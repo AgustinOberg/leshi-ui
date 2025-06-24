@@ -173,30 +173,59 @@ const Description: React.FC<DescriptionProps> = ({
 );
 
 /*──────── CTA Buttons */
-type CTAProps = ButtonProps & { text?: string };
-function Action({ text = "Confirm", onPress, ...btn }: CTAProps) {
+type CTAProps = ButtonProps & {
+  text?: string;
+  asChild?: boolean;
+  children?: React.ReactNode;
+};
+function Action({
+  text = "Confirm",
+  asChild,
+  onPress,
+  children,
+  ...btn
+}: CTAProps) {
   const { setOpen } = useDialog();
+  const handlePress = (e: any) => {
+    onPress?.(e);
+    if (!e.defaultPrevented) setOpen(false);
+  };
+  if (asChild) {
+    return (
+      <SlotPressable {...btn} onPress={handlePress}>
+        {children as React.ReactElement}
+      </SlotPressable>
+    );
+  }
   return (
-    <Button
-      text={text}
-      onPress={(e) => {
-        onPress?.(e);
-        if (!e.defaultPrevented) setOpen(false);
-      }}
-      {...btn}
-    />
+    <Button text={text} onPress={handlePress} {...btn} />
   );
 }
-function Cancel({ text = "Cancel", variant, onPress, ...btn }: CTAProps) {
+function Cancel({
+  text = "Cancel",
+  variant,
+  asChild,
+  onPress,
+  children,
+  ...btn
+}: CTAProps) {
   const { setOpen } = useDialog();
+  const handlePress = (e: any) => {
+    onPress?.(e);
+    if (!e.defaultPrevented) setOpen(false);
+  };
+  if (asChild) {
+    return (
+      <SlotPressable {...btn} onPress={handlePress}>
+        {children as React.ReactElement}
+      </SlotPressable>
+    );
+  }
   return (
     <Button
       variant={variant ?? "outline"}
       text={text}
-      onPress={(e) => {
-        onPress?.(e);
-        if (!e.defaultPrevented) setOpen(false);
-      }}
+      onPress={handlePress}
       {...btn}
     />
   );

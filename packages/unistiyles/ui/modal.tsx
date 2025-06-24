@@ -5,7 +5,7 @@ import RNModal, {
 import type { ModalProps as BaseModalProps } from "react-native";
 
 export type ModalProps = BaseModalProps &
-  Omit<RNModalModalProps, "isVisible" | "children">;
+  Partial<Omit<RNModalModalProps, "isVisible" | "children">>;
 
 export const Modal: React.FC<ModalProps> = ({
   visible,

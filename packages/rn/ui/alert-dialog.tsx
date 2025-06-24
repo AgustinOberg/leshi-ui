@@ -171,30 +171,75 @@ const Description: React.FC<DescriptionProps> = ({
 );
 
 /*──────── CTA Buttons */
-type CTAProps = ButtonProps & { text?: string };
-function Action({ text = "Confirm", onPress, ...btn }: CTAProps) {
+type CTAProps = ButtonProps & {
+  text?: string;
+  asChild?: boolean;
+  children?: React.ReactNode;
+};
+function Action({
+  text = "Confirm",
+  asChild,
+  onPress,
+  children,
+  ...btn
+}: CTAProps) {
   const { setOpen } = useDialog();
+  const handlePress = (e: any) => {
+    onPress?.(e);
+    if (!e.defaultPrevented) setOpen(false);
+  };
+  if (asChild) {
+    if (!React.isValidElement(children))
+      throw new Error(
+        "AlertDialog.Action with asChild needs a single element child"
+      );
+    return React.cloneElement(children as React.ReactElement<any>, {
+      ...(btn as any),
+      onPress: (e: any) => {
+        (children as any).props?.onPress?.(e);
+        handlePress(e);
+      },
+    });
+  }
   return (
     <Button
       text={text}
-      onPress={(e) => {
-        onPress?.(e);
-        if (!e.defaultPrevented) setOpen(false);
-      }}
+      onPress={handlePress}
       {...btn}
     />
   );
 }
-function Cancel({ text = "Cancel", variant, onPress, ...btn }: CTAProps) {
+function Cancel({
+  text = "Cancel",
+  variant,
+  asChild,
+  onPress,
+  children,
+  ...btn
+}: CTAProps) {
   const { setOpen } = useDialog();
+  const handlePress = (e: any) => {
+    onPress?.(e);
+    if (!e.defaultPrevented) setOpen(false);
+  };
+  if (asChild) {
+    if (!React.isValidElement(children))
+      throw new Error(
+        "AlertDialog.Cancel with asChild needs a single element child"
+      );
+    return React.cloneElement(children as React.ReactElement<any>, {
+      ...(btn as any),
+      onPress: (e: any) => {
+        (children as any).props?.onPress?.(e);
+        handlePress(e);
+      },
+    });
+  }
   return (
     <Button
       variant={variant ?? "outline"}
       text={text}
-      onPress={(e) => {
-        onPress?.(e);
-        if (!e.defaultPrevented) setOpen(false);
-      }}
+      onPress={handlePress}
       {...btn}
     />
   );

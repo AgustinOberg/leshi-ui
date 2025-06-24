@@ -8,6 +8,7 @@ const componentScreens = [
   { name: "Badge", href: "/components/Badge" },
   { name: "Button", href: "/components/Button" },
   { name: "Checkbox", href: "/components/Checkbox" },
+  { name: "Radio", href: "/components/Radio" },
   { name: "Divider", href: "/components/Divider" },
   { name: "Dialog", href: "/components/Dialog" },
   { name: "Progress", href: "/components/Progress" },
