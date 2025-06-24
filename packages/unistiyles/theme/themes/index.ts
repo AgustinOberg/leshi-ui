@@ -1,7 +1,48 @@
 export { fonts, shadows, sizes, radii } from "./common";
 import { light } from "./light";
 import { dark } from "./dark";
-export { light, dark };
+import { grapeLight, grapeDark } from "./grape";
+import { peachLight, peachDark } from "./peach";
+import { retroLight, retroDark } from "./retro";
+import { monoLight, monoDark } from "./mono";
+import { lavenderLight, lavenderDark } from "./lavender";
+import { oceanLight, oceanDark } from "./ocean";
+import { bubblegumLight, bubblegumDark } from "./bubblegum";
+export {
+  light,
+  dark,
+  grapeLight,
+  grapeDark,
+  peachLight,
+  peachDark,
+  retroLight,
+  retroDark,
+  monoLight,
+  monoDark,
+  lavenderLight,
+  lavenderDark,
+  oceanLight,
+  oceanDark,
+  bubblegumLight,
+  bubblegumDark,
+};
 
-export const themes = { light, dark } as const;
+export const themes = {
+  light,
+  dark,
+  grapeLight,
+  grapeDark,
+  peachLight,
+  peachDark,
+  retroLight,
+  retroDark,
+  monoLight,
+  monoDark,
+  lavenderLight,
+  lavenderDark,
+  oceanLight,
+  oceanDark,
+  bubblegumLight,
+  bubblegumDark,
+} as const;
 export type ThemeName = keyof typeof themes;
