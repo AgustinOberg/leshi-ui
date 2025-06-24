@@ -20,15 +20,16 @@ jobs:
 
       - run: bun install
 
-      - run: npm version patch --no-git-tag-version
+      # 1️⃣ Aumenta versión, hace commit + tag
+      - run: npm version patch
 
-      - run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git commit -am "chore: bump version" || echo "no changes"
-          git tag v$(node -p "require('./package.json').version")
-          git push --follow-tags
+      # 2️⃣ Push de commit + tag al repo
+      - run: git push --follow-tags
 
-      - run: bun run release
+      # 3️⃣ Auth de npm
+      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+
+      # 4️⃣ Publica en npm
+      - run: npm publish
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
