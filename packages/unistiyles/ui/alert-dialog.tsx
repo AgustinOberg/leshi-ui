@@ -14,6 +14,7 @@ import {
   type StyleProp,
   type ViewStyle,
   type TextStyle,
+  type GestureResponderEvent,
 } from "react-native";
 import { Modal, type ModalProps } from "./modal";
 import { StyleSheet } from "react-native-unistyles";
@@ -70,7 +71,7 @@ interface TriggerProps extends PressableProps {
 function Trigger({ children, onPress, asChild, ...rest }: TriggerProps) {
   const { setOpen } = useDialog();
 
-  const handlePress = (e: any) => {
+  const handlePress = (e: GestureResponderEvent) => {
     onPress?.(e);
     if (!e.defaultPrevented) setOpen(true);
   };
@@ -186,7 +187,7 @@ function Action({
   ...btn
 }: CTAProps) {
   const { setOpen } = useDialog();
-  const handlePress = (e: any) => {
+  const handlePress = (e: GestureResponderEvent) => {
     onPress?.(e);
     if (!e.defaultPrevented) setOpen(false);
   };
@@ -210,7 +211,7 @@ function Cancel({
   ...btn
 }: CTAProps) {
   const { setOpen } = useDialog();
-  const handlePress = (e: any) => {
+  const handlePress = (e: GestureResponderEvent) => {
     onPress?.(e);
     if (!e.defaultPrevented) setOpen(false);
   };
