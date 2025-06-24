@@ -22,7 +22,8 @@
     "react-native-edge-to-edge": "^1.6.1",
     "react-native-nitro-modules": "^0.26.2",
     "react-native-reanimated": "~3.17.4",
-    "react-native-unistyles": "^3.0.0-rc.4"
+    "react-native-unistyles": "^3.0.0-rc.4",
+    "react-native-modal": "^14.0.0-rc.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

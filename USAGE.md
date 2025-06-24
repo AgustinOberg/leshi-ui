@@ -17,6 +17,7 @@ bun add -g leshi-ui
 | `bunx leshi-ui add component <name> --unistyles` | Add a Unistyles component |
 | `bunx leshi-ui add theme <name>` | Add RN theme file to `theme/themes/` and update index |
 | `bunx leshi-ui add theme <name> --unistyles` | Add Unistyles theme file and update index |
+| `bunx leshi-ui themes` | List available themes |
 | `bunx leshi-ui help` | Show help information |
 
 ## Examples

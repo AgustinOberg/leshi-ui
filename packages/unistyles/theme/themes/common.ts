@@ -1,14 +1,15 @@
 // --- Font families for each weight ---
+// Use the default system font available in React Native
 export const fonts = {
-  thin: "Inter_100Thin",
-  extralight: "Inter_200ExtraLight",
-  light: "Inter_300Light",
-  regular: "Inter_400Regular",
-  medium: "Inter_500Medium",
-  semibold: "Inter_600SemiBold",
-  bold: "Inter_700Bold",
-  extrabold: "Inter_800ExtraBold",
-  black: "Inter_900Black",
+  thin: "System",
+  extralight: "System",
+  light: "System",
+  regular: "System",
+  medium: "System",
+  semibold: "System",
+  bold: "System",
+  extrabold: "System",
+  black: "System",
 } as const;
 
 // --- Shadow presets used across components ---
