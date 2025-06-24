@@ -123,7 +123,7 @@ function getSourcePath(unistyles, type, name) {
 
 program
   .command('init [target]')
-  .description('initialize themes')
+  .description('initialize themes (light/dark)')
   .action(async (target) => {
     let folder = 'rn';
     if (target === 'unistyles') {
@@ -135,11 +135,33 @@ program
       logError('Source theme folder not found');
       return;
     }
+
+    // copy base theme files excluding the themes folder
     await fs.copy(src, dest, {
       overwrite: false,
       errorOnExist: false,
-      filter: (file) => !file.endsWith('spotify.ts'),
+      filter: (file) => {
+        const rel = path.relative(src, file);
+        return !rel.startsWith(`themes${path.sep}`);
+      },
     });
+
+    const themesDir = path.join(dest, 'themes');
+    await fs.ensureDir(themesDir);
+    // copy default light and dark themes
+    for (const name of ['light', 'dark']) {
+      const srcFile = path.join(src, 'themes', `${name}.ts`);
+      const destFile = path.join(themesDir, `${name}.ts`);
+      if (await fs.pathExists(srcFile)) {
+        await fs.copy(srcFile, destFile, {
+          overwrite: false,
+          errorOnExist: false,
+        });
+      }
+    }
+
+    await updateThemeIndex(themesDir, 'light');
+
     logSuccess('Themes initialized');
   });
 
