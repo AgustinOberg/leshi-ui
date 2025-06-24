@@ -13,12 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
       - uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
-
       - run: bun install
+
+      - run: git config user.name "github-actions"
+      - run: git config user.email "github-actions@github.com"
 
       - run: npm version patch
 
