@@ -144,7 +144,7 @@ program
       return;
     }
 
-    // copy base theme files excluding the themes folder
+    //copy base theme files excluding the themes folder
     await fs.copy(src, dest, {
       overwrite: false,
       errorOnExist: false,
