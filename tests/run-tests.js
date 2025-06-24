@@ -51,4 +51,9 @@ if (idxContent.includes('import { grape-dark }')) {
   throw new Error('invalid theme name in index');
 }
 
+const themesList = run('themes');
+if (!themesList.includes('spotify') || !themesList.includes('grape-dark')) {
+  throw new Error('themes list missing entries');
+}
+
 console.log('All CLI tests passed');

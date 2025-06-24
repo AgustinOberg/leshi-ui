@@ -61,6 +61,7 @@ npm install -g leshi-ui
 | -------------------------------------------- | ------------------------------------ |
 | `bunx leshi-ui add theme <name>`             | Add RN theme file to `theme/themes/` |
 | `bunx leshi-ui add theme <name> --unistyles` | Add Unistyles theme file             |
+| `bunx leshi-ui themes`                       | List available themes                |
 
 ---
 

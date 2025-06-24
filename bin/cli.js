@@ -31,7 +31,27 @@ program
     program.outputHelp();
   });
 
+program.hook("preAction", () => {
+  printBanner();
+});
+
+const logo = chalk.cyan(`
+ 
+░▒▓█▓▒░      ░▒▓████████▓▒░░▒▓███████▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░ 
+░▒▓█▓▒░      ░▒▓█▓▒░      ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░ 
+░▒▓█▓▒░      ░▒▓█▓▒░      ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░ 
+░▒▓█▓▒░      ░▒▓██████▓▒░  ░▒▓██████▓▒░░▒▓████████▓▒░▒▓█▓▒░ 
+░▒▓█▓▒░      ░▒▓█▓▒░             ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░ 
+░▒▓█▓▒░      ░▒▓█▓▒░             ░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░ 
+░▒▓████████▓▒░▒▓████████▓▒░▒▓███████▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░ 
+                                                            
+                                                            
+`);
 const mascot = chalk.cyan("🐱  Leshi");
+
+function printBanner() {
+  console.log(logo);
+}
 function logSuccess(msg) {
   console.log(`${mascot} ${chalk.green(msg)}`);
 }
@@ -78,8 +98,7 @@ async function updateThemeIndex(dir, name) {
     ].join("\n");
     await fs.outputFile(indexPath, base);
   }
-  const toCamel = (str) =>
-    str.replace(/[-_](\w)/g, (_, c) => c.toUpperCase());
+  const toCamel = (str) => str.replace(/[-_](\w)/g, (_, c) => c.toUpperCase());
   const varName = toCamel(name);
 
   let content = await fs.readFile(indexPath, "utf8");
@@ -211,6 +230,22 @@ add
     await fs.ensureDir(destDir);
     await copyDir(src, dest);
     await updateThemeIndex(destDir, name);
+  });
+
+program
+  .command("themes")
+  .option("--unistyles", "list Unistyles themes")
+  .description("list available themes")
+  .action(async (options) => {
+    const folder = options.unistyles ? "unistyles" : "rn";
+    const dir = path.join(packagesDir, folder, "theme", "themes");
+    const files = await fs.readdir(dir);
+    const names = files
+      .filter((f) => f.endsWith(".ts"))
+      .filter((f) => !["index.ts", "common.ts"].includes(f))
+      .map((f) => f.replace(/\.ts$/, ""));
+    logInfo("Available themes:");
+    names.forEach((n) => console.log(`  - ${n}`));
   });
 
 program.parseAsync(process.argv);
