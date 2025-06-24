@@ -5,25 +5,30 @@ on:
     branches:
       - main
 
-  permissions:
-    contents: write
+permissions:
+  contents: write
 
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
+
       - run: bun install
+
       - run: npm version patch --no-git-tag-version
+
       - run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git commit -am "chore: bump version" || echo "no changes"
           git tag v$(node -p "require('./package.json').version")
           git push --follow-tags
+
       - run: bun run release
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
