@@ -1,4 +1,4 @@
-import { useInit } from "@/hooks/useInit";
+import { useInit } from "../hooks/useInit";
 import { ThemeProvider, useTheme } from "@leshi/ui-rn";
 import { Stack } from "expo-router";
 

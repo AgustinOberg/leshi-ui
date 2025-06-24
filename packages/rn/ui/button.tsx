@@ -5,9 +5,9 @@ import {
   type ViewStyle,
 } from "react-native";
 import { StyleSheet } from "react-native";
-import { useTheme } from "@/theme/native";
+import { useTheme } from "../theme/native";
 import Text, { type TextVariant } from "./text";
-import type { Theme } from "@/theme/theme";
+import type { Theme } from "../theme/theme";
 
 export type ButtonVariant =
   | "primary"

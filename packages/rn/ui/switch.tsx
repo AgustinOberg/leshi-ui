@@ -12,7 +12,7 @@ import Animated, {
   Easing,
 } from "react-native-reanimated";
 import { StyleSheet } from "react-native";
-import { useTheme } from "@/theme/native";
+import { useTheme } from "../theme/native";
 
 export type SwitchSize = "sm" | "md" | "lg";
 
@@ -89,7 +89,7 @@ export const Switch = ({
   );
 };
 
-import type { Theme } from "@/theme/theme";
+import type { Theme } from "../theme/theme";
 
 const styles = (theme: Theme) => {
   const base = StyleSheet.create({

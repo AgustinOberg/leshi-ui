@@ -1,5 +1,5 @@
 import { ActivityIndicator } from "react-native";
-import { useTheme } from "@/theme/unistyles";
+import { useTheme } from "../theme/unistyles";
 
 interface Props {
   size?: "large" | "small" | number;

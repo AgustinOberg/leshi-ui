@@ -18,7 +18,7 @@ import {
 } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
 import Text from "./text";
-import { useTheme } from "@/theme/unistyles";
+import { useTheme } from "../theme/unistyles";
 
 export type AvatarSize = "sm" | "md" | "lg" | "xl";
 

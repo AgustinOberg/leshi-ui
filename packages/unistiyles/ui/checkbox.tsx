@@ -1,7 +1,7 @@
 import { View, Text, type PressableProps, Pressable } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
 import { Icon } from "./icon";
-import { useTheme } from "@/theme/unistyles";
+import { useTheme } from "../theme/unistyles";
 
 export type CheckboxSize = "sm" | "md" | "lg";
 
