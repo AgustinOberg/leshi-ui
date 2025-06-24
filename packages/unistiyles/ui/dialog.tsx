@@ -14,12 +14,14 @@ import {
   type StyleProp,
   type ViewStyle,
   type TextStyle,
+  type GestureResponderEvent,
 } from "react-native";
 import { Modal, type ModalProps } from "./modal";
 import { StyleSheet } from "react-native-unistyles";
 import { Text, type TextProps } from "./text";
 import { Icon } from "./icon";
 import { Pressable as SlotPressable } from "./slot";
+import { useTheme } from "../theme/unistyles";
 
 /*──────── context */
 type Ctx = { open: boolean; setOpen: (v: boolean) => void };
@@ -66,7 +68,7 @@ interface TriggerProps extends PressableProps {
 }
 function Trigger({ children, onPress, asChild, ...rest }: TriggerProps) {
   const { setOpen } = useDialog();
-  const handlePress = (e: any) => {
+  const handlePress = (e: GestureResponderEvent) => {
     onPress?.(e);
     if (!e.defaultPrevented) setOpen(true);
   };
@@ -80,7 +82,7 @@ function Trigger({ children, onPress, asChild, ...rest }: TriggerProps) {
       children as React.ReactElement<any>,
       {
         ...(rest as any),
-        onPress: (e: any) => {
+        onPress: (e: GestureResponderEvent) => {
           (children as any).props?.onPress?.(e);
           handlePress(e);
         },
@@ -109,6 +111,7 @@ function Content({
   ...rest
 }: ContentProps) {
   const { open, setOpen } = useDialog();
+  const theme = useTheme();
 
   if (!open) return null;
 
@@ -130,7 +133,7 @@ function Content({
               accessibilityRole="button"
               accessibilityLabel="Close dialog"
             >
-              <Icon name="x" size={18} color="#6b6b6b" />
+              <Icon name="x" size={18} color={theme.colors.mutedForeground} />
             </Close>
           )}
         </View>
@@ -148,7 +151,7 @@ interface CloseProps extends PressableProps {
 function Close({ children, onPress, asChild, ...rest }: CloseProps) {
   const { setOpen } = useDialog();
 
-  const handlePress = (e: any) => {
+  const handlePress = (e: GestureResponderEvent) => {
     onPress?.(e);
     if (!e.defaultPrevented) setOpen(false);
   };

@@ -15,6 +15,7 @@ import {
   type StyleProp,
   type ViewStyle,
   type TextStyle,
+  type GestureResponderEvent,
 } from "react-native";
 import { Modal, type ModalProps } from "./modal";
 import { useTheme } from "../theme/native";
@@ -73,7 +74,7 @@ interface TriggerProps extends PressableProps {
 function Trigger({ children, onPress, asChild, ...rest }: TriggerProps) {
   const { setOpen } = useDialog();
 
-  const handlePress = (e: any) => {
+  const handlePress = (e: GestureResponderEvent) => {
     onPress?.(e);
     if (!e.defaultPrevented) setOpen(true);
   };
@@ -171,30 +172,75 @@ const Description: React.FC<DescriptionProps> = ({
 );
 
 /*──────── CTA Buttons */
-type CTAProps = ButtonProps & { text?: string };
-function Action({ text = "Confirm", onPress, ...btn }: CTAProps) {
+type CTAProps = ButtonProps & {
+  text?: string;
+  asChild?: boolean;
+  children?: React.ReactNode;
+};
+function Action({
+  text = "Confirm",
+  asChild,
+  onPress,
+  children,
+  ...btn
+}: CTAProps) {
   const { setOpen } = useDialog();
+  const handlePress = (e: GestureResponderEvent) => {
+    onPress?.(e);
+    if (!e.defaultPrevented) setOpen(false);
+  };
+  if (asChild) {
+    if (!React.isValidElement(children))
+      throw new Error(
+        "AlertDialog.Action with asChild needs a single element child"
+      );
+    return React.cloneElement(children as React.ReactElement<any>, {
+      ...(btn as any),
+      onPress: (e: GestureResponderEvent) => {
+        (children as any).props?.onPress?.(e);
+        handlePress(e);
+      },
+    });
+  }
   return (
     <Button
       text={text}
-      onPress={(e) => {
-        onPress?.(e);
-        if (!e.defaultPrevented) setOpen(false);
-      }}
+      onPress={handlePress}
       {...btn}
     />
   );
 }
-function Cancel({ text = "Cancel", variant, onPress, ...btn }: CTAProps) {
+function Cancel({
+  text = "Cancel",
+  variant,
+  asChild,
+  onPress,
+  children,
+  ...btn
+}: CTAProps) {
   const { setOpen } = useDialog();
+  const handlePress = (e: GestureResponderEvent) => {
+    onPress?.(e);
+    if (!e.defaultPrevented) setOpen(false);
+  };
+  if (asChild) {
+    if (!React.isValidElement(children))
+      throw new Error(
+        "AlertDialog.Cancel with asChild needs a single element child"
+      );
+    return React.cloneElement(children as React.ReactElement<any>, {
+      ...(btn as any),
+      onPress: (e: GestureResponderEvent) => {
+        (children as any).props?.onPress?.(e);
+        handlePress(e);
+      },
+    });
+  }
   return (
     <Button
       variant={variant ?? "outline"}
       text={text}
-      onPress={(e) => {
-        onPress?.(e);
-        if (!e.defaultPrevented) setOpen(false);
-      }}
+      onPress={handlePress}
       {...btn}
     />
   );

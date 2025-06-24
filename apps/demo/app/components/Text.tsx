@@ -26,7 +26,7 @@ export default function TextScreen() {
         Variants
       </Text>
       {variants.map((v) => (
-        <Text key={v} color={v} style={{ marginBottom: 8 }}>
+        <Text key={v} variant={v} style={{ marginBottom: 8 }}>
           {v}
         </Text>
       ))}
