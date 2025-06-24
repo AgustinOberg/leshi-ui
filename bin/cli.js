@@ -118,7 +118,7 @@ async function updateThemeIndex(dir, name) {
 function getSourcePath(unistyles, type, name) {
   let base = path.join(packagesDir, "rn");
   if (unistyles) {
-    base = path.join(packagesDir, "unistiyles");
+    base = path.join(packagesDir, "unistyles");
   }
   if (type === "component") {
     return path.join(base, "ui", `${name}.tsx`);
@@ -135,7 +135,7 @@ program
   .action(async (target) => {
     let folder = "rn";
     if (target === "unistyles") {
-      folder = "unistiyles";
+      folder = "unistyles";
     }
     const src = path.join(packagesDir, folder, "theme");
     const dest = path.join(process.cwd(), "theme");

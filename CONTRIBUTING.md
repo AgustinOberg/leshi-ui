@@ -8,7 +8,7 @@ Thank you for wanting to contribute! Please follow these guidelines:
 4. Run `bun test` and the TypeScript checks before submitting a pull request:
    ```bash
    npm run test
-   npx tsc -p packages/unistiyles/tsconfig.json
+   npx tsc -p packages/unistyles/tsconfig.json
    npx tsc -p packages/rn/tsconfig.json
    ```
 5. Ensure your code follows existing style conventions.
