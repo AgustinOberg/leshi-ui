@@ -68,3 +68,6 @@ leshi-ui/
 ---
 
 This project was bootstrapped with **Bun** v1.1.33.
+
+## CLI Usage
+See [USAGE.md](USAGE.md) for instructions on using the Leshi CLI. Some components will output additional notes defined in `component-notes.json`.

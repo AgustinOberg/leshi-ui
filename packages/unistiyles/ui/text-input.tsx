@@ -9,7 +9,7 @@ import { useCallback, useState } from "react";
 import { StyleSheet } from "react-native-unistyles";
 import Label from "./label";
 import { Text, type TextSize } from "./text";
-import { useTheme } from "../theme/unistyles";
+import { useTheme } from "@/theme/unistyles";
 
 export type TextInputSize = "sm" | "base" | "lg" | "xl";
 export type TextInputContentSize = "base" | "sm" | "lg" | "xl";

@@ -1,5 +1,5 @@
 import { View, type ViewProps, StyleSheet } from "react-native";
-import { useTheme } from "../theme/native";
+import { useTheme } from "@/theme/native";
 
 export type SurfaceElevation = "xs" | "md" | "xl" | "2xl" | "3xl" | "none";
 export type SurfaceVariant = "filled" | "outlined";
@@ -28,7 +28,7 @@ export const Surface = ({
   );
 };
 
-import type { Theme } from "../theme/theme";
+import type { Theme } from "@/theme/theme";
 
 const styles = (theme: Theme) => {
   const base = StyleSheet.create({

@@ -1,0 +1,11 @@
+apps
+index.ts
+node_modules
+.bun
+bun.lockb
+.vscode
+AGENTS.md
+LLM_OVERVIEW.md
+ROADMAP.md
+tests
+.github

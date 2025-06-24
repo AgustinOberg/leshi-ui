@@ -17,7 +17,7 @@ import {
   type TextStyle,
 } from "react-native";
 import { Modal, type ModalProps } from "./modal";
-import { useTheme } from "../theme/native";
+import { useTheme } from "@/theme/native";
 import { Text, type TextProps } from "./text";
 import { Pressable as SlotPressable } from "./slot";
 import { Icon } from "./icon";

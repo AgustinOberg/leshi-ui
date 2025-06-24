@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import { useCallback, useState } from "react";
 import { StyleSheet } from "react-native";
-import { useTheme } from "../theme/native";
+import { useTheme } from "@/theme/native";
 import Label from "./label";
 import { Text, type TextSize } from "./text";
 
@@ -115,7 +115,7 @@ export const TextInput = ({
 
 export default TextInput;
 
-import type { Theme } from "../theme/theme";
+import type { Theme } from "@/theme/theme";
 
 const styles = (theme: Theme) => {
   const base = StyleSheet.create({

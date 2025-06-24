@@ -11,7 +11,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { StyleSheet } from "react-native-unistyles";
-import { useTheme } from "../theme/unistyles";
+import { useTheme } from "@/theme/unistyles";
 
 export type ProgressSize = "sm" | "md" | "lg";
 export type ProgressVariant = "primary" | "secondary" | "destructive";

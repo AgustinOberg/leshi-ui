@@ -1,7 +1,7 @@
 import { Text as RNText, type TextProps as RNTextProps } from "react-native";
 import React from "react";
 import { StyleSheet } from "react-native";
-import { useTheme } from "../theme/native";
+import { useTheme } from "@/theme/native";
 export type TextVariant =
   | "primaryForeground"
   | "primary"
@@ -70,7 +70,7 @@ export const Text = ({
 
 export default Text;
 
-import type { Theme } from "../theme/theme";
+import type { Theme } from "@/theme/theme";
 
 const styles = (theme: Theme) => {
   const base = StyleSheet.create({
