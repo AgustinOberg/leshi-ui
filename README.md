@@ -1,4 +1,4 @@
-# Leshi CLI
+# 🚀 Leshi CLI 🚀
 
 > A **powerful CLI** for managing themes and UI components in React Native and Unistyles projects. Quickly bootstrap themes, scaffold styled components, and maintain a clean, standardized design system.
 
@@ -38,11 +38,11 @@ npm install -g leshi-ui
 
 ### Initialize Themes
 
-| Command                        | Description                    |
-| ------------------------------ | ------------------------------ |
+| Command                        | Description                          |
+| ------------------------------ | ------------------------------------ |
 | `bunx leshi-ui init`           | Copy base theme files (light & dark) |
-| `bunx leshi-ui init rn`        | Explicit RN theme init         |
-| `bunx leshi-ui init unistyles` | Copy Unistyles theme files     |
+| `bunx leshi-ui init rn`        | Explicit RN theme init               |
+| `bunx leshi-ui init unistyles` | Copy Unistyles theme files           |
 
 ---
 
@@ -80,6 +80,7 @@ npm install -g leshi-ui
 ```bash
 bunx leshi-ui init
 ```
+
 This copies only the **light** and **dark** themes. Use `bunx leshi-ui add theme <name>` to add more.
 
 #### Add a Button Component
