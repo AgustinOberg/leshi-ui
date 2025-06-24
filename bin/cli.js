@@ -78,8 +78,12 @@ async function updateThemeIndex(dir, name) {
     ].join("\n");
     await fs.outputFile(indexPath, base);
   }
+  const toCamel = (str) =>
+    str.replace(/[-_](\w)/g, (_, c) => c.toUpperCase());
+  const varName = toCamel(name);
+
   let content = await fs.readFile(indexPath, "utf8");
-  const importLine = `import { ${name} } from "./${name}";`;
+  const importLine = `import { ${varName} } from "./${name}";`;
   if (!content.includes(importLine)) {
     const lines = content.split("\n");
     const insertPos = lines.findIndex((l) =>
@@ -101,14 +105,14 @@ async function updateThemeIndex(dir, name) {
           .map((s) => s.trim())
           .filter(Boolean);
       }
-      if (!parts.includes(name)) parts.push(name);
+      if (!parts.includes(varName)) parts.push(varName);
       lines[themesLineIdx] = `${start.substring(0, openIdx + 1)} ${parts.join(
         ", "
       )} ${start.substring(closeIdx)}`;
     } else {
       let i = themesLineIdx + 1;
       while (i < lines.length && lines[i].trim() !== "};") i++;
-      lines.splice(i, 0, `  ${name},`);
+      lines.splice(i, 0, `  ${varName},`);
     }
     await fs.writeFile(indexPath, lines.join("\n"));
     logSuccess(`Updated ${path.relative(process.cwd(), indexPath)}`);

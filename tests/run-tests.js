@@ -33,10 +33,22 @@ if (!fs.existsSync(themeFile)) {
   throw new Error('theme copy failed');
 }
 
+run('add theme grape-dark');
+const grapeFile = path.join(tmp, 'theme', 'themes', 'grape-dark.ts');
+if (!fs.existsSync(grapeFile)) {
+  throw new Error('grape theme copy failed');
+}
+
 const indexFile = path.join(tmp, 'theme', 'themes', 'index.ts');
 const idxContent = fs.readFileSync(indexFile, 'utf8');
 if (!idxContent.includes('spotify')) {
   throw new Error('theme index not updated');
+}
+if (!idxContent.includes('grapeDark')) {
+  throw new Error('camelCase theme not added');
+}
+if (idxContent.includes('import { grape-dark }')) {
+  throw new Error('invalid theme name in index');
 }
 
 console.log('All CLI tests passed');
