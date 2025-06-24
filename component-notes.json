@@ -1,0 +1,5 @@
+{
+  "button": "Caution: this component depends on \"text\". Install using leshi-ui CLI.",
+  "modal": "Requires 'react-native-modal'. Install it via 'bun add react-native-modal'.",
+  "dialog": "Depends on 'slot' and 'icon'. Add them with 'leshi-ui add component slot' and 'icon'."
+}

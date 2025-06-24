@@ -1,0 +1,36 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - run: bun install
+
+      - run: git restore bun.lockb || echo "no bun.lockb changed"
+
+      - run: git config user.name "github-actions"
+      - run: git config user.email "github-actions@github.com"
+
+      - run: npm version patch
+
+      - run: git push --follow-tags
+
+      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+
+      - run: npm publish
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
