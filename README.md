@@ -40,7 +40,7 @@ npm install -g leshi-ui
 
 | Command                        | Description                    |
 | ------------------------------ | ------------------------------ |
-| `bunx leshi-ui init`           | Copy RN theme files (`theme/`) |
+| `bunx leshi-ui init`           | Copy base theme files (light & dark) |
 | `bunx leshi-ui init rn`        | Explicit RN theme init         |
 | `bunx leshi-ui init unistyles` | Copy Unistyles theme files     |
 
@@ -79,6 +79,7 @@ npm install -g leshi-ui
 ```bash
 bunx leshi-ui init
 ```
+This copies only the **light** and **dark** themes. Use `bunx leshi-ui add theme <name>` to add more.
 
 #### Add a Button Component
 
