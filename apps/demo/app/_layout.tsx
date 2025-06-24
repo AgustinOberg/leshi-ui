@@ -13,6 +13,9 @@ const App = () => {
         headerTintColor: colors.foreground,
         contentStyle: {
           backgroundColor: colors.background,
+          maxWidth: 600,
+          width: "100%",
+          alignSelf: "center",
         },
       }}
     >
