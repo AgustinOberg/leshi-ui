@@ -17,16 +17,17 @@ jobs:
         with:
           bun-version: latest
       - run: bun install
+      - run: git status
+      - run: git diff
+      - run: git add . && git commit -m "chore: fix lockfiles" || echo "no changes"
 
       - run: git config user.name "github-actions"
       - run: git config user.email "github-actions@github.com"
 
       - run: npm version patch
-
       - run: git push --follow-tags
 
       - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-
       - run: npm publish
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
