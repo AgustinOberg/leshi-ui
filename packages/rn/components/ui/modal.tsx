@@ -12,7 +12,7 @@ import {
   type StyleProp,
 } from "react-native";
 import { Portal } from "@gorhom/portal";
-import { useTheme } from "../theme/native";
+import { useTheme } from "../../theme/native";
 import { getBackdropConfig, DEFAULT_MODAL_CONFIG } from "./modal-utils";
 
 export type ModalSize = "sm" | "base" | "lg" | "xl" | "full";

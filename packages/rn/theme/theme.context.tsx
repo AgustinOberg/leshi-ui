@@ -1,11 +1,5 @@
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from "react";
-import { useColorScheme } from "react-native";
+import React, { createContext, useContext, useMemo, useState } from "react";
+import { type ColorSchemeName, useColorScheme } from "react-native";
 import { themes } from "./themes";
 
 export type ThemeName = keyof typeof themes;
@@ -22,8 +16,7 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
-const getSystemTheme = (): ThemeName => {
-  const scheme = useColorScheme();
+const getSystemTheme = (scheme: ColorSchemeName): ThemeName => {
   return scheme === "dark" && "dark" in themes ? "dark" : "light";
 };
 
@@ -32,7 +25,8 @@ export const ThemeProvider: React.FC<{
   defaultTheme?: ThemeName;
   defaultMode?: ThemeMode;
 }> = ({ children, defaultTheme = "light", defaultMode = "manual" }) => {
-  const systemTheme = getSystemTheme();
+  const scheme = useColorScheme();
+  const systemTheme = getSystemTheme(scheme);
   const [themeName, setThemeName] = useState<ThemeName>(defaultTheme);
   const [mode, setMode] = useState<ThemeMode>(defaultMode);
   const resolvedThemeName = mode === "system" ? systemTheme : themeName;
@@ -55,9 +49,9 @@ export const ThemeProvider: React.FC<{
 
 export const useThemeContext = (): ThemeContextValue => {
   const ctx = useContext(ThemeContext);
+  const scheme = useColorScheme();
   if (ctx) return ctx;
-
-  const systemTheme = getSystemTheme();
+  const systemTheme = getSystemTheme(scheme);
   return {
     theme: themes[systemTheme],
     themeName: systemTheme,

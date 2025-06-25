@@ -10,6 +10,17 @@ const __dirname = path.dirname(__filename);
 const repoRoot = path.resolve(__dirname, "..");
 const packagesDir = path.join(repoRoot, "packages");
 const notesPath = path.join(repoRoot, "component-notes.json");
+const packageJsonPath = path.join(repoRoot, "package.json");
+
+// Read version from package.json
+let version = "1.0.0"; // fallback
+if (fs.existsSync(packageJsonPath)) {
+  try {
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
+    version = packageJson.version;
+  } catch {}
+}
+
 let componentNotes = {};
 if (fs.existsSync(notesPath)) {
   try {
@@ -21,7 +32,7 @@ const program = new Command();
 program
   .name("leshi-ui")
   .description("Leshi UI helper CLI")
-  .version("1.0.0")
+  .version(version)
   .helpOption("-h, --help", "display help for command");
 
 program
@@ -31,9 +42,7 @@ program
     program.outputHelp();
   });
 
-program.hook("preAction", () => {
-  printBanner();
-});
+// Banner will only be shown in specific commands
 
 const logo = chalk.cyan(`
  
@@ -88,7 +97,7 @@ function logComponentInfo(name) {
   }
 
   console.log('');
-  logInfo(`💡 For usage examples and detailed guide, run: ${chalk.cyan(`leshi-ui guide component ${name}`)}`);
+  logInfo(`💡 For usage examples and detailed guide, run: ${chalk.cyan(`npx leshi-ui@latest guide component ${name}`)}`);
 }
 
 function showComponentGuide(name) {
@@ -223,7 +232,7 @@ function getSourcePath(unistyles, type, name) {
     base = path.join(packagesDir, "unistyles");
   }
   if (type === "component") {
-    return path.join(base, "ui", `${name}.tsx`);
+    return path.join(base, "components", "ui", `${name}.tsx`);
   }
   if (type === "theme") {
     return path.join(base, "theme", "themes", `${name}.ts`);
@@ -235,6 +244,9 @@ program
   .command("init [target]")
   .description("initialize themes (light/dark)")
   .action(async (target) => {
+    // Show banner only for init command
+    printBanner();
+    
     let folder = "rn";
     if (target === "unistyles") {
       folder = "unistyles";
@@ -273,6 +285,15 @@ program
     await updateThemeIndex(themesDir, "light");
 
     logSuccess("Themes initialized");
+    
+    // Credit message
+    console.log('');
+    console.log(chalk.gray("Built with ❤️  by Agustin Oberg"));
+    console.log(chalk.gray("LinkedIn → linkedin.com/in/oberg-agustin"));
+    
+    // Guide message
+    console.log('');
+    logInfo(`For setup and configuration guide, run: ${chalk.cyan("npx leshi-ui@latest guide theme")}`);
   });
 
 const add = program.command("add").description("add components or themes");
@@ -357,7 +378,87 @@ guide
     });
     
     console.log('');
-    logInfo(`💡 View detailed guide: ${chalk.cyan('leshi-ui guide component <name>')}`);
+    logInfo(`💡 View detailed guide: ${chalk.cyan('npx leshi-ui@latest guide component <name>')}`);
+  });
+
+guide
+  .command("theme")
+  .description("show theme setup and configuration guide")
+  .action(() => {
+    console.log('');
+    logInfo("🎨 THEME SETUP & CONFIGURATION GUIDE");
+    console.log('');
+
+    logInfo("📋 Initial Setup:");
+    console.log("   1. Initialize theme system:");
+    console.log(`      ${chalk.cyan("npx leshi-ui@latest init")}`);
+    console.log("   2. For Unistyles (optional):");
+    console.log(`      ${chalk.cyan("npx leshi-ui@latest init unistyles")}`);
+    console.log('');
+
+    logInfo("🔧 Theme Provider Setup:");
+    console.log("   Add ThemeProvider to your app root (_layout.tsx or App.tsx):");
+    console.log('');
+    console.log(chalk.gray(`   import { ThemeProvider } from "./theme/theme.context";
+   
+   export default function App() {
+     return (
+       <ThemeProvider>
+         {/* Your app content */}
+       </ThemeProvider>
+     );
+   }`));
+    console.log('');
+
+    logInfo("🌙 Using Themes in Components:");
+    console.log("   Import and use the theme hook:");
+    console.log('');
+    console.log(chalk.gray(`   import { useTheme } from "../theme/theme.context";
+   
+   export function MyComponent() {
+     const theme = useTheme();
+     const styles = StyleSheet.create({
+       container: {
+         backgroundColor: theme.colors.background,
+         padding: theme.spacing.md,
+       }
+     });
+     return <View style={styles.container} />;
+   }`));
+    console.log('');
+
+    logInfo("➕ Adding Custom Themes:");
+    console.log("   1. Add a new theme file:");
+    console.log(`      ${chalk.cyan("npx leshi-ui@latest add theme <theme-name>")}`);
+    console.log("   2. List available themes:");
+    console.log(`      ${chalk.cyan("npx leshi-ui@latest themes")}`);
+    console.log('');
+
+    logInfo("🎯 Theme Structure:");
+    console.log("   Each theme includes:");
+    console.log("   • colors: Primary, secondary, background, text colors");
+    console.log("   • spacing: Consistent spacing scale (xs, sm, md, lg, xl)");
+    console.log("   • fonts: Typography system with different weights");
+    console.log("   • borderRadius: Consistent border radius values");
+    console.log("   • shadows: Pre-defined shadow styles");
+    console.log('');
+
+    logInfo("💡 Theme Switching:");
+    console.log("   Use the theme context to switch themes:");
+    console.log('');
+    console.log(chalk.gray(`   const { setTheme } = useTheme();
+   
+   // Switch to dark theme
+   setTheme('dark');
+   
+   // Switch to light theme  
+   setTheme('light');`));
+    console.log('');
+
+    logSuccess("Happy theming! 🚀");
+    console.log('');
+    console.log(chalk.gray("Built with ❤️  by Agustin Oberg"));
+    console.log(chalk.gray("LinkedIn → linkedin.com/in/oberg-agustin"));
   });
 
 program.parseAsync(process.argv);

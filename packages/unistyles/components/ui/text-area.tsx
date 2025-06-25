@@ -9,7 +9,7 @@ import React, { useCallback, useState, useMemo } from "react";
 import { StyleSheet, useUnistyles } from "react-native-unistyles";
 import Label from "./label";
 import { Text, type TextSize } from "./text";
-import { useTheme } from "../theme/unistyles";
+import { useTheme } from "../../theme/unistyles";
 
 export type TextAreaSize = "sm" | "base" | "lg" | "xl";
 export type TextAreaVariant = "default" | "destructive";

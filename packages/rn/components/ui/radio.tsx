@@ -8,8 +8,8 @@ import {
   type ViewStyle,
 } from "react-native";
 import { StyleSheet } from "react-native";
-import { useTheme } from "../theme/native";
-import type { Theme } from "../theme/theme";
+import { useTheme } from "../../theme/native";
+import type { Theme } from "../../theme/theme";
 
 export type RadioSize = "sm" | "md" | "lg";
 

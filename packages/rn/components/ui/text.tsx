@@ -1,7 +1,7 @@
 import { Text as RNText, type TextProps as RNTextProps, Platform } from "react-native";
 import React, { useMemo } from "react";
 import { StyleSheet } from "react-native";
-import { useTheme } from "../theme/native";
+import { useTheme } from "../../theme/native";
 
 export type TextVariant =
   | "heading"
@@ -80,7 +80,7 @@ export const Text = ({
 
 export default Text;
 
-import type { Theme } from "../theme/theme";
+import type { Theme } from "../../theme/theme";
 
 const createStyles = (theme: Theme) => {
   const baseStyles = StyleSheet.create({

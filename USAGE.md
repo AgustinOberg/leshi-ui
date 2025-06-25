@@ -10,37 +10,37 @@ bun add -g leshi-ui
 
 | Command | Description |
 |---------|-------------|
-| `bunx leshi-ui init` | Copy base themes (light & dark) |
-| `bunx leshi-ui init rn` | Same as `init` (explicit React Native) |
-| `bunx leshi-ui init unistyles` | Copy Unistyles themes |
-| `bunx leshi-ui add component <name>` | Add a RN component to `components/ui/` |
-| `bunx leshi-ui add component <name> --unistyles` | Add a Unistyles component |
-| `bunx leshi-ui add theme <name>` | Add RN theme file to `theme/themes/` and update index |
-| `bunx leshi-ui add theme <name> --unistyles` | Add Unistyles theme file and update index |
-| `bunx leshi-ui themes` | List available themes |
-| `bunx leshi-ui help` | Show help information |
+| `npx leshi-ui@latest init` | Copy base themes (light & dark) |
+| `npx leshi-ui@latest init rn` | Same as `init` (explicit React Native) |
+| `npx leshi-ui@latest init unistyles` | Copy Unistyles themes |
+| `npx leshi-ui@latest add component <name>` | Add a RN component to `components/ui/` |
+| `npx leshi-ui@latest add component <name> --unistyles` | Add a Unistyles component |
+| `npx leshi-ui@latest add theme <name>` | Add RN theme file to `theme/themes/` and update index |
+| `npx leshi-ui@latest add theme <name> --unistyles` | Add Unistyles theme file and update index |
+| `npx leshi-ui@latest themes` | List available themes |
+| `npx leshi-ui@latest help` | Show help information |
 
 ## Examples
 
 ```bash
 # Initialize RN themes
-bunx leshi-ui init
+npx leshi-ui@latest init
 
 # Add a button component
-bunx leshi-ui add component button
+npx leshi-ui@latest add component button
 
 # Add the Spotify theme for Unistyles
-bunx leshi-ui add theme spotify --unistyles
+npx leshi-ui@latest add theme spotify --unistyles
 
 # See help
-bunx leshi-ui help
+npx leshi-ui@latest help
 ```
-The `init` command installs only the **light** and **dark** themes. Run `bunx leshi-ui add theme <name>` to add more.
+The `init` command installs only the **light** and **dark** themes. Run `npx leshi-ui@latest add theme <name>` to add more.
 
 Certain components print extra notes after installation. For example:
 
 ```
-bunx leshi-ui add component modal
+npx leshi-ui@latest add component modal
 # -> message about installing react-native-modal
 ```
 

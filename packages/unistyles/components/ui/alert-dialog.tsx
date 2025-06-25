@@ -20,7 +20,7 @@ import { Modal, type ModalProps, type ModalSize } from "./modal";
 import { Text, type TextProps } from "./text";
 import { Button, type ButtonProps } from "./button";
 import { Pressable as SlotPressable } from "./slot";
-import { useTheme } from "../theme/unistyles";
+import { useTheme } from "../../theme/unistyles";
 
 /*──────────────────── Types */
 export type AlertDialogVariant = "default" | "destructive" | "warning";

@@ -16,9 +16,10 @@ import {
   type ImageLoadEventData,
   type ImageErrorEventData,
 } from "react-native";
-import { StyleSheet } from "react-native-unistyles";
+import { StyleSheet } from "react-native";
+import { useTheme } from "../../theme/native";
+import type { Theme } from "../../theme/theme";
 import Text from "./text";
-import { useTheme } from "../theme/unistyles";
 
 export type AvatarSize = "sm" | "md" | "lg" | "xl";
 
@@ -58,11 +59,16 @@ export const Avatar = ({ size = "md", style, children }: AvatarProps) => {
     [dim, hasImage]
   );
 
-  styles.useVariants({ size });
+  const theme = useTheme();
+  const containerStyle = [
+    styles(theme).container,
+    styles(theme).size[size],
+    style,
+  ];
 
   return (
     <AvatarCtx.Provider value={value}>
-      <View data-slot="avatar" style={[styles.container, style]}>
+      <View data-slot="avatar" style={containerStyle}>
         {children}
       </View>
     </AvatarCtx.Provider>
@@ -133,7 +139,11 @@ export const AvatarFallback = ({ children, style }: AvatarFallbackProps) => {
   return (
     <View
       data-slot="avatar-fallback"
-      style={[styles.fallback, { backgroundColor: theme.colors.muted }, style]}
+      style={[
+        styles(theme).fallback,
+        { backgroundColor: theme.colors.muted },
+        style,
+      ]}
     >
       {initials ? (
         <Text
@@ -149,26 +159,29 @@ export const AvatarFallback = ({ children, style }: AvatarFallbackProps) => {
   );
 };
 
-const styles = StyleSheet.create((theme) => ({
-  container: {
-    overflow: "hidden",
-    alignItems: "center",
-    justifyContent: "center",
-    aspectRatio: 1,
-    borderRadius: theme.radii.full,
-    variants: {
-      size: {
-        sm: { width: theme.sizes.width(6) },
-        md: { width: theme.sizes.width(8) },
-        lg: { width: theme.sizes.width(10) },
-        xl: { width: theme.sizes.width(16) },
-      },
+const styles = (theme: Theme) => {
+  const base = StyleSheet.create({
+    container: {
+      overflow: "hidden",
+      alignItems: "center",
+      justifyContent: "center",
+      aspectRatio: 1,
+      borderRadius: theme.radii.full,
     },
-  },
-  fallback: {
-    ...StyleSheet.absoluteFillObject,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: theme.radii.full,
-  },
-}));
+    fallback: {
+      ...StyleSheet.absoluteFillObject,
+      alignItems: "center",
+      justifyContent: "center",
+      borderRadius: theme.radii.full,
+    },
+  });
+
+  const size = {
+    sm: { width: theme.sizes.width(6) },
+    md: { width: theme.sizes.width(8) },
+    lg: { width: theme.sizes.width(10) },
+    xl: { width: theme.sizes.width(16) },
+  } as const;
+
+  return { ...base, size };
+};

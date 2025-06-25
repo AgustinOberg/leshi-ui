@@ -43,20 +43,20 @@ npm install -g leshi-ui
 
 ```bash
 # Initialize theme system (React Native)
-bunx leshi-ui init
+npx leshi-ui@latest init
 
 # Or for Unistyles
-bunx leshi-ui init unistyles
+npx leshi-ui@latest init unistyles
 ```
 
 ### 2. Add Components
 
 ```bash
 # Add a component with automatic setup guidance
-bunx leshi-ui add component button
+npx leshi-ui@latest add component button
 
 # View detailed component guide
-bunx leshi-ui guide component button
+npx leshi-ui@latest guide component button
 ```
 
 ### 3. Set Up Modal Components (if needed)
@@ -87,27 +87,27 @@ export default function Layout() {
 
 | Command                                          | Description                              |
 | ------------------------------------------------ | ---------------------------------------- |
-| `bunx leshi-ui add component <name>`             | Add React Native component               |
-| `bunx leshi-ui add component <name> --unistyles` | Add Unistyles component                  |
-| `bunx leshi-ui guide component <name>`           | Show detailed component guide            |
-| `bunx leshi-ui guide components`                 | List all available components            |
+| `npx leshi-ui@latest add component <name>`             | Add React Native component               |
+| `npx leshi-ui@latest add component <name> --unistyles` | Add Unistyles component                  |
+| `npx leshi-ui@latest guide component <name>`           | Show detailed component guide            |
+| `npx leshi-ui@latest guide components`                 | List all available components            |
 
 ### Theme Management
 
 | Command                                      | Description                          |
 | -------------------------------------------- | ------------------------------------ |
-| `bunx leshi-ui init`                         | Initialize React Native themes       |
-| `bunx leshi-ui init unistyles`               | Initialize Unistyles themes          |
-| `bunx leshi-ui add theme <name>`             | Add React Native theme               |
-| `bunx leshi-ui add theme <name> --unistyles` | Add Unistyles theme                  |
-| `bunx leshi-ui themes`                       | List available themes                |
+| `npx leshi-ui@latest init`                         | Initialize React Native themes       |
+| `npx leshi-ui@latest init unistyles`               | Initialize Unistyles themes          |
+| `npx leshi-ui@latest add theme <name>`             | Add React Native theme               |
+| `npx leshi-ui@latest add theme <name> --unistyles` | Add Unistyles theme                  |
+| `npx leshi-ui@latest themes`                       | List available themes                |
 
 ### Help & Discovery
 
 | Command                      | Description                 |
 | ---------------------------- | --------------------------- |
-| `bunx leshi-ui help`         | Show all commands           |
-| `bunx leshi-ui guide --help` | Show guide command help     |
+| `npx leshi-ui@latest help`         | Show all commands           |
+| `npx leshi-ui@latest guide --help` | Show guide command help     |
 
 ---
 
@@ -150,10 +150,10 @@ Each component comes with comprehensive documentation:
 
 ```bash
 # List all components with dependencies
-bunx leshi-ui guide components
+npx leshi-ui@latest guide components
 
 # Get detailed guide for specific component
-bunx leshi-ui guide component button
+npx leshi-ui@latest guide component button
 ```
 
 Component guides include:
@@ -179,10 +179,10 @@ Popular themes include: `spotify`, `twitter-light`, `twitter-dark`, `supabase-li
 
 ```bash
 # List all available themes
-bunx leshi-ui themes
+npx leshi-ui@latest themes
 
 # Add a specific theme  
-bunx leshi-ui add theme spotify
+npx leshi-ui@latest add theme spotify
 ```
 
 ---
