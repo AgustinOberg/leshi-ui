@@ -1,11 +1,12 @@
 import type { Theme } from "../theme";
-import { fonts, shadows, sizes, radii } from "./common";
+import { fonts, shadows, sizes, radii, backdrop } from "./common";
 
 export const mochaMousseDark: Theme = {
   fonts,
   shadows,
   sizes,
   radii,
+  backdrop,
   colors: {
     background: "#2d2521",
     foreground: "#F1F0E5",

@@ -1,11 +1,12 @@
 import type { Theme } from "../theme";
-import { fonts, shadows, sizes, radii } from "./common";
+import { fonts, shadows, sizes, radii, backdrop } from "./common";
 
 export const grapeLight: Theme = {
   fonts,
   shadows,
   sizes,
   radii,
+  backdrop,
   colors: {
     background: "hsl(260 23.0769% 97.4510%)",
     foreground: "hsl(243.1579 13.6691% 27.2549%)",

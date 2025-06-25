@@ -65,11 +65,90 @@ function logWarn(msg) {
   console.log(`${mascot} ${chalk.yellow(msg)}`);
 }
 
-function maybeLogComponentNote(name) {
-  const note = componentNotes[name];
-  if (note) {
-    logWarn(note);
+function logComponentInfo(name) {
+  const info = componentNotes[name];
+  if (!info) return;
+
+  // Handle legacy string format
+  if (typeof info === 'string') {
+    logWarn(info);
+    return;
   }
+
+  console.log('');
+  logSuccess(`${name.toUpperCase()} component installed successfully!`);
+  
+  // Only show critical setup info during install
+  if (info.setup && info.setup.length > 0) {
+    console.log('');
+    logInfo('Setup required:');
+    info.setup.forEach((step, index) => {
+      console.log(`   ${index + 1}. ${step}`);
+    });
+  }
+
+  console.log('');
+  logInfo(`💡 For usage examples and detailed guide, run: ${chalk.cyan(`leshi-ui guide component ${name}`)}`);
+}
+
+function showComponentGuide(name) {
+  const info = componentNotes[name];
+  if (!info) {
+    logError(`Component '${name}' not found`);
+    return;
+  }
+
+  // Handle legacy string format
+  if (typeof info === 'string') {
+    logWarn(info);
+    return;
+  }
+
+  console.log('');
+  logInfo(`📖 ${name.toUpperCase()} COMPONENT GUIDE`);
+  console.log('');
+
+  // Dependencies
+  if (info.dependencies && info.dependencies.length > 0) {
+    logInfo('📦 Component Dependencies:');
+    info.dependencies.forEach(dep => {
+      console.log(`   • ${dep}`);
+    });
+    console.log('');
+  }
+
+  if (info.externalDeps && info.externalDeps.length > 0) {
+    logInfo('🔗 External Dependencies:');
+    info.externalDeps.forEach(dep => {
+      console.log(`   • ${dep}`);
+    });
+    console.log('');
+  }
+  
+  // Setup instructions
+  if (info.setup && info.setup.length > 0) {
+    logInfo('📋 Setup Instructions:');
+    info.setup.forEach((step, index) => {
+      console.log(`   ${index + 1}. ${step}`);
+    });
+    console.log('');
+  }
+
+  // Setup code
+  if (info.setupCode) {
+    logInfo('⚙️ Setup Code (_layout.tsx):');
+    console.log(chalk.gray('   ' + info.setupCode.split('\n').join('\n   ')));
+    console.log('');
+  }
+
+  // Usage example
+  if (info.example) {
+    logInfo('💡 Usage Example:');
+    console.log(chalk.gray('   ' + info.example.split('\n').join('\n   ')));
+    console.log('');
+  }
+
+  logSuccess('Happy coding! 🚀');
 }
 
 async function copyDir(src, dest) {
@@ -212,7 +291,7 @@ add
     }
     await fs.ensureDir(destDir);
     await copyDir(src, dest);
-    maybeLogComponentNote(name);
+    logComponentInfo(name);
   });
 
 add
@@ -246,6 +325,39 @@ program
       .map((f) => f.replace(/\.ts$/, ""));
     logInfo("Available themes:");
     names.forEach((n) => console.log(`  - ${n}`));
+  });
+
+const guide = program.command("guide").description("show detailed component guides and examples");
+
+guide
+  .command("component <name>")
+  .description("show detailed guide for a component")
+  .action((name) => {
+    showComponentGuide(name);
+  });
+
+guide
+  .command("components")
+  .alias("list")
+  .description("list all available components with guides")
+  .action(() => {
+    console.log('');
+    logInfo("📖 Available Component Guides:");
+    console.log('');
+    
+    const componentList = Object.keys(componentNotes).sort();
+    const maxLength = Math.max(...componentList.map(name => name.length));
+    
+    componentList.forEach(name => {
+      const info = componentNotes[name];
+      const description = typeof info === 'string' ? 'Basic component' : 
+        info.dependencies?.length > 0 ? `Depends on: ${info.dependencies.join(', ')}` : 'Standalone component';
+      
+      console.log(`   ${chalk.cyan(name.padEnd(maxLength + 2))} ${chalk.gray(description)}`);
+    });
+    
+    console.log('');
+    logInfo(`💡 View detailed guide: ${chalk.cyan('leshi-ui guide component <name>')}`);
   });
 
 program.parseAsync(process.argv);

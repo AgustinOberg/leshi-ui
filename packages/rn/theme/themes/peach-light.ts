@@ -1,11 +1,12 @@
 import type { Theme } from "../theme";
-import { fonts, shadows, sizes, radii } from "./common";
+import { fonts, shadows, sizes, radii, backdrop } from "./common";
 
 export const peachLight: Theme = {
   fonts,
   shadows,
   sizes,
   radii,
+  backdrop,
   colors: {
     background: "hsl(330 47.0588% 93.3333%)",
     foreground: "hsl(0 0% 35.6863%)",

@@ -1,11 +1,12 @@
 import type { Theme } from "../theme";
-import { fonts, shadows, sizes, radii } from "./common";
+import { fonts, shadows, sizes, radii, backdrop } from "./common";
 
 export const twitterDark: Theme = {
   fonts,
   shadows,
   sizes,
   radii,
+  backdrop,
   colors: {
     background: "#000000",
     foreground: "#e7e9ea",

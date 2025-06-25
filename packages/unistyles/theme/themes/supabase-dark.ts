@@ -1,11 +1,12 @@
 import type { Theme } from "../theme";
-import { fonts, shadows, sizes, radii } from "./common";
+import { fonts, shadows, sizes, radii, backdrop } from "./common";
 
 export const supabaseDark: Theme = {
   fonts,
   shadows,
   sizes,
   radii,
+  backdrop,
   colors: {
     background: "#121212",
     foreground: "#e2e8f0",

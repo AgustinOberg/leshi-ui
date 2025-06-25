@@ -5,7 +5,7 @@ import {
   type TextInputProps as RNTextInputProps,
   type TextInputFocusEventData,
 } from "react-native";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useMemo } from "react";
 import { StyleSheet } from "react-native";
 import { useTheme } from "../theme/native";
 import Label from "./label";
@@ -13,11 +13,13 @@ import { Text, type TextSize } from "./text";
 
 export type TextInputSize = "sm" | "base" | "lg" | "xl";
 export type TextInputContentSize = "base" | "sm" | "lg" | "xl";
+export type TextInputVariant = "default" | "destructive";
 
 export interface TextInputProps extends RNTextInputProps {
   error?: string;
   label?: string;
   size?: TextInputSize;
+  variant?: TextInputVariant;
   labelSize?: TextSize;
   textSize?: TextInputContentSize;
   prefix?: React.ReactNode;
@@ -41,13 +43,14 @@ export const TextInput = ({
   onFocus,
   prefix,
   size = "base",
+  variant = "default",
   suffix,
   textSize = "base",
   ...rest
 }: TextInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
   const theme = useTheme();
-  const styleObj = styles(theme);
+  const styleObj = useMemo(() => styles(theme), [theme]);
 
   const handleFocus = useCallback(
     (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
@@ -65,36 +68,54 @@ export const TextInput = ({
     [onBlur]
   );
 
+  const isDisabled = rest.editable === false;
+  const isReadOnly = rest.readOnly;
+
+  const containerStyle = useMemo(() => [
+    styleObj.container,
+    isDisabled && styleObj.disabled.true,
+    isReadOnly && styleObj.readOnly.true,
+  ], [styleObj.container, styleObj.disabled.true, styleObj.readOnly.true, isDisabled, isReadOnly]);
+
+  const inputWrapperStyle = useMemo(() => [
+    styleObj.inputWrapper,
+    styleObj.size[size],
+    styleObj.variant[variant],
+    isFocused && styleObj.isFocused.true,
+    error && styleObj.error.true,
+    isDisabled && styleObj.inputWrapperDisabled.true,
+    isReadOnly && styleObj.inputWrapperReadOnly.true,
+  ], [styleObj.inputWrapper, styleObj.size, styleObj.variant, styleObj.isFocused.true, styleObj.error.true, styleObj.inputWrapperDisabled.true, styleObj.inputWrapperReadOnly.true, size, variant, isFocused, error, isDisabled, isReadOnly]);
+
+  const inputStyle = useMemo(() => [
+    styleObj.input,
+    styleObj.textSize[textSize]
+  ], [styleObj.input, styleObj.textSize, textSize]);
+
   return (
-    <View
-      style={[
-        styleObj.container,
-        rest.editable === false && styleObj.editable.false,
-      ]}
-    >
+    <View style={containerStyle}>
       {label && (
         <Label size={labelSize ?? LABEL_SIZE[size]} error={!!error}>
           {label}
         </Label>
       )}
 
-      <View
-        style={[
-          styleObj.inputWrapper,
-          styleObj.size[size],
-          isFocused && styleObj.isFocused.true,
-          error && styleObj.error.true,
-        ]}
-      >
+      <View style={inputWrapperStyle}>
         {prefix && <View style={styleObj.affix}>{prefix}</View>}
 
         <RNTextInput
           {...rest}
-          style={[styleObj.input, styleObj.textSize[textSize]]}
+          style={inputStyle}
           verticalAlign="middle"
           onFocus={handleFocus}
           onBlur={handleBlur}
           placeholderTextColor={theme.colors.mutedForeground}
+          accessibilityLabel={rest.accessibilityLabel ?? label}
+          accessibilityHint={rest.accessibilityHint ?? description}
+          accessibilityState={{
+            disabled: isDisabled,
+            ...rest.accessibilityState,
+          }}
         />
 
         {suffix && <View style={styleObj.affix}>{suffix}</View>}
@@ -150,8 +171,25 @@ const styles = (theme: Theme) => {
     },
   });
 
-  const editable = {
-    false: { opacity: 0.6 },
+  const disabled = {
+    true: { opacity: 0.6 },
+  } as const;
+
+  const readOnly = {
+    true: { opacity: 0.8 },
+  } as const;
+
+  const inputWrapperDisabled = {
+    true: { 
+      backgroundColor: theme.colors.muted,
+      borderColor: theme.colors.border,
+    },
+  } as const;
+
+  const inputWrapperReadOnly = {
+    true: {
+      backgroundColor: theme.colors.muted,
+    },
   } as const;
 
   const size = {
@@ -165,6 +203,13 @@ const styles = (theme: Theme) => {
     true: {},
   } as const;
 
+  const variant = {
+    default: {},
+    destructive: {
+      borderColor: theme.colors.destructive,
+    },
+  } as const;
+
   const error = {
     true: { borderColor: theme.colors.destructive },
   } as const;
@@ -176,5 +221,5 @@ const styles = (theme: Theme) => {
     xl: { fontSize: theme.sizes.fonts.xl },
   } as const;
 
-  return { ...base, editable, size, isFocused, error, textSize };
+  return { ...base, disabled, readOnly, inputWrapperDisabled, inputWrapperReadOnly, size, variant, isFocused, error, textSize };
 };

@@ -1,8 +1,14 @@
-import { Text as RNText, type TextProps as RNTextProps } from "react-native";
-import React from "react";
+import { Text as RNText, type TextProps as RNTextProps, Platform } from "react-native";
+import React, { useMemo } from "react";
 import { StyleSheet } from "react-native";
 import { useTheme } from "../theme/native";
+
 export type TextVariant =
+  | "heading"
+  | "subheading"
+  | "body"
+  | "caption"
+  | "overline"
   | "primaryForeground"
   | "primary"
   | "secondaryForeground"
@@ -45,24 +51,28 @@ export interface TextProps extends RNTextProps {
   weight?: Weight;
   style?: RNTextProps["style"];
 }
+
 export const Text = ({
   children,
-  variant,
-  size,
-  weight,
+  variant = "foreground",
+  size = "base",
+  weight = "regular",
   style,
   ...rest
 }: TextProps) => {
   const theme = useTheme();
-  const stylesObj = styles(theme);
-  const colorStyle = stylesObj.color[variant ?? "foreground"];
-  const sizeStyle = stylesObj.size[size ?? "base"];
-  const weightStyle = stylesObj.weight[weight ?? "regular"];
+  const styles = useMemo(() => createStyles(theme), [theme]);
+  
+  const combinedStyle = useMemo(() => {
+    const colorStyle = styles.color[variant];
+    const sizeStyle = styles.size[size];
+    const weightStyle = styles.weight[weight];
+    
+    return [styles.text, colorStyle, sizeStyle, weightStyle, style];
+  }, [styles, variant, size, weight, style]);
+
   return (
-    <RNText
-      style={[stylesObj.text, colorStyle, sizeStyle, weightStyle, style]}
-      {...rest}
-    >
+    <RNText style={combinedStyle} {...rest}>
       {children}
     </RNText>
   );
@@ -72,8 +82,8 @@ export default Text;
 
 import type { Theme } from "../theme/theme";
 
-const styles = (theme: Theme) => {
-  const base = StyleSheet.create({
+const createStyles = (theme: Theme) => {
+  const baseStyles = StyleSheet.create({
     text: {
       includeFontPadding: false,
       lineHeight: theme.sizes.fonts.base * 1.2,
@@ -81,19 +91,67 @@ const styles = (theme: Theme) => {
     },
   });
 
-  const weight = {
-    thin: { fontFamily: theme.fonts.thin },
-    extralight: { fontFamily: theme.fonts.extralight },
-    light: { fontFamily: theme.fonts.light },
-    regular: { fontFamily: theme.fonts.regular },
-    medium: { fontFamily: theme.fonts.medium },
-    semibold: { fontFamily: theme.fonts.semibold },
-    bold: { fontFamily: theme.fonts.bold },
-    extrabold: { fontFamily: theme.fonts.extrabold },
-    black: { fontFamily: theme.fonts.black },
-  } as const;
+  const weight = StyleSheet.create({
+    thin: { 
+      fontFamily: theme.fonts.thin,
+      ...(Platform.OS === 'web' && { fontWeight: '100' as const })
+    },
+    extralight: { 
+      fontFamily: theme.fonts.extralight,
+      ...(Platform.OS === 'web' && { fontWeight: '200' as const })
+    },
+    light: { 
+      fontFamily: theme.fonts.light,
+      ...(Platform.OS === 'web' && { fontWeight: '300' as const })
+    },
+    regular: { 
+      fontFamily: theme.fonts.regular,
+      ...(Platform.OS === 'web' && { fontWeight: '400' as const })
+    },
+    medium: { 
+      fontFamily: theme.fonts.medium,
+      ...(Platform.OS === 'web' && { fontWeight: '500' as const })
+    },
+    semibold: { 
+      fontFamily: theme.fonts.semibold,
+      ...(Platform.OS === 'web' && { fontWeight: '600' as const })
+    },
+    bold: { 
+      fontFamily: theme.fonts.bold,
+      ...(Platform.OS === 'web' && { fontWeight: '700' as const })
+    },
+    extrabold: { 
+      fontFamily: theme.fonts.extrabold,
+      ...(Platform.OS === 'web' && { fontWeight: '800' as const })
+    },
+    black: { 
+      fontFamily: theme.fonts.black,
+      ...(Platform.OS === 'web' && { fontWeight: '900' as const })
+    },
+  });
 
-  const color = {
+  const color = StyleSheet.create({
+    heading: { 
+      color: theme.colors.foreground,
+      ...(Platform.OS === 'web' && { fontWeight: '600' as const }),
+    },
+    subheading: { 
+      color: theme.colors.foreground,
+      ...(Platform.OS === 'web' && { fontWeight: '500' as const }),
+    },
+    body: { 
+      color: theme.colors.foreground 
+    },
+    caption: { 
+      color: theme.colors.mutedForeground,
+      fontSize: theme.sizes.fonts.sm 
+    },
+    overline: { 
+      color: theme.colors.mutedForeground,
+      fontSize: theme.sizes.fonts.xs,
+      textTransform: 'uppercase' as const,
+      letterSpacing: 1 
+    },
     primaryForeground: { color: theme.colors.primaryForeground },
     primary: { color: theme.colors.primary },
     secondaryForeground: { color: theme.colors.secondaryForeground },
@@ -102,9 +160,9 @@ const styles = (theme: Theme) => {
     mutedForeground: { color: theme.colors.mutedForeground },
     destructive: { color: theme.colors.destructive },
     foreground: { color: theme.colors.foreground },
-  } as const;
+  });
 
-  const size = {
+  const size = StyleSheet.create({
     xs: { fontSize: theme.sizes.fonts.xs },
     sm: { fontSize: theme.sizes.fonts.sm },
     base: { fontSize: theme.sizes.fonts.base },
@@ -118,7 +176,7 @@ const styles = (theme: Theme) => {
     "7xl": { fontSize: theme.sizes.fonts["7xl"] },
     "8xl": { fontSize: theme.sizes.fonts["8xl"] },
     "9xl": { fontSize: theme.sizes.fonts["9xl"] },
-  } as const;
+  });
 
-  return { ...base, weight, color, size };
+  return { text: baseStyles.text, weight, color, size };
 };

@@ -5,19 +5,21 @@ import {
   type TextInputProps as RNTextInputProps,
   type TextInputFocusEventData,
 } from "react-native";
-import { useCallback, useState } from "react";
-import { StyleSheet } from "react-native-unistyles";
+import { useCallback, useState, useMemo } from "react";
+import { StyleSheet, useUnistyles } from "react-native-unistyles";
 import Label from "./label";
 import { Text, type TextSize } from "./text";
 import { useTheme } from "../theme/unistyles";
 
 export type TextInputSize = "sm" | "base" | "lg" | "xl";
 export type TextInputContentSize = "base" | "sm" | "lg" | "xl";
+export type TextInputVariant = "default" | "destructive";
 
 export interface TextInputProps extends RNTextInputProps {
   error?: string;
   label?: string;
   size?: TextInputSize;
+  variant?: TextInputVariant;
   labelSize?: TextSize;
   textSize?: TextInputContentSize;
   prefix?: React.ReactNode;
@@ -41,6 +43,7 @@ export const TextInput = ({
   onFocus,
   prefix,
   size = "base",
+  variant = "default",
   suffix,
   textSize = "base",
   ...rest
@@ -48,12 +51,17 @@ export const TextInput = ({
   const [isFocused, setIsFocused] = useState(false);
   const theme = useTheme();
 
-  styles.useVariants({
+  const isDisabled = rest.editable === false;
+  const isReadOnly = rest.readOnly;
+
+  const { styles: styleVariants } = useUnistyles(styles, {
     error: !!error,
     isFocused,
     size,
+    variant,
     textSize,
-    editable: rest.editable,
+    disabled: isDisabled,
+    readOnly: isReadOnly,
   });
 
   const handleFocus = useCallback(
@@ -73,26 +81,32 @@ export const TextInput = ({
   );
 
   return (
-    <View style={styles.container}>
+    <View style={styleVariants.container}>
       {label && (
         <Label size={labelSize ?? LABEL_SIZE[size]} error={!!error}>
           {label}
         </Label>
       )}
 
-      <View style={styles.inputWrapper}>
-        {prefix && <View style={styles.affix}>{prefix}</View>}
+      <View style={styleVariants.inputWrapper}>
+        {prefix && <View style={styleVariants.affix}>{prefix}</View>}
 
         <RNTextInput
           {...rest}
-          style={styles.input}
+          style={styleVariants.input}
           verticalAlign="middle"
           onFocus={handleFocus}
           onBlur={handleBlur}
           placeholderTextColor={theme.colors.mutedForeground}
+          accessibilityLabel={rest.accessibilityLabel ?? label}
+          accessibilityHint={rest.accessibilityHint ?? description}
+          accessibilityState={{
+            disabled: isDisabled,
+            ...rest.accessibilityState,
+          }}
         />
 
-        {suffix && <View style={styles.affix}>{suffix}</View>}
+        {suffix && <View style={styleVariants.affix}>{suffix}</View>}
       </View>
       {description && (
         <Text variant="mutedForeground" size="sm">
@@ -115,9 +129,14 @@ const styles = StyleSheet.create((theme) => ({
     gap: theme.sizes.gap(1),
     width: "100%",
     variants: {
-      editable: {
-        false: {
+      disabled: {
+        true: {
           opacity: 0.6,
+        },
+      },
+      readOnly: {
+        true: {
+          opacity: 0.8,
         },
       },
     },
@@ -140,6 +159,23 @@ const styles = StyleSheet.create((theme) => ({
         lg: { height: theme.sizes.height(10) },
         xl: { height: theme.sizes.height(12) },
       },
+      variant: {
+        default: {},
+        destructive: {
+          borderColor: theme.colors.destructive,
+        },
+      },
+      disabled: {
+        true: {
+          backgroundColor: theme.colors.muted,
+          borderColor: theme.colors.border,
+        },
+      },
+      readOnly: {
+        true: {
+          backgroundColor: theme.colors.muted,
+        },
+      },
       isFocused: {
         true: {},
       },
@@ -153,7 +189,7 @@ const styles = StyleSheet.create((theme) => ({
 
   input: {
     flex: 1,
-    color: theme.colors.primary,
+    color: theme.colors.foreground,
     fontFamily: theme.fonts.medium,
     minHeight: 0,
     paddingVertical: 0,

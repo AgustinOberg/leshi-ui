@@ -1,4 +1,4 @@
-import Text from "./text";
+import { Text } from "./text";
 
 export type IconName = "checkbox" | "x";
 export interface IconProps {

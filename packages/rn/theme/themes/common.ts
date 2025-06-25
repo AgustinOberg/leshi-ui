@@ -28,6 +28,13 @@ export const shadows = {
     shadowRadius: 6,
     elevation: 4,
   },
+  lg: {
+    shadowColor: "rgba(0,0,0,0.09)",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 1,
+    shadowRadius: 9,
+    elevation: 6,
+  },
   xl: {
     shadowColor: "rgba(0,0,0,0.1)",
     shadowOffset: { width: 0, height: 8 },
@@ -76,7 +83,16 @@ export const sizes = {
 
 // --- Radii values used for rounded components ---
 export const radii = {
+  sm: 4,
   md: 8,
+  lg: 12,
   xl: 14,
+  "2xl": 20,
   full: 9999,
+} as const;
+
+// --- Modal backdrop configuration ---
+export const backdrop = {
+  color: "rgba(0, 0, 0, 0.5)",
+  opacity: 0.5,
 } as const;

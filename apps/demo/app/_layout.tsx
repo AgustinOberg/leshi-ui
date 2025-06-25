@@ -1,4 +1,4 @@
-import { ThemeProvider, useTheme } from "@leshi/ui-rn";
+import { ThemeProvider, useTheme, ModalProvider } from "@leshi/ui-rn";
 import { Stack } from "expo-router";
 import { useInit } from "../hooks/useInit";
 
@@ -34,9 +34,12 @@ const App = () => {
       <Stack.Screen name="components/Divider" options={{ title: "Divider" }} />
       <Stack.Screen name="components/Dialog" options={{ title: "Dialog" }} />
       <Stack.Screen name="components/Progress" options={{ title: "Progress" }} />
+      <Stack.Screen name="components/Skeleton" options={{ title: "Skeleton" }} />
       <Stack.Screen name="components/Surface" options={{ title: "Surface" }} />
+      <Stack.Screen name="components/Modal" options={{ title: "Modal" }} />
       <Stack.Screen name="components/Switch" options={{ title: "Switch" }} />
       <Stack.Screen name="components/Text" options={{ title: "Text" }} />
+      <Stack.Screen name="components/TextArea" options={{ title: "TextArea" }} />
       <Stack.Screen name="components/TextInput" options={{ title: "TextInput" }} />
       <Stack.Screen name="examples/MusicPlayer" options={{ title: "Music Player" }} />
       <Stack.Screen name="examples/Registration" options={{ title: "Registration" }} />
@@ -54,9 +57,11 @@ const RootLayout = () => {
     return null;
   }
   return (
-    <ThemeProvider defaultMode="manual">
-      <App />
-    </ThemeProvider>
+    <ModalProvider>
+      <ThemeProvider defaultMode="manual">
+        <App />
+      </ThemeProvider>
+    </ModalProvider>
   );
 };
 

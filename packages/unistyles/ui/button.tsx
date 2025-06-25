@@ -3,7 +3,9 @@ import {
   type PressableProps,
   type StyleProp,
   type ViewStyle,
+  ActivityIndicator,
 } from "react-native";
+import React, { useMemo } from "react";
 import { StyleSheet } from "react-native-unistyles";
 import Text, { type TextVariant } from "./text";
 
@@ -12,7 +14,8 @@ export type ButtonVariant =
   | "destructive"
   | "outline"
   | "secondary"
-  | "ghost";
+  | "ghost"
+  | "link";
 
 export type ButtonSize = "base" | "sm" | "lg" | "icon";
 
@@ -21,6 +24,7 @@ export interface ButtonProps extends PressableProps {
   text?: string;
   size?: ButtonSize;
   fullWidth?: boolean;
+  loading?: boolean;
   prefix?: React.JSX.Element;
   suffix?: React.JSX.Element;
   style?: StyleProp<ViewStyle>;
@@ -32,13 +36,15 @@ const TEXT_VARIANT: Record<ButtonVariant, TextVariant> = {
   ghost: "primary",
   outline: "primary",
   secondary: "secondaryForeground",
+  link: "primary",
 };
 
 export const Button = ({
-  variant,
-  size,
+  variant = "primary",
+  size = "base",
   fullWidth,
   text,
+  loading,
   prefix,
   suffix,
   disabled,
@@ -46,31 +52,49 @@ export const Button = ({
   ...rest
 }: ButtonProps) => {
   styles.useVariants({
-    variant: variant ?? "primary",
-    size: size ?? "base",
+    variant: variant,
+    size: size,
     fullWidth: fullWidth,
   });
+
+  const isDisabled = disabled || loading;
+
+  const spinnerColor = useMemo(() => {
+    if (variant === 'ghost' || variant === 'outline' || variant === 'link') {
+      return 'primary'; // This will be resolved by the theme
+    }
+    return 'primaryForeground';
+  }, [variant]);
+
+  const textVariant = useMemo(() => TEXT_VARIANT[variant], [variant]);
+
   return (
     <Pressable
       accessibilityRole={rest.accessibilityRole ?? "button"}
-      accessibilityState={{ disabled: disabled ?? false }}
+      accessibilityState={{ disabled: isDisabled }}
       style={(state) => [
         styles.container,
-        disabled && styles.disabled,
-        state.pressed && styles.pressed,
+        isDisabled && styles.disabled,
+        state.pressed && !isDisabled && styles.pressed,
         style,
       ]}
-      disabled={disabled}
+      disabled={isDisabled}
       {...rest}
     >
       <>
-        {prefix && <>{prefix}</>}
-        {text && (
-          <Text weight="medium" variant={TEXT_VARIANT[variant ?? "primary"]}>
+        {loading && (
+          <ActivityIndicator 
+            size="small" 
+            color={spinnerColor}
+          />
+        )}
+        {!loading && prefix && <>{prefix}</>}
+        {text && !loading && (
+          <Text weight="medium" variant={textVariant}>
             {text}
           </Text>
         )}
-        {suffix && <>{suffix}</>}
+        {!loading && suffix && <>{suffix}</>}
       </>
     </Pressable>
   );
@@ -114,31 +138,45 @@ const styles = StyleSheet.create((theme) => ({
           ...theme.shadows.xs,
         },
         ghost: {
-          backgroundColor: theme.colors.background,
+          backgroundColor: 'transparent',
         },
         destructive: {
           backgroundColor: theme.colors.destructive,
           ...theme.shadows.xs,
         },
+        link: {
+          backgroundColor: 'transparent',
+          paddingHorizontal: 0,
+          paddingVertical: 0,
+          minHeight: 'auto',
+        },
       },
       size: {
+        sm: {
+          height: 32,
+          paddingHorizontal: theme.sizes.padding(3),
+          paddingVertical: theme.sizes.padding(1),
+        },
         base: {
-          height: theme.sizes.height(9),
+          height: 40,
           paddingHorizontal: theme.sizes.padding(4),
           paddingVertical: theme.sizes.padding(2),
         },
-        sm: {
-          height: theme.sizes.height(8),
-          paddingHorizontal: theme.sizes.padding(3),
-        },
         lg: {
-          height: theme.sizes.height(10),
-          paddingHorizontal: theme.sizes.padding(5),
+          height: 48,
+          paddingHorizontal: theme.sizes.padding(6),
+          paddingVertical: theme.sizes.padding(3),
         },
         icon: {
-          aspectRatio: 1,
-          height: theme.sizes.height(9),
-          borderRadius: theme.radii.full,
+          width: 40,
+          height: 40,
+          borderRadius: 20,
+          paddingHorizontal: 0,
+          paddingVertical: 0,
+          minHeight: 40,
+          maxHeight: 40,
+          minWidth: 40,
+          maxWidth: 40,
         },
       },
     },

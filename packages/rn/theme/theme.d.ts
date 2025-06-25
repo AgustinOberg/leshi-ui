@@ -1,8 +1,11 @@
+import { fonts, shadows, sizes, radii, backdrop } from "./themes/common";
+
 export type Theme = {
   fonts: typeof fonts;
   shadows: typeof shadows;
   sizes: typeof sizes;
   radii: typeof radii;
+  backdrop: typeof backdrop;
   colors: {
     /** Main background color */
     background: string;

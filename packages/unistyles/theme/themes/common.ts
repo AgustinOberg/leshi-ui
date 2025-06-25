@@ -76,7 +76,16 @@ export const sizes = {
 
 // --- Radii values used for rounded components ---
 export const radii = {
+  sm: 4,
   md: 8,
+  lg: 12,
   xl: 14,
+  "2xl": 20,
   full: 9999,
+} as const;
+
+// --- Modal backdrop configuration ---
+export const backdrop = {
+  color: "rgba(0, 0, 0, 0.5)",
+  opacity: 0.5,
 } as const;

@@ -16,10 +16,13 @@ const componentScreens = [
   { name: "Radio", href: "/components/Radio" },
   { name: "Divider", href: "/components/Divider" },
   { name: "Dialog", href: "/components/Dialog" },
+  { name: "Modal", href: "/components/Modal" },
   { name: "Progress", href: "/components/Progress" },
+  { name: "Skeleton", href: "/components/Skeleton" },
   { name: "Surface", href: "/components/Surface" },
   { name: "Switch", href: "/components/Switch" },
   { name: "Text", href: "/components/Text" },
+  { name: "TextArea", href: "/components/TextArea" },
   { name: "TextInput", href: "/components/TextInput" },
 ];
 
@@ -42,8 +45,8 @@ export default function Index() {
   const renderButtons = (screens: { name: string; href: string }[]) => (
     <View style={{ flexDirection: "row", flexWrap: "wrap", marginHorizontal: -4 }}>
       {screens.map((s) => (
-        <View key={s.name} style={{ width: buttonWidth, padding: 4 }}>
-          <Link href={s.href} asChild>
+        <View key={s.name} style={{ width: buttonWidth as any, padding: 4 }}>
+          <Link href={s.href as any} asChild>
             <Button text={s.name} fullWidth />
           </Link>
         </View>

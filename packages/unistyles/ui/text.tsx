@@ -1,7 +1,13 @@
-import { Text as RNText, type TextProps as RNTextProps } from "react-native";
+import { Text as RNText, type TextProps as RNTextProps, Platform } from "react-native";
 import React from "react";
 import { StyleSheet } from "react-native-unistyles";
+
 export type TextVariant =
+  | "heading"
+  | "subheading"
+  | "body"
+  | "caption"
+  | "overline"
   | "primaryForeground"
   | "primary"
   | "secondaryForeground"
@@ -44,19 +50,21 @@ export interface TextProps extends RNTextProps {
   weight?: Weight;
   style?: RNTextProps["style"];
 }
+
 export const Text = ({
   children,
-  variant,
-  size,
-  weight,
+  variant = "foreground",
+  size = "base",
+  weight = "regular",
   style,
   ...rest
 }: TextProps) => {
   styles.useVariants({
-    color: variant ?? "foreground",
-    size: size ?? "base",
-    weight: weight ?? "regular",
+    color: variant,
+    size: size,
+    weight: weight,
   });
+
   return (
     <RNText style={[styles.text, style]} {...rest}>
       {children}
@@ -75,33 +83,63 @@ const styles = StyleSheet.create((theme) => ({
       weight: {
         thin: {
           fontFamily: theme.fonts.thin,
+          ...(Platform.OS === 'web' && { fontWeight: "100" }),
         },
         extralight: {
           fontFamily: theme.fonts.extralight,
+          ...(Platform.OS === 'web' && { fontWeight: "200" }),
         },
         light: {
           fontFamily: theme.fonts.light,
+          ...(Platform.OS === 'web' && { fontWeight: "300" }),
         },
         regular: {
           fontFamily: theme.fonts.regular,
+          ...(Platform.OS === 'web' && { fontWeight: "400" }),
         },
         medium: {
           fontFamily: theme.fonts.medium,
+          ...(Platform.OS === 'web' && { fontWeight: "500" }),
         },
         semibold: {
           fontFamily: theme.fonts.semibold,
+          ...(Platform.OS === 'web' && { fontWeight: "600" }),
         },
         bold: {
           fontFamily: theme.fonts.bold,
+          ...(Platform.OS === 'web' && { fontWeight: "700" }),
         },
         extrabold: {
           fontFamily: theme.fonts.extrabold,
+          ...(Platform.OS === 'web' && { fontWeight: "800" }),
         },
         black: {
           fontFamily: theme.fonts.black,
+          ...(Platform.OS === 'web' && { fontWeight: "900" }),
         },
       },
       color: {
+        heading: {
+          color: theme.colors.foreground,
+          ...(Platform.OS === 'web' && { fontWeight: "600" }),
+        },
+        subheading: {
+          color: theme.colors.foreground,
+          ...(Platform.OS === 'web' && { fontWeight: "500" }),
+        },
+        body: {
+          color: theme.colors.foreground,
+        },
+        caption: {
+          color: theme.colors.mutedForeground,
+          fontSize: theme.sizes.fonts.sm,
+        },
+        overline: {
+          color: theme.colors.mutedForeground,
+          fontSize: theme.sizes.fonts.xs,
+          textTransform: "uppercase",
+          letterSpacing: 1,
+        },
         primaryForeground: {
           color: theme.colors.primaryForeground,
         },
@@ -137,7 +175,6 @@ const styles = StyleSheet.create((theme) => ({
         base: {
           fontSize: theme.sizes.fonts.base,
         },
-
         lg: {
           fontSize: theme.sizes.fonts.lg,
         },
