@@ -23,7 +23,6 @@ import Text from "./text";
 
 export type AvatarSize = "sm" | "md" | "lg" | "xl";
 
-// TODO: use "w" function here instead of hardcoded pixel values
 const PX: Record<AvatarSize, number> = {
   sm: 24,
   md: 32,

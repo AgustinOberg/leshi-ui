@@ -119,7 +119,7 @@ function App() {
           onCheckedChange={() => setChecked(!checked)}
         />
       </View>
-      <Text weight="black">Esto es un texto </Text>
+      <Text weight="black">This is sample text</Text>
       <Text weight="bold" size="lg">
         Avatar
       </Text>
@@ -187,7 +187,7 @@ function App() {
             <AlertDialog.Action
               text="Yes, delete"
               onPress={() => {
-                /* tu lógica */
+                /* your logic */
               }}
             />
           </AlertDialog.Footer>
@@ -205,7 +205,7 @@ function App() {
             <Dialog.Description>Make changes and save them.</Dialog.Description>
           </Dialog.Header>
 
-          {/* …contenido form… */}
+          {/* form content */}
 
           <Dialog.Footer orientation="row">
             <Dialog.Close asChild>

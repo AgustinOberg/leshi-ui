@@ -283,6 +283,3 @@ const createStyles = (theme: Theme) => {
   };
 };
 
-/*──────────────────── Icon Component Enhancement */
-// We need to extend the Icon component to support minus for indeterminate state
-// This would be added to the icon.tsx file, but for now we'll handle it in the checkbox

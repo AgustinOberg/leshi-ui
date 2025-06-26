@@ -5,14 +5,12 @@ import React, {
   useMemo,
   useState,
   useEffect,
-  useRef,
   type ReactNode,
 } from "react";
 import {
   Pressable,
   View,
   StyleSheet,
-  BackHandler,
   type PressableProps,
   type ViewProps,
   type StyleProp,

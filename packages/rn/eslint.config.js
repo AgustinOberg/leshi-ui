@@ -26,7 +26,7 @@ module.exports = defineConfig({
   },
   ignorePatterns: ['dist/**', 'node_modules/**'],
   rules: {
-    // TypeScript rules - Super strict pero funcionales
+    // TypeScript rules - Strict but functional
     '@typescript-eslint/no-unused-vars': 'error',
     '@typescript-eslint/no-explicit-any': 'error',
     '@typescript-eslint/prefer-const': 'error',
@@ -59,7 +59,7 @@ module.exports = defineConfig({
     'react-native/no-unused-styles': 'error',
     'react-native/no-inline-styles': 'error',
     'react-native/no-color-literals': 'error',
-    'react-native/no-raw-text': 'off', // Demasiado estricto para componentes UI
+    'react-native/no-raw-text': 'off', // Too strict for UI components
 
     // Unused imports
     'unused-imports/no-unused-imports': 'error',
@@ -74,7 +74,7 @@ module.exports = defineConfig({
     ],
 
     // General code quality rules
-    'no-console': 'warn', // Warn en lugar de error para desarrollo
+    'no-console': 'warn', // Warn instead of error for development
     'no-debugger': 'error',
     'no-var': 'error',
     'prefer-const': 'error',
@@ -84,7 +84,7 @@ module.exports = defineConfig({
     'curly': ['error', 'all'],
     'eqeqeq': ['error', 'always'],
 
-    // Style rules más suaves
+    // Relaxed style rules
     'comma-dangle': ['error', 'always-multiline'],
     'quotes': ['error', 'single', { avoidEscape: true }],
     'semi': ['error', 'always'],
