@@ -15,7 +15,7 @@ import {
   type TextStyle,
   type GestureResponderEvent,
 } from "react-native";
-import { StyleSheet, useUnistyles } from "react-native-unistyles";
+import { StyleSheet } from "react-native-unistyles";
 import { Modal, type ModalProps, type ModalSize } from "./modal";
 import { Text, type TextProps } from "./text";
 import { Pressable as SlotPressable } from "./slot";
@@ -170,7 +170,8 @@ function DialogClose({ children, onPress, asChild, ...rest }: DialogCloseProps) 
 }
 
 /*──────────────────── Content */
-interface DialogContentProps extends ViewProps, Omit<ModalProps, 'visible' | 'size'> {
+interface DialogContentProps extends Omit<ViewProps, 'children'>, Omit<ModalProps, 'visible' | 'size' | 'children'> {
+  children?: React.ReactNode;
   showCloseButton?: boolean;
 }
 
@@ -186,7 +187,6 @@ function DialogContent({
 }: DialogContentProps) {
   const { open, setOpen, size, loading, setLoading } = useDialog();
   const theme = useTheme();
-  const { styles } = useUnistyles(stylesheet);
 
   const handleRequestClose = useCallback(() => {
     setOpen(false);
@@ -204,14 +204,14 @@ function DialogContent({
       closeOnBackButton={closeOnBackButton}
       statusBarTranslucent={statusBarTranslucent}
       backdropColor={theme.backdrop.color}
-      style={[styles.content, style]}
+      style={[stylesheet.content, style]}
       {...rest}
     >
       <DialogContext.Provider value={{ open, setOpen, size, loading, setLoading }}>
         {children}
         {showCloseButton && (
           <DialogClose
-            style={styles.closeButton}
+            style={stylesheet.closeButton}
             accessibilityRole="button"
             accessibilityLabel="Close dialog"
             accessibilityHint="Closes the dialog"
@@ -226,9 +226,7 @@ function DialogContent({
 
 /*──────────────────── Header */
 function DialogHeader({ style, ...rest }: ViewProps) {
-  const { styles } = useUnistyles(stylesheet);
-  
-  return <View style={[styles.header, style]} {...rest} />;
+  return <View style={[stylesheet.header, style]} {...rest} />;
 }
 
 /*──────────────────── Footer */
@@ -241,13 +239,11 @@ function DialogFooter({
   style, 
   ...rest 
 }: DialogFooterProps) {
-  const { styles } = useUnistyles(stylesheet);
-  
   return (
     <View
       style={[
-        styles.footer,
-        orientation === "vertical" && styles.footerVertical,
+        stylesheet.footer,
+        orientation === "vertical" && stylesheet.footerVertical,
         style,
       ]}
       {...rest}
@@ -352,7 +348,6 @@ export const Dialog = {
 };
 
 export type { 
-  DialogRootProps,
   DialogTriggerProps,
   DialogCloseProps,
   DialogContentProps,

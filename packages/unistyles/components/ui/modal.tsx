@@ -8,7 +8,7 @@ import {
   StatusBar,
   type ViewProps,
 } from "react-native";
-import { StyleSheet, useUnistyles } from "react-native-unistyles";
+import { StyleSheet } from "react-native-unistyles";
 import { Portal } from "@gorhom/portal";
 import { useTheme } from "../../theme/unistyles";
 
@@ -59,7 +59,6 @@ export const Modal: React.FC<ModalProps> = ({
   const slideAnim = useRef(new Animated.Value(SCREEN_HEIGHT)).current;
 
   const sizeConfig = useMemo(() => SIZE_CONFIG[size], [size]);
-  const { styles } = useUnistyles(stylesheet);
 
   const animateIn = useCallback(() => {
     const animations: Animated.CompositeAnimation[] = [
@@ -221,7 +220,7 @@ export const Modal: React.FC<ModalProps> = ({
 
   const getContentStyle = useCallback(() => {
     const baseStyle = [
-      styles.content,
+      stylesheet.content,
       sizeConfig,
       style,
     ];
@@ -252,7 +251,7 @@ export const Modal: React.FC<ModalProps> = ({
       default:
         return baseStyle;
     }
-  }, [animationType, contentAnim, scaleAnim, slideAnim, sizeConfig, style, styles.content]);
+  }, [animationType, contentAnim, scaleAnim, slideAnim, sizeConfig, style]);
 
   if (!visible) {
     return null;
@@ -261,10 +260,10 @@ export const Modal: React.FC<ModalProps> = ({
   return (
     <Portal>
       {statusBarTranslucent && <StatusBar translucent backgroundColor="transparent" />}
-      <View style={styles.container}>
+      <View style={stylesheet.container}>
         <Animated.View
           style={[
-            styles.backdrop,
+            stylesheet.backdrop,
             {
               backgroundColor: backdropColor || theme.backdrop.color,
               opacity: backdropOpacityAnim,
@@ -272,7 +271,7 @@ export const Modal: React.FC<ModalProps> = ({
           ]}
         />
         <Pressable
-          style={styles.overlay}
+          style={stylesheet.overlay}
           onPress={handleBackdropPress}
           accessibilityRole="button"
           accessibilityLabel="Close modal"

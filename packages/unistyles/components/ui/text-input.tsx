@@ -5,8 +5,8 @@ import {
   type TextInputProps as RNTextInputProps,
   type TextInputFocusEventData,
 } from "react-native";
-import { useCallback, useState, useMemo } from "react";
-import { StyleSheet, useUnistyles } from "react-native-unistyles";
+import { useCallback, useState } from "react";
+import { StyleSheet } from "react-native-unistyles";
 import Label from "./label";
 import { Text, type TextSize } from "./text";
 import { useTheme } from "../../theme/unistyles";
@@ -54,11 +54,11 @@ export const TextInput = ({
   const isDisabled = rest.editable === false;
   const isReadOnly = rest.readOnly;
 
-  const { styles: styleVariants } = useUnistyles(styles, {
+  styles.useVariants({
     error: !!error,
     isFocused,
     size,
-    variant,
+    variant: variant as any,
     textSize,
     disabled: isDisabled,
     readOnly: isReadOnly,
@@ -81,19 +81,19 @@ export const TextInput = ({
   );
 
   return (
-    <View style={styleVariants.container}>
+    <View style={styles.container}>
       {label && (
         <Label size={labelSize ?? LABEL_SIZE[size]} error={!!error}>
           {label}
         </Label>
       )}
 
-      <View style={styleVariants.inputWrapper}>
-        {prefix && <View style={styleVariants.affix}>{prefix}</View>}
+      <View style={styles.inputWrapper}>
+        {prefix && <View style={styles.affix}>{prefix}</View>}
 
         <RNTextInput
           {...rest}
-          style={styleVariants.input}
+          style={styles.input}
           verticalAlign="middle"
           onFocus={handleFocus}
           onBlur={handleBlur}
@@ -106,7 +106,7 @@ export const TextInput = ({
           }}
         />
 
-        {suffix && <View style={styleVariants.affix}>{suffix}</View>}
+        {suffix && <View style={styles.affix}>{suffix}</View>}
       </View>
       {description && (
         <Text variant="mutedForeground" size="sm">
@@ -160,7 +160,9 @@ const styles = StyleSheet.create((theme) => ({
         xl: { height: theme.sizes.height(12) },
       },
       variant: {
-        default: {},
+        default: {
+          borderColor: theme.colors.border,
+        },
         destructive: {
           borderColor: theme.colors.destructive,
         },

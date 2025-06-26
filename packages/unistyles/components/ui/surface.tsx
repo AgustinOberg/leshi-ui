@@ -1,8 +1,8 @@
 import { View, type ViewProps } from "react-native";
-import React, { useMemo } from "react";
-import { StyleSheet, useUnistyles } from "react-native-unistyles";
+import React from "react";
+import { StyleSheet } from "react-native-unistyles";
 
-export type SurfaceElevation = "xs" | "md" | "xl" | "2xl" | "3xl" | "none";
+export type SurfaceElevation = "xs" | "md" | "lg" | "xl" | "2xl" | "3xl" | "none";
 export type SurfaceVariant = "filled" | "outlined" | "default" | "secondary" | "muted" | "accent";
 export type SurfacePadding = "none" | "sm" | "base" | "lg" | "xl";
 export type SurfaceRadius = "none" | "sm" | "md" | "lg" | "xl" | "2xl";
@@ -22,15 +22,15 @@ export const Surface = ({
   radius = "xl",
   ...rest
 }: SurfaceProps) => {
-  const { styles: styleVariants } = useUnistyles(styles, {
+  styles.useVariants({
     elevation,
-    variant,
-    padding,
+    variant: variant as any,
+    ...(padding && { padding }),
     radius,
   });
 
   return (
-    <View style={[styleVariants.container, style]} {...rest}>
+    <View style={[styles.container, style]} {...rest}>
       {children}
     </View>
   );
@@ -69,6 +69,7 @@ const styles = StyleSheet.create((theme) => ({
       elevation: {
         xs: theme.shadows.xs,
         md: theme.shadows.md,
+        lg: theme.shadows.lg,
         xl: theme.shadows.xl,
         "2xl": theme.shadows["2xl"],
         "3xl": theme.shadows["3xl"],

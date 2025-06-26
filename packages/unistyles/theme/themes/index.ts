@@ -25,6 +25,7 @@ import { amethystHazeLight } from "./amethyst-haze-light";
 import { amethystHazeDark } from "./amethyst-haze-dark";
 import { supabaseLight } from "./supabase-light";
 import { supabaseDark } from "./supabase-dark";
+import { spotify } from "./spotify";
 export {
   light,
   dark,
@@ -52,6 +53,7 @@ export {
   amethystHazeDark,
   supabaseLight,
   supabaseDark,
+  spotify,
 };
 
 export const themes = {
@@ -81,5 +83,6 @@ export const themes = {
   amethystHazeDark,
   supabaseLight,
   supabaseDark,
+  spotify,
 } as const;
 export type ThemeName = keyof typeof themes;
