@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { Portal } from "@gorhom/portal";
 import { useTheme } from "../../styles/theme";
-import { getBackdropConfig, DEFAULT_MODAL_CONFIG } from "./modal-utils";
+import { getBackdropConfig, DEFAULT_MODAL_CONFIG } from "../../lib/modal-utils";
 
 export type ModalSize = "sm" | "base" | "lg" | "xl" | "full";
 export type ModalAnimation = "fade" | "slide" | "scale" | "none";

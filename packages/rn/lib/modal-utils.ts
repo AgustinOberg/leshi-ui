@@ -2,7 +2,7 @@
  * Modal utility functions for consistent behavior across all modal components
  */
 
-import type { Theme } from '../../styles/theme';
+import type { Theme } from '../styles/theme';
 
 /**
  * Get standardized backdrop configuration for all modal components

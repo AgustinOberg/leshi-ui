@@ -235,9 +235,50 @@ function getSourcePath(unistyles, type, name) {
     return path.join(base, "components", "ui", `${name}.tsx`);
   }
   if (type === "theme") {
-    return path.join(base, "theme", "themes", `${name}.ts`);
+    return path.join(base, "styles", "themes", `${name}.ts`);
   }
   return "";
+}
+
+// Components that require additional files (utilities, etc.)
+const COMPONENT_DEPENDENCIES = {
+  modal: ["lib/modal-utils.ts"],
+  dialog: ["lib/modal-utils.ts"], // Dialog also uses modal utils
+  "alert-dialog": ["lib/modal-utils.ts"], // AlertDialog also uses modal utils
+};
+
+async function copyComponentFiles(componentName, unistyles) {
+  const base = unistyles ? path.join(packagesDir, "unistyles") : path.join(packagesDir, "rn");
+  const destBase = process.cwd();
+  
+  // Copy main component
+  const mainSrc = path.join(base, "components", "ui", `${componentName}.tsx`);
+  const mainDest = path.join(destBase, "components", "ui", `${componentName}.tsx`);
+  
+  if (!fs.existsSync(mainSrc)) {
+    logError(`Component '${componentName}' not found`);
+    return false;
+  }
+  
+  await fs.ensureDir(path.dirname(mainDest));
+  await copyDir(mainSrc, mainDest);
+  
+  // Copy additional dependencies if they exist
+  const dependencies = COMPONENT_DEPENDENCIES[componentName];
+  if (dependencies) {
+    for (const dep of dependencies) {
+      const depSrc = path.join(base, dep);
+      const depDest = path.join(destBase, dep);
+      
+      if (fs.existsSync(depSrc)) {
+        await fs.ensureDir(path.dirname(depDest));
+        await copyDir(depSrc, depDest);
+        logSuccess(`Copied dependency: ${dep}`);
+      }
+    }
+  }
+  
+  return true;
 }
 
 program
@@ -251,8 +292,8 @@ program
     if (target === "unistyles") {
       folder = "unistyles";
     }
-    const src = path.join(packagesDir, folder, "theme");
-    const dest = path.join(process.cwd(), "theme");
+    const src = path.join(packagesDir, folder, "styles");
+    const dest = path.join(process.cwd(), "styles");
     if (!fs.existsSync(src)) {
       logError("Source theme folder not found");
       return;
@@ -303,16 +344,10 @@ add
   .option("--unistyles", "use Unistyles implementation")
   .description("add a UI component")
   .action(async (name, options) => {
-    const src = getSourcePath(options.unistyles, "component", name);
-    const destDir = path.join(process.cwd(), "components", "ui");
-    const dest = path.join(destDir, `${name}.tsx`);
-    if (!fs.existsSync(src)) {
-      logError("Not found");
-      return;
+    const success = await copyComponentFiles(name, options.unistyles);
+    if (success) {
+      logComponentInfo(name);
     }
-    await fs.ensureDir(destDir);
-    await copyDir(src, dest);
-    logComponentInfo(name);
   });
 
 add
@@ -321,7 +356,7 @@ add
   .description("add a theme file")
   .action(async (name, options) => {
     const src = getSourcePath(options.unistyles, "theme", name);
-    const destDir = path.join(process.cwd(), "theme", "themes");
+    const destDir = path.join(process.cwd(), "styles", "themes");
     const dest = path.join(destDir, `${name}.ts`);
     if (!fs.existsSync(src)) {
       logError("Not found");
@@ -338,7 +373,7 @@ program
   .description("list available themes")
   .action(async (options) => {
     const folder = options.unistyles ? "unistyles" : "rn";
-    const dir = path.join(packagesDir, folder, "theme", "themes");
+    const dir = path.join(packagesDir, folder, "styles", "themes");
     const files = await fs.readdir(dir);
     const names = files
       .filter((f) => f.endsWith(".ts"))
