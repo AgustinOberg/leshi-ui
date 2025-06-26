@@ -20,7 +20,7 @@ import { Modal, type ModalProps, type ModalSize } from "./modal";
 import { Text, type TextProps } from "./text";
 import { Pressable as SlotPressable } from "./slot";
 import { Icon } from "./icon";
-import { useTheme } from "../../theme/unistyles";
+import { useTheme } from "../../styles/context";
 
 /*──────────────────── Context */
 interface DialogContextValue {

@@ -11,7 +11,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { StyleSheet } from "react-native";
-import { useTheme } from "../../theme/native";
+import { useTheme } from "../../styles/theme";
 
 export type ProgressSize = "sm" | "md" | "lg";
 export type ProgressVariant = "primary" | "secondary" | "destructive";
@@ -66,7 +66,7 @@ export const Progress = ({
   );
 };
 
-import type { Theme } from "../../theme/theme";
+import type { Theme } from "../../styles/theme";
 
 const styles = (theme: Theme) => {
   const base = StyleSheet.create({

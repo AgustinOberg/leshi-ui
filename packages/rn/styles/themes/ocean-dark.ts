@@ -1,4 +1,4 @@
-import type { Theme } from "../theme";
+import type { Theme } from "../theme.d";
 import { fonts, shadows, sizes, radii, backdrop } from "./common";
 
 export const oceanDark: Theme = {

@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
 import { Portal } from "@gorhom/portal";
-import { useTheme } from "../../theme/unistyles";
+import { useTheme } from "../../styles/context";
 
 export type ModalSize = "sm" | "base" | "lg" | "xl" | "full";
 export type ModalAnimation = "fade" | "slide" | "scale" | "none";

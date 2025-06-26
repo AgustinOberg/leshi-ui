@@ -21,8 +21,8 @@ import {
   type GestureResponderEvent,
 } from "react-native";
 import { Modal, type ModalProps, type ModalSize } from "./modal";
-import { useTheme } from "../../theme/native";
-import type { Theme } from "../../theme/theme";
+import { useTheme } from "../../styles/theme";
+import type { Theme } from "../../styles/theme";
 import { Text, type TextProps } from "./text";
 import { Pressable as SlotPressable } from "./slot";
 import { Icon } from "./icon";

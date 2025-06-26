@@ -1,4 +1,7 @@
-import { useThemeContext } from "./theme.context";
+import { useThemeContext } from "./context";
+
+// Re-export Theme type for convenience
+export type { Theme } from "./theme.d";
 
 export const useTheme = () => useThemeContext().theme;
 export const useThemeName = () => ({

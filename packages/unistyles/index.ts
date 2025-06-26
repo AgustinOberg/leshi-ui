@@ -1,10 +1,10 @@
-import "./theme/unistyles";
+import "./styles/context";
 export {
   ThemeProvider,
   useTheme,
   useThemeMode,
   useThemeName,
-} from "./theme/unistyles";
+} from "./styles/context";
 
 export { AlertDialog } from "./components/ui/alert-dialog";
 export { Avatar, AvatarFallback, AvatarImage } from "./components/ui/avatar";
@@ -22,5 +22,5 @@ export { RadioGroup, RadioGroupItem } from "./components/ui/radio";
 export { Text } from "./components/ui/text";
 export { TextArea } from "./components/ui/text-area";
 export { TextInput } from "./components/ui/text-input";
-export { themes } from "./theme/themes";
+export { themes } from "./styles/themes";
 export * from "./components/ui/slot";

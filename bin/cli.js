@@ -399,7 +399,7 @@ guide
     logInfo("🔧 Theme Provider Setup:");
     console.log("   Add ThemeProvider to your app root (_layout.tsx or App.tsx):");
     console.log('');
-    console.log(chalk.gray(`   import { ThemeProvider } from "./theme/theme.context";
+    console.log(chalk.gray(`   import { ThemeProvider } from "./styles/theme.context";
    
    export default function App() {
      return (
@@ -413,7 +413,7 @@ guide
     logInfo("🌙 Using Themes in Components:");
     console.log("   Import and use the theme hook:");
     console.log('');
-    console.log(chalk.gray(`   import { useTheme } from "../theme/theme.context";
+    console.log(chalk.gray(`   import { useTheme } from "../styles/theme.context";
    
    export function MyComponent() {
      const theme = useTheme();

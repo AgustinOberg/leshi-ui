@@ -17,8 +17,8 @@ import {
   type ImageErrorEventData,
 } from "react-native";
 import { StyleSheet } from "react-native";
-import { useTheme } from "../../theme/native";
-import type { Theme } from "../../theme/theme";
+import { useTheme } from "../../styles/theme";
+import type { Theme } from "../../styles/theme";
 import Text from "./text";
 
 export type AvatarSize = "sm" | "md" | "lg" | "xl";

@@ -1,7 +1,7 @@
 import { type PressableProps, Pressable, StyleSheet } from "react-native";
-import { useTheme } from "../../theme/native";
+import { useTheme } from "../../styles/theme";
 import { Icon } from "./icon";
-import type { Theme } from "../../theme/theme";
+import type { Theme } from "../../styles/theme";
 
 export type CheckboxSize = "sm" | "md" | "lg";
 
