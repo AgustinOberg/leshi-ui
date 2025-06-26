@@ -13,7 +13,7 @@ import { useTheme } from "../../styles/context";
 
 export type TextInputSize = "sm" | "base" | "lg" | "xl";
 export type TextInputContentSize = "base" | "sm" | "lg" | "xl";
-export type TextInputVariant = "default" | "destructive";
+export type TextInputVariant = "destructive" | "default";
 
 export interface TextInputProps extends RNTextInputProps {
   error?: string;
@@ -58,7 +58,7 @@ export const TextInput = ({
     error: !!error,
     isFocused,
     size,
-    variant: variant as TextInputVariant,
+    variant: variant as any,
     textSize,
     disabled: isDisabled,
     readOnly: isReadOnly,

@@ -23,7 +23,7 @@ import { Pressable as SlotPressable } from "./slot";
 import { useTheme } from "../../styles/context";
 
 /*──────────────────── Types */
-export type AlertDialogVariant = "default" | "destructive" | "warning";
+export type AlertDialogVariant = "destructive" | "warning" | "default";
 
 /*──────────────────── Context */
 interface AlertDialogContextValue {
@@ -146,7 +146,7 @@ function AlertDialogContent({
   const { open, setOpen, size, variant, loading, setLoading } = useAlertDialog();
   const theme = useTheme();
   
-  stylesheet.useVariants({ variant: variant as AlertDialogVariant });
+  styles.useVariants({ variant: variant as any });
 
   const handleRequestClose = useCallback(() => {
     // AlertDialog typically doesn't auto-close, but we respect the prop
@@ -167,7 +167,7 @@ function AlertDialogContent({
       closeOnBackButton={closeOnBackButton}
       statusBarTranslucent={statusBarTranslucent}
       backdropColor={theme.backdrop.color}
-      style={[stylesheet.content, style]}
+      style={[styles.content, style]}
       {...rest}
     >
       <AlertDialogContext.Provider value={{ open, setOpen, size, variant, loading, setLoading }}>
@@ -179,7 +179,7 @@ function AlertDialogContent({
 
 /*──────────────────── Header */
 function AlertDialogHeader({ style, ...rest }: ViewProps) {
-  return <View style={[stylesheet.header, style]} {...rest} />;
+  return <View style={[styles.header, style]} {...rest} />;
 }
 
 /*──────────────────── Footer */
@@ -195,8 +195,8 @@ function AlertDialogFooter({
   return (
     <View
       style={[
-        stylesheet.footer,
-        orientation === "vertical" && stylesheet.footerVertical,
+        styles.footer,
+        orientation === "vertical" && styles.footerVertical,
         style,
       ]}
       {...rest}
@@ -422,7 +422,7 @@ function AlertDialogCancel({
 }
 
 /*──────────────────── Styles */
-const stylesheet = StyleSheet.create((theme) => ({
+const styles = StyleSheet.create((theme) => ({
   content: {
     backgroundColor: theme.colors.card,
     borderRadius: theme.radii.xl,

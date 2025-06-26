@@ -10,4 +10,7 @@ export const Icon = ({ name, color, size }: IconProps) => {
   if (name === "checkbox")
     return <Text style={{ color, fontSize: size }}>✓</Text>;
   if (name === "x") return <Text style={{ color, fontSize: size }}>X</Text>;
+  
+  // Fallback for unknown icon names
+  return <Text style={{ color, fontSize: size }}>?</Text>;
 };

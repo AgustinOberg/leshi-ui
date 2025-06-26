@@ -12,7 +12,7 @@ import { Text, type TextSize } from "./text";
 import { useTheme } from "../../styles/context";
 
 export type TextAreaSize = "sm" | "base" | "lg" | "xl";
-export type TextAreaVariant = "default" | "destructive";
+export type TextAreaVariant = "destructive" | "default";
 export type TextAreaRows = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 export type TextAreaResize = "none" | "vertical" | "horizontal" | "both";
 
@@ -63,7 +63,7 @@ export const TextArea = ({
     error: !!error,
     isFocused,
     size,
-    variant: variant as TextAreaVariant,
+    variant: variant as any,
     disabled: isDisabled,
     readOnly: isReadOnly,
     rows: Math.min(rows, 10) as TextAreaRows, // Cap at 10 rows

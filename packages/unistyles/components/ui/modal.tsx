@@ -206,6 +206,7 @@ export const Modal: React.FC<ModalProps> = ({
       const subscription = BackHandler.addEventListener("hardwareBackPress", handleBackButton);
       return () => subscription.remove();
     }
+    return undefined;
   }, [visible, handleBackButton]);
 
   // Handle animation when visibility changes
