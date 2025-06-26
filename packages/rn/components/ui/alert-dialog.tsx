@@ -179,7 +179,7 @@ function AlertDialogHeader({ style, ...rest }: ViewProps) {
   const theme = useTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
   
-  return <View style={[styles.header, style as any]} {...rest} />;
+  return <View style={[styles.header, style]} {...rest} />;
 }
 
 /*──────────────────── Footer */
@@ -200,7 +200,7 @@ function AlertDialogFooter({
       style={[
         styles.footer,
         orientation === "vertical" && styles.footerVertical,
-        style as any,
+        style,
       ]}
       {...rest}
     />

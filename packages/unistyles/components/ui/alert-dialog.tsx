@@ -146,7 +146,7 @@ function AlertDialogContent({
   const { open, setOpen, size, variant, loading, setLoading } = useAlertDialog();
   const theme = useTheme();
   
-  stylesheet.useVariants({ variant: variant as any });
+  stylesheet.useVariants({ variant: variant as AlertDialogVariant });
 
   const handleRequestClose = useCallback(() => {
     // AlertDialog typically doesn't auto-close, but we respect the prop

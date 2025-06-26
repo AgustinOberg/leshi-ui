@@ -4,6 +4,7 @@ import { StyleSheet } from "react-native-unistyles";
 
 export type SurfaceElevation = "xs" | "md" | "lg" | "xl" | "2xl" | "3xl" | "none";
 export type SurfaceVariant = "filled" | "outlined" | "default" | "secondary" | "muted" | "accent";
+
 export type SurfacePadding = "none" | "sm" | "base" | "lg" | "xl";
 export type SurfaceRadius = "none" | "sm" | "md" | "lg" | "xl" | "2xl";
 
@@ -24,7 +25,7 @@ export const Surface = ({
 }: SurfaceProps) => {
   styles.useVariants({
     elevation,
-    variant: variant as any,
+    variant: variant as SurfaceVariant,
     ...(padding && { padding }),
     radius,
   });

@@ -29,10 +29,10 @@ const Pressable = React.forwardRef<
     React.ComponentPropsWithoutRef<typeof RNPressable>,
     React.ElementRef<typeof RNPressable>
   >(isTextChildren(children) ? <></> : children, {
-    ...mergeProps(pressableSlotProps, children.props as AnyProps),
+    ...mergeProps(pressableSlotProps, children.props as ComponentProps),
     ref: forwardedRef
-      ? composeRefs(forwardedRef, (children as any).ref)
-      : (children as any).ref,
+      ? composeRefs(forwardedRef, (children as React.ReactElement & { ref?: React.Ref<any> }).ref)
+      : (children as React.ReactElement & { ref?: React.Ref<any> }).ref,
   });
 });
 
@@ -51,10 +51,10 @@ const View = React.forwardRef<React.ElementRef<typeof RNView>, RNViewProps>(
       React.ComponentPropsWithoutRef<typeof RNView>,
       React.ElementRef<typeof RNView>
     >(isTextChildren(children) ? <></> : children, {
-      ...mergeProps(viewSlotProps, children.props as AnyProps),
+      ...mergeProps(viewSlotProps, children.props as ComponentProps),
       ref: forwardedRef
-        ? composeRefs(forwardedRef, (children as any).ref)
-        : (children as any).ref,
+        ? composeRefs(forwardedRef, (children as React.ReactElement & { ref?: React.Ref<any> }).ref)
+        : (children as React.ReactElement & { ref?: React.Ref<any> }).ref,
     });
   }
 );
@@ -74,10 +74,10 @@ const Text = React.forwardRef<React.ElementRef<typeof RNText>, RNTextProps>(
       React.ComponentPropsWithoutRef<typeof RNText>,
       React.ElementRef<typeof RNText>
     >(isTextChildren(children) ? <></> : children, {
-      ...mergeProps(textSlotProps, children.props as AnyProps),
+      ...mergeProps(textSlotProps, children.props as ComponentProps),
       ref: forwardedRef
-        ? composeRefs(forwardedRef, (children as any).ref)
-        : (children as any).ref,
+        ? composeRefs(forwardedRef, (children as React.ReactElement & { ref?: React.Ref<any> }).ref)
+        : (children as React.ReactElement & { ref?: React.Ref<any> }).ref,
     });
   }
 );
@@ -103,10 +103,10 @@ const Image = React.forwardRef<
     React.ComponentPropsWithoutRef<typeof RNImage>,
     React.ElementRef<typeof RNImage>
   >(isTextChildren(children) ? <></> : children, {
-    ...mergeProps(imageSlotProps, children.props as AnyProps),
+    ...mergeProps(imageSlotProps, children.props as ComponentProps),
     ref: forwardedRef
-      ? composeRefs(forwardedRef, (children as any).ref)
-      : (children as any).ref,
+      ? composeRefs(forwardedRef, (children as React.ReactElement & { ref?: React.Ref<any> }).ref)
+      : (children as React.ReactElement & { ref?: React.Ref<any> }).ref,
   });
 });
 
@@ -125,9 +125,9 @@ function composeRefs<T>(...refs: (React.Ref<T> | undefined)[]) {
     });
 }
 
-type AnyProps = Record<string, any>;
+type ComponentProps = Record<string, unknown>;
 
-function mergeProps(slotProps: AnyProps, childProps: AnyProps) {
+function mergeProps(slotProps: ComponentProps, childProps: ComponentProps) {
   const overrideProps = { ...childProps };
 
   for (const propName in childProps) {
@@ -138,14 +138,14 @@ function mergeProps(slotProps: AnyProps, childProps: AnyProps) {
     if (isHandler) {
       if (slotPropValue && childPropValue) {
         overrideProps[propName] = (...args: unknown[]) => {
-          childPropValue(...args);
-          slotPropValue(...args);
+          (childPropValue as (...args: unknown[]) => void)(...args);
+          (slotPropValue as (...args: unknown[]) => void)(...args);
         };
       } else if (slotPropValue) {
         overrideProps[propName] = slotPropValue;
       }
     } else if (propName === "style") {
-      overrideProps[propName] = combineStyles(slotPropValue, childPropValue);
+      overrideProps[propName] = combineStyles(slotPropValue as Style, childPropValue as Style);
     } else if (propName === "className") {
       overrideProps[propName] = [slotPropValue, childPropValue]
         .filter(Boolean)

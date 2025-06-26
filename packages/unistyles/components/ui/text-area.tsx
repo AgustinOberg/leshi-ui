@@ -13,6 +13,7 @@ import { useTheme } from "../../theme/unistyles";
 
 export type TextAreaSize = "sm" | "base" | "lg" | "xl";
 export type TextAreaVariant = "default" | "destructive";
+export type TextAreaRows = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 export type TextAreaResize = "none" | "vertical" | "horizontal" | "both";
 
 export interface TextAreaProps extends Omit<RNTextInputProps, 'multiline'> {
@@ -62,10 +63,10 @@ export const TextArea = ({
     error: !!error,
     isFocused,
     size,
-    variant: variant as any,
+    variant: variant as TextAreaVariant,
     disabled: isDisabled,
     readOnly: isReadOnly,
-    rows: Math.min(rows, 10) as any, // Cap at 10 rows
+    rows: Math.min(rows, 10) as TextAreaRows, // Cap at 10 rows
   });
 
   const handleFocus = useCallback(

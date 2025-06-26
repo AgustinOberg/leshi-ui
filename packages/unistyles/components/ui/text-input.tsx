@@ -58,7 +58,7 @@ export const TextInput = ({
     error: !!error,
     isFocused,
     size,
-    variant: variant as any,
+    variant: variant as TextInputVariant,
     textSize,
     disabled: isDisabled,
     readOnly: isReadOnly,
