@@ -7,9 +7,9 @@ import {
 } from "react-native";
 import React, { useMemo } from "react";
 import { StyleSheet } from "react-native";
-import { useTheme } from "../../theme/native";
+import { useTheme } from "../../styles/theme";
 import Text, { type TextVariant } from "./text";
-import type { Theme } from "../../theme/theme";
+import type { Theme } from "../../styles/theme";
 
 export type ButtonVariant =
   | "primary"

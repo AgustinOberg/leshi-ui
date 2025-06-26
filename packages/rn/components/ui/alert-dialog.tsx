@@ -18,11 +18,11 @@ import {
   type GestureResponderEvent,
 } from "react-native";
 import { Modal, type ModalProps, type ModalSize } from "./modal";
-import { useTheme } from "../../theme/native";
+import { useTheme } from "../../styles/theme";
 import { Text, type TextProps } from "./text";
 import { Button, type ButtonProps } from "./button";
 import { Pressable as SlotPressable } from "./slot";
-import type { Theme } from "../../theme/theme";
+import type { Theme } from "../../styles/theme";
 
 /*──────────────────── Types */
 export type AlertDialogVariant = "default" | "destructive" | "warning";
@@ -179,7 +179,7 @@ function AlertDialogHeader({ style, ...rest }: ViewProps) {
   const theme = useTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
   
-  return <View style={[styles.header, style as any]} {...rest} />;
+  return <View style={[styles.header, style]} {...rest} />;
 }
 
 /*──────────────────── Footer */
@@ -200,7 +200,7 @@ function AlertDialogFooter({
       style={[
         styles.footer,
         orientation === "vertical" && styles.footerVertical,
-        style as any,
+        style,
       ]}
       {...rest}
     />

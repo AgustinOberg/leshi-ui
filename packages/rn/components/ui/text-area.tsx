@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import React, { useCallback, useState, useMemo } from "react";
 import { StyleSheet } from "react-native";
-import { useTheme } from "../../theme/native";
+import { useTheme } from "../../styles/theme";
 import Label from "./label";
 import { Text, type TextSize } from "./text";
 
@@ -155,7 +155,7 @@ export const TextArea = ({
 
 export default TextArea;
 
-import type { Theme } from "../../theme/theme";
+import type { Theme } from "../../styles/theme";
 
 const createStyles = (theme: Theme) => {
   const base = StyleSheet.create({

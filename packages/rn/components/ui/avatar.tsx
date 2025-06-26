@@ -17,13 +17,12 @@ import {
   type ImageErrorEventData,
 } from "react-native";
 import { StyleSheet } from "react-native";
-import { useTheme } from "../../theme/native";
-import type { Theme } from "../../theme/theme";
+import { useTheme } from "../../styles/theme";
+import type { Theme } from "../../styles/theme";
 import Text from "./text";
 
 export type AvatarSize = "sm" | "md" | "lg" | "xl";
 
-// TODO: use "w" function here instead of hardcoded pixel values
 const PX: Record<AvatarSize, number> = {
   sm: 24,
   md: 32,

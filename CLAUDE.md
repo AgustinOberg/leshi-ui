@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Leshi UI is a **shadcn alternative for React Native** - a CLI tool and component library that enables developers to build their own UI systems with excellent developer experience and performance. The goal is to provide a curated catalog of copy-paste components that developers can customize and own, rather than a traditional component library dependency.
+Leshi UI is a **shadcn alternative for React Native** - an enterprise-grade CLI tool and component library that enables developers to build their own UI systems with excellent developer experience and performance. The goal is to provide a curated catalog of copy-paste components that developers can customize and own, rather than a traditional component library dependency.
 
 ## Core Philosophy
 
@@ -13,6 +13,7 @@ Leshi UI is a **shadcn alternative for React Native** - a CLI tool and component
 - **shadcn-inspired**: CLI commands and component patterns follow shadcn's proven DX patterns
 - **Full ownership**: Developers can modify components completely since they own the code
 - **Theme-first design**: All components are built with comprehensive theming support
+- **Enterprise-grade tooling**: TypeScript-first with atomic operations and advanced error handling
 
 ### Performance Focus
 - **Zero runtime overhead**: No component library bundle, only the components you use
@@ -23,11 +24,30 @@ Leshi UI is a **shadcn alternative for React Native** - a CLI tool and component
 ## Architecture
 
 ### Monorepo Structure
-- **CLI Tool** (`bin/cli.js`): Main CLI for copying components and themes
+- **Enterprise CLI** (`cli/`): TypeScript-based CLI with atomic operations, dependency resolution, and import transformation
 - **Component Library**:
   - `packages/rn/`: React Native components with theme integration
   - `packages/unistyles/`: Unistyles variant (alternative styling approach)
 - **Demo Apps**: Showcase components and development testing
+
+### CLI Architecture (Enterprise-Grade)
+```
+cli/
+├── src/
+│   ├── commands/           # Modular command implementations
+│   │   ├── add.ts         # Component installation with dependency resolution
+│   │   ├── init.ts        # Project initialization with framework detection
+│   │   └── guide.ts       # Documentation and help system
+│   ├── services/          # Core business logic
+│   │   ├── dependency-resolver.ts    # Multi-pass dependency resolution
+│   │   ├── file-operations.ts       # Atomic file operations with rollback
+│   │   ├── project-detector.ts      # Automatic framework detection
+│   │   └── import-transformer.ts    # Babel-based import transformation
+│   ├── schemas/           # Zod validation schemas
+│   ├── errors/            # Structured error handling system
+│   ├── types/             # TypeScript type definitions
+│   └── __tests__/         # Comprehensive test suite
+```
 
 ### Component Design Patterns
 - **Theme-aware**: All components consume theme via `useTheme()` hook
@@ -41,17 +61,34 @@ Leshi UI is a **shadcn alternative for React Native** - a CLI tool and component
 - **Type-safe**: Full TypeScript theme definitions
 - **Extensible**: Easy to add custom themes and override existing ones
 - **Performance-optimized**: Theme context minimizes re-renders
+- **File structure**: Moved from `theme/` to `styles/` following shadcn patterns
 
 ## Development Commands
 
 ### CLI Development & Testing
-- `bun run test`: Run CLI integration tests (ONLY testing for this project)
-- `bun run release`: Publish to npm
+- `npm run build`: Build the TypeScript CLI
+- `npm run test`: Run comprehensive test suite with Jest
+- `npm run test:coverage`: Generate coverage report
+- `npm run dev`: Watch mode for development
+- `npm run lint`: ESLint validation
+- `bun run release`: Publish to npm (builds CLI first)
 
 ### Demo App Development
 - `cd apps/demo && bun start`: Start Expo development server for component testing
 - `cd apps/demo && bun run ios/android/web`: Platform-specific development
 - **Demo app MUST be updated**: Every component change requires updating the demo to showcase the component's full capabilities
+
+### CLI Usage in Development
+```bash
+# Test CLI locally
+node cli/dist/index.js add component button
+
+# Test framework detection
+node cli/dist/index.js init --cwd /path/to/test-project
+
+# Test dependency resolution
+node cli/dist/index.js add component dialog --silent
+```
 
 ## Component Development Guidelines
 
@@ -61,6 +98,7 @@ Leshi UI is a **shadcn alternative for React Native** - a CLI tool and component
 3. **Performance first**: Use StyleSheet.create, avoid inline styles
 4. **TypeScript complete**: Proper prop interfaces, theme typing
 5. **Composition ready**: Design for component composition and customization
+6. **Dependency registration**: Update dependency resolver service
 
 ### Component File Structure
 ```typescript
@@ -82,38 +120,129 @@ const createStyles = (theme: Theme) => StyleSheet.create({
 ```
 
 ### Adding Component Dependencies
-- Update `component-notes.json` for components requiring external dependencies
-- Provide clear installation instructions
-- Document component interdependencies
+- **Update `cli/src/services/dependency-resolver.ts`**: Add component to COMPONENT_REGISTRY
+- **External dependencies**: List in `dependencies` array
+- **Component dependencies**: List in `registryDependencies` array
+- **Utility files**: List in `utilities` array (e.g., `lib/modal-utils.ts`)
+- **Provider files**: List in `providers` array if component needs providers
 
-## CLI Usage Patterns
+#### Example Registry Entry:
+```typescript
+modal: {
+  name: 'modal',
+  type: 'registry:ui',
+  dependencies: ['@gorhom/portal'],           // External npm packages
+  registryDependencies: [],                   // Other components
+  utilities: ['lib/modal-utils.ts'],          // Utility files
+  providers: ['components/ui/modal-provider.tsx'], // Provider components
+  setup: [
+    'Install external dependency: bun add @gorhom/portal',
+    'Wrap your app with ModalProvider in _layout.tsx'
+  ],
+  description: 'A flexible modal component with animations'
+}
+```
 
-### Component Management
-- `leshi-ui add component <name>`: Copy component to user's project
-- `leshi-ui add component <name> --unistyles`: Copy Unistyles variant
+## CLI System Architecture
 
-### Theme Management  
-- `leshi-ui init`: Initialize base theme system (light/dark)
-- `leshi-ui add theme <name>`: Add additional themes
-- `leshi-ui themes`: List available themes
+### Enterprise Features Implemented
+
+#### 1. Atomic File Operations
+- **All-or-nothing**: Operations succeed completely or rollback automatically
+- **Backup system**: Automatic backup creation before operations
+- **Validation**: Pre-flight validation of all operations
+- **Error handling**: Graceful failure with detailed error messages
+
+#### 2. Multi-Pass Dependency Resolution
+- **Recursive resolution**: Automatically resolves component dependencies
+- **Circular detection**: Prevents infinite loops in dependency chains
+- **Dependency ordering**: Installs dependencies before dependents
+- **External dependency tracking**: Tracks npm packages required
+
+#### 3. Framework-Aware Operations
+- **Auto-detection**: Detects Expo, React Native, or Expo Router automatically
+- **Path adaptation**: Adjusts file paths based on framework conventions
+- **TypeScript detection**: Automatically detects TypeScript usage
+- **Configuration generation**: Creates appropriate project config
+
+#### 4. Import Transformation
+- **Babel AST**: Uses Babel parser for reliable import transformation
+- **Path fixing**: Automatically fixes relative import paths
+- **Alias resolution**: Handles TypeScript path aliases
+- **Platform adaptation**: Adds platform-specific imports when needed
+
+### CLI Command Patterns
+
+#### Enhanced Add Command
+```bash
+# Basic usage with automatic dependency resolution
+leshi-ui add component dialog
+# Resolves: text → icon → slot → button → modal → dialog
+
+# Advanced options
+leshi-ui add component button --unistyles --overwrite --silent
+
+# Interactive mode (if no components specified)
+leshi-ui add component
+# Shows multi-select prompt with descriptions
+```
+
+#### Smart Init Command
+```bash
+# Auto-detects framework and creates optimal structure
+leshi-ui init
+
+# Unistyles variant
+leshi-ui init unistyles
+
+# Creates:
+# - Project config (leshi-ui.json)
+# - Directory structure
+# - Base theme files
+# - Framework-specific aliases
+```
 
 ## Key Implementation Details
 
+### File Organization Patterns
+- **Components**: `packages/{rn|unistyles}/components/ui/`
+- **Utilities**: `packages/{rn|unistyles}/lib/` (moved from mixed locations)
+- **Styles**: `packages/{rn|unistyles}/styles/` (renamed from `theme/`)
+- **CLI**: `cli/src/` (enterprise TypeScript implementation)
+
 ### Performance Optimizations
-- Theme context uses useMemo to prevent unnecessary re-renders
-- StyleSheet.create for all component styles (never inline styles)
-- Minimal theme context value changes
+- **Theme context**: Uses useMemo to prevent unnecessary re-renders
+- **StyleSheet.create**: Always used for all component styles (never inline)
+- **Import caching**: CLI caches resolved dependencies
+- **Minimal file operations**: Only copies necessary files
 
 ### Developer Experience Features
-- Automatic theme index file updates when adding themes
-- Component dependency warnings via component-notes.json
-- Clear error messages and helpful CLI output
-- camelCase conversion for theme variable names
+- **Structured errors**: 12 specific error types with helpful messages
+- **Progress indicators**: Spinner feedback during operations
+- **Validation**: Comprehensive input validation with Zod
+- **Rollback protection**: Automatic cleanup on failure
+- **Silent mode**: Supports CI/CD automation
 
 ## Testing Strategy
-- **CLI testing only**: Tests focus on CLI functionality (file copying, theme registration)
-- **No component testing**: Components are copy-paste, developers test in their own projects
-- **Integration tests**: Test complete CLI workflows in temporary directories
+
+### CLI Testing (Comprehensive)
+- **Unit tests**: All services tested independently
+- **Integration tests**: End-to-end command execution
+- **Mocked filesystem**: Uses memfs for reliable testing
+- **Error scenarios**: Tests failure modes and rollback
+- **Coverage**: 100% test coverage requirement
+
+### Component Testing
+- **Copy-paste philosophy**: Components are copy-paste, developers test in their own projects
+- **Demo app validation**: All components must be showcased in demo app
+- **Platform testing**: Ensure components work on iOS/Android/Web
+
+### Test Commands
+```bash
+cd cli && npm test              # Run all tests
+cd cli && npm run test:coverage # Coverage report
+cd cli && npm run test:watch   # Watch mode
+```
 
 ## Development Best Practices
 
@@ -122,6 +251,14 @@ const createStyles = (theme: Theme) => StyleSheet.create({
 - **Fix TypeScript errors immediately**: Never leave TypeScript errors unresolved
 - **Use proper types**: Import correct types like `DimensionValue` from React Native for props like `width` and `height`
 - **Type safety first**: Ensure all component props and theme interfaces are properly typed
+- **CLI type safety**: All CLI operations are fully typed with Zod validation
+
+### CLI Development Best Practices
+- **Service-oriented**: Keep business logic in services, commands are thin wrappers
+- **Error-first**: Always consider error cases and provide helpful messages
+- **Atomic operations**: Design operations to be atomic (all-or-nothing)
+- **Testing**: Write tests for all new functionality
+- **Documentation**: Update CLI-README.md for user-facing changes
 
 ### Unistyles v3 Implementation
 When working with `packages/unistyles/`, follow the official Unistyles v3 API:
@@ -229,6 +366,9 @@ When creating or modifying components, follow shadcn's design principles:
 
 ### Debugging and Troubleshooting
 Common issues and solutions:
+- **CLI errors**: Check `cli/dist/` exists and run `npm run build` in cli folder
+- **Dependency resolution**: Verify component is registered in dependency resolver
+- **Import transformation**: Check Babel AST transformation in import-transformer service
 - **Styles not applying**: Check if using correct platform-specific styles
 - **TypeScript errors**: Ensure proper type imports (DimensionValue vs string/number)
 - **Unistyles not working**: Verify `styles.useVariants()` syntax and theme structure
@@ -238,11 +378,38 @@ Common issues and solutions:
 ### Code Quality Checklist
 Before completing any task:
 1. ✅ Run `npx tsc --noEmit` in affected packages
-2. ✅ Verify Unistyles v3 API usage is correct
-3. ✅ Check that all TypeScript errors are resolved
-4. ✅ Ensure proper React Native type imports (DimensionValue, etc.)
-5. ✅ Test that changes don't break existing functionality
-6. ✅ **Update demo app to showcase ALL component capabilities**
-7. ✅ **Verify demo displays all variants, sizes, and states**
-8. ✅ **Check platform-specific implementations work correctly**
-9. ✅ **Ensure proper performance optimizations are in place**
+2. ✅ Run `cd cli && npm test` to ensure CLI tests pass
+3. ✅ Verify Unistyles v3 API usage is correct
+4. ✅ Check that all TypeScript errors are resolved
+5. ✅ Ensure proper React Native type imports (DimensionValue, etc.)
+6. ✅ Test that changes don't break existing functionality
+7. ✅ **Update demo app to showcase ALL component capabilities**
+8. ✅ **Verify demo displays all variants, sizes, and states**
+9. ✅ **Check platform-specific implementations work correctly**
+10. ✅ **Ensure proper performance optimizations are in place**
+11. ✅ **Update dependency resolver if adding new components**
+12. ✅ **Test CLI functionality with the new/modified components**
+
+## Enterprise CLI Development Guidelines
+
+### Adding New CLI Commands
+1. Create command file in `cli/src/commands/`
+2. Add Zod schema for options validation
+3. Implement error handling with structured errors
+4. Add comprehensive tests
+5. Update CLI-README.md documentation
+
+### Modifying Services
+1. Maintain backwards compatibility
+2. Add unit tests for new functionality
+3. Use TypeScript strict mode
+4. Handle all error cases gracefully
+5. Update type definitions
+
+### CLI Testing Requirements
+- All new services must have 100% test coverage
+- Integration tests for command workflows
+- Error scenario testing
+- Filesystem operation testing with memfs
+
+This enterprise-grade CLI system provides the foundation for a production-ready component distribution system that rivals and exceeds shadcn/ui in functionality and reliability.

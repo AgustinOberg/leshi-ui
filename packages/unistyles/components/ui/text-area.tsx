@@ -5,14 +5,15 @@ import {
   type TextInputProps as RNTextInputProps,
   type TextInputFocusEventData,
 } from "react-native";
-import React, { useCallback, useState, useMemo } from "react";
-import { StyleSheet, useUnistyles } from "react-native-unistyles";
+import React, { useCallback, useState } from "react";
+import { StyleSheet } from "react-native-unistyles";
 import Label from "./label";
 import { Text, type TextSize } from "./text";
-import { useTheme } from "../../theme/unistyles";
+import { useTheme } from "../../styles/context";
 
 export type TextAreaSize = "sm" | "base" | "lg" | "xl";
-export type TextAreaVariant = "default" | "destructive";
+export type TextAreaVariant = "destructive" | "default";
+export type TextAreaRows = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 export type TextAreaResize = "none" | "vertical" | "horizontal" | "both";
 
 export interface TextAreaProps extends Omit<RNTextInputProps, 'multiline'> {
@@ -58,14 +59,14 @@ export const TextArea = ({
   const isReadOnly = rest.readOnly;
   const characterCount = value?.length || 0;
 
-  const { styles: styleVariants } = useUnistyles(styles, {
+  styles.useVariants({
     error: !!error,
     isFocused,
     size,
-    variant,
+    variant: variant as any,
     disabled: isDisabled,
     readOnly: isReadOnly,
-    rows: Math.min(rows, 10), // Cap at 10 rows
+    rows: Math.min(rows, 10) as TextAreaRows, // Cap at 10 rows
   });
 
   const handleFocus = useCallback(
@@ -85,17 +86,17 @@ export const TextArea = ({
   );
 
   return (
-    <View style={styleVariants.container}>
+    <View style={styles.container}>
       {label && (
         <Label size={labelSize ?? LABEL_SIZE[size]} error={!!error}>
           {label}
         </Label>
       )}
 
-      <View style={styleVariants.textAreaWrapper}>
+      <View style={styles.textAreaWrapper}>
         <RNTextInput
           {...rest}
-          style={styleVariants.textArea}
+          style={styles.textArea}
           multiline
           numberOfLines={rows}
           textAlignVertical="top"
@@ -113,7 +114,7 @@ export const TextArea = ({
         />
       </View>
 
-      <View style={styleVariants.footer}>
+      <View style={styles.footer}>
         {description && (
           <Text variant="mutedForeground" size="sm">
             {description}
@@ -128,7 +129,7 @@ export const TextArea = ({
           <Text 
             variant={characterCount > maxLength * 0.9 ? "destructive" : "mutedForeground"} 
             size="sm"
-            style={styleVariants.characterCount}
+            style={styles.characterCount}
           >
             {characterCount}/{maxLength}
           </Text>
@@ -185,7 +186,9 @@ const styles = StyleSheet.create((theme) => ({
         },
       },
       variant: {
-        default: {},
+        default: {
+          borderColor: theme.colors.border,
+        },
         destructive: {
           borderColor: theme.colors.destructive,
         },

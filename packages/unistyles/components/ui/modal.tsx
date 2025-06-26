@@ -8,9 +8,10 @@ import {
   StatusBar,
   type ViewProps,
 } from "react-native";
-import { StyleSheet, useUnistyles } from "react-native-unistyles";
+import { StyleSheet } from "react-native-unistyles";
 import { Portal } from "@gorhom/portal";
-import { useTheme } from "../../theme/unistyles";
+import { useTheme } from "../../styles/context";
+import { getBackdropConfig, DEFAULT_MODAL_CONFIG } from "../../lib/modal-utils";
 
 export type ModalSize = "sm" | "base" | "lg" | "xl" | "full";
 export type ModalAnimation = "fade" | "slide" | "scale" | "none";
@@ -43,28 +44,29 @@ export const Modal: React.FC<ModalProps> = ({
   onRequestClose,
   animationType = "fade",
   size = "base",
-  closeOnBackdrop = true,
-  closeOnBackButton = true,
-  backdropOpacity = 0.5,
+  closeOnBackdrop = DEFAULT_MODAL_CONFIG.closeOnBackdrop,
+  closeOnBackButton = DEFAULT_MODAL_CONFIG.closeOnBackButton,
+  backdropOpacity,
   backdropColor,
-  statusBarTranslucent = true,
+  statusBarTranslucent = DEFAULT_MODAL_CONFIG.statusBarTranslucent,
   children,
   style,
   ...rest
 }) => {
   const theme = useTheme();
+  const backdropConfig = getBackdropConfig(theme);
+  const finalBackdropOpacity = backdropOpacity ?? backdropConfig.opacity;
   const backdropOpacityAnim = useRef(new Animated.Value(0)).current;
   const contentAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
   const slideAnim = useRef(new Animated.Value(SCREEN_HEIGHT)).current;
 
   const sizeConfig = useMemo(() => SIZE_CONFIG[size], [size]);
-  const { styles } = useUnistyles(stylesheet);
 
   const animateIn = useCallback(() => {
     const animations: Animated.CompositeAnimation[] = [
       Animated.timing(backdropOpacityAnim, {
-        toValue: backdropOpacity,
+        toValue: finalBackdropOpacity,
         duration: 250,
         useNativeDriver: true,
       }),
@@ -108,7 +110,7 @@ export const Modal: React.FC<ModalProps> = ({
         );
         break;
       case "none":
-        backdropOpacityAnim.setValue(backdropOpacity);
+        backdropOpacityAnim.setValue(finalBackdropOpacity);
         contentAnim.setValue(1);
         scaleAnim.setValue(1);
         slideAnim.setValue(0);
@@ -204,6 +206,7 @@ export const Modal: React.FC<ModalProps> = ({
       const subscription = BackHandler.addEventListener("hardwareBackPress", handleBackButton);
       return () => subscription.remove();
     }
+    return undefined;
   }, [visible, handleBackButton]);
 
   // Handle animation when visibility changes
@@ -221,7 +224,7 @@ export const Modal: React.FC<ModalProps> = ({
 
   const getContentStyle = useCallback(() => {
     const baseStyle = [
-      styles.content,
+      stylesheet.content,
       sizeConfig,
       style,
     ];
@@ -252,7 +255,7 @@ export const Modal: React.FC<ModalProps> = ({
       default:
         return baseStyle;
     }
-  }, [animationType, contentAnim, scaleAnim, slideAnim, sizeConfig, style, styles.content]);
+  }, [animationType, contentAnim, scaleAnim, slideAnim, sizeConfig, style]);
 
   if (!visible) {
     return null;
@@ -261,18 +264,18 @@ export const Modal: React.FC<ModalProps> = ({
   return (
     <Portal>
       {statusBarTranslucent && <StatusBar translucent backgroundColor="transparent" />}
-      <View style={styles.container}>
+      <View style={stylesheet.container}>
         <Animated.View
           style={[
-            styles.backdrop,
+            stylesheet.backdrop,
             {
-              backgroundColor: backdropColor || theme.backdrop.color,
+              backgroundColor: backdropColor ?? backdropConfig.color,
               opacity: backdropOpacityAnim,
             },
           ]}
         />
         <Pressable
-          style={styles.overlay}
+          style={stylesheet.overlay}
           onPress={handleBackdropPress}
           accessibilityRole="button"
           accessibilityLabel="Close modal"

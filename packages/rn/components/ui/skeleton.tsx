@@ -9,7 +9,7 @@ import Animated, {
   Easing,
   interpolate,
 } from "react-native-reanimated";
-import { useTheme } from "../../theme/native";
+import { useTheme } from "../../styles/theme";
 
 export interface SkeletonProps extends Omit<ViewProps, "style"> {
   width?: DimensionValue;
@@ -78,7 +78,7 @@ export const Skeleton = ({
 
 export default Skeleton;
 
-import type { Theme } from "../../theme/theme";
+import type { Theme } from "../../styles/theme";
 
 const createStyles = (theme: Theme) =>
   StyleSheet.create({

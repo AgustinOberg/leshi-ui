@@ -5,14 +5,12 @@ import React, {
   useMemo,
   useState,
   useEffect,
-  useRef,
   type ReactNode,
 } from "react";
 import {
   Pressable,
   View,
   StyleSheet,
-  BackHandler,
   type PressableProps,
   type ViewProps,
   type StyleProp,
@@ -21,7 +19,8 @@ import {
   type GestureResponderEvent,
 } from "react-native";
 import { Modal, type ModalProps, type ModalSize } from "./modal";
-import { useTheme } from "../../theme/native";
+import { useTheme } from "../../styles/theme";
+import type { Theme } from "../../styles/theme";
 import { Text, type TextProps } from "./text";
 import { Pressable as SlotPressable } from "./slot";
 import { Icon } from "./icon";
@@ -306,7 +305,7 @@ const DialogDescription: React.FC<DialogDescriptionProps> = ({
 );
 
 /*──────────────────── Styles */
-const createStyles = (theme: any) =>
+const createStyles = (theme: Theme) =>
   StyleSheet.create({
     content: {
       backgroundColor: theme.colors.card,

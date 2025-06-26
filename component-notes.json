@@ -10,6 +10,7 @@
   "modal": {
     "dependencies": [],
     "externalDeps": ["@gorhom/portal"],
+    "utilities": ["lib/modal-utils.ts"],
     "setup": [
       "Install external dependency: bun add @gorhom/portal",
       "Wrap your app with ModalProvider in _layout.tsx"

@@ -4,7 +4,8 @@
   "type": "module",
   "workspaces": [
     "packages/*",
-    "apps/*"
+    "apps/*",
+    "cli"
   ],
   "devDependencies": {
     "@types/bun": "latest"
@@ -21,7 +22,7 @@
   "description": "Leshi CLI for UI utilities",
   "license": "MIT",
   "bin": {
-    "leshi-ui": "./bin/cli.js"
+    "leshi-ui": "./cli/dist/index.js"
   },
   "files": [
     "bin",
@@ -32,7 +33,11 @@
     "LICENSE"
   ],
   "scripts": {
-    "test": "node tests/run-tests.js",
-    "release": "bunx npm publish"
+    "build": "cd cli && npm run build",
+    "test": "cd cli && npm test",
+    "test:cli": "cd cli && npm test",
+    "lint": "cd cli && npm run lint",
+    "dev": "cd cli && npm run dev",
+    "release": "npm run build && bunx npm publish"
   }
 }

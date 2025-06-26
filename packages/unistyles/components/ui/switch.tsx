@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Pressable,
   type PressableProps,
@@ -13,57 +13,89 @@ import Animated, {
 } from "react-native-reanimated";
 import { StyleSheet } from "react-native-unistyles";
 
-export type SwitchSize = "sm" | "md" | "lg";
+export type SwitchSize = "sm" | "base" | "lg";
+export type SwitchVariant = "default" | "destructive";
 
 export interface SwitchProps extends Omit<PressableProps, "onPress" | "style"> {
-  checked: boolean;
-  onCheckedChange: (val: boolean) => void;
-  disabled?: boolean;
+  checked?: boolean;
+  defaultChecked?: boolean;
+  onCheckedChange?: (checked: boolean) => void;
   size?: SwitchSize;
+  variant?: SwitchVariant;
+  disabled?: boolean;
   style?: StyleProp<ViewStyle>;
+  "aria-label"?: string;
+  "aria-describedby"?: string;
+  testID?: string;
 }
 
-// TODO: change it to use the theme.size and not hardcoded values
-const SIZE = {
-  sm: { trackW: 24, trackH: 12, thumb: 10, pad: 2 },
-  md: { trackW: 32, trackH: 20, thumb: 16, pad: 2 },
-  lg: { trackW: 40, trackH: 24, thumb: 20, pad: 3 },
-} as const;
-
-export const Switch = ({
-  checked,
+export const Switch = React.memo<SwitchProps>(({
+  checked: checkedProp,
+  defaultChecked = false,
   onCheckedChange,
+  size = "base",
+  variant = "default",
   disabled = false,
-  size = "md",
   style,
+  "aria-label": ariaLabel,
+  "aria-describedby": ariaDescribedBy,
+  testID,
   ...rest
-}: SwitchProps) => {
-  const dims = SIZE[size];
+}) => {
+  const [internalChecked, setInternalChecked] = useState(defaultChecked);
+  const isControlled = checkedProp !== undefined;
+  const checked = isControlled ? checkedProp : internalChecked;
 
-  const OFFSET = dims.trackW - dims.thumb - dims.pad * 2;
+  const sizes = useMemo(() => ({
+    sm: { trackW: 32, trackH: 18, thumbSize: 14, padding: 2 },
+    base: { trackW: 44, trackH: 24, thumbSize: 20, padding: 2 },
+    lg: { trackW: 52, trackH: 30, thumbSize: 26, padding: 2 },
+  }), []);
 
-  const tx = useSharedValue(checked ? OFFSET : 0);
+  const currentSize = sizes[size];
+  const translateDistance = currentSize.trackW - currentSize.thumbSize - currentSize.padding * 2;
+
+  const tx = useSharedValue(checked ? translateDistance : 0);
 
   useEffect(() => {
-    tx.value = withTiming(checked ? OFFSET : 0, {
-      duration: 180,
+    tx.value = withTiming(checked ? translateDistance : 0, {
+      duration: 200,
       easing: Easing.out(Easing.quad),
     });
-  }, [checked, OFFSET]);
+  }, [checked, translateDistance]);
 
   const thumbAnim = useAnimatedStyle(() => ({
     transform: [{ translateX: tx.value }],
   }));
 
-  styles.useVariants({ size, checked, disabled });
+  const handlePress = useCallback(() => {
+    if (disabled) return;
+    const newChecked = !checked;
+    if (!isControlled) {
+      setInternalChecked(newChecked);
+    }
+    onCheckedChange?.(newChecked);
+  }, [checked, disabled, isControlled, onCheckedChange]);
+
+  const state = disabled ? "disabled" : checked ? "checked" : "unchecked";
+
+  styles.useVariants({
+    size: size as any,
+    variant: variant as any,
+    state: state as any,
+  });
 
   return (
     <Pressable
       accessibilityRole="switch"
       accessibilityState={{ checked, disabled }}
       accessibilityValue={{ text: checked ? "on" : "off" }}
+      accessibilityLabel={ariaLabel}
+      accessibilityHint={disabled ? "Switch is disabled" : "Double tap to toggle"}
+      accessible
       disabled={disabled}
-      onPress={() => !disabled && onCheckedChange(!checked)}
+      onPress={handlePress}
+      testID={testID}
       data-slot="switch"
       style={[styles.track, style]}
       {...rest}
@@ -74,56 +106,91 @@ export const Switch = ({
       />
     </Pressable>
   );
-};
+});
+
+Switch.displayName = "Switch";
 
 const styles = StyleSheet.create((theme) => ({
   track: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "center", 
+    justifyContent: "flex-start",
     borderRadius: theme.radii.full,
     borderWidth: 1,
     borderColor: "transparent",
+    position: "relative",
+    padding: 2,
     ...theme.shadows.xs,
     variants: {
       size: {
-        sm: {
-          width: theme.sizes.width(6),
-          height: theme.sizes.height(3),
-          padding: theme.sizes.padding(0.5),
-        },
-        md: {
-          width: theme.sizes.width(8),
-          height: theme.sizes.height(5),
-          padding: theme.sizes.padding(0.5),
-        },
-        lg: {
-          width: theme.sizes.width(10),
-          height: theme.sizes.height(6),
-          padding: theme.sizes.padding(0.75),
-        },
+        sm: { width: 32, height: 18 },
+        base: { width: 44, height: 24 },
+        lg: { width: 52, height: 30 },
       },
-      checked: {
-        true: { backgroundColor: theme.colors.primary },
-        false: { backgroundColor: theme.colors.inputSurface },
+      variant: {
+        default: {},
+        destructive: {},
       },
-      disabled: {
-        true: { opacity: 0.5 },
+      state: {
+        unchecked: {
+          backgroundColor: theme.colors.inputSurface,
+          borderColor: theme.colors.border,
+        },
+        checked: {
+          backgroundColor: theme.colors.primary,
+          borderColor: theme.colors.primary,
+        },
+        disabled: {
+          opacity: 0.5,
+        },
       },
     },
+    compoundVariants: [
+      {
+        variant: "destructive",
+        state: "checked",
+        styles: {
+          backgroundColor: theme.colors.destructive,
+          borderColor: theme.colors.destructive,
+        },
+      },
+    ],
   },
 
   thumb: {
+    position: "relative", 
     borderRadius: theme.radii.full,
+    ...theme.shadows.xs,
     variants: {
       size: {
-        sm: { width: theme.sizes.width(2.5), height: theme.sizes.height(2.5) },
-        md: { width: theme.sizes.width(4), height: theme.sizes.height(4) },
-        lg: { width: theme.sizes.width(5), height: theme.sizes.height(5) },
+        sm: { width: 14, height: 14 },
+        base: { width: 20, height: 20 },
+        lg: { width: 26, height: 26 },
       },
-      checked: {
-        true: { backgroundColor: theme.colors.primaryForeground },
-        false: { backgroundColor: theme.colors.background },
+      variant: {
+        default: {},
+        destructive: {},
+      },
+      state: {
+        unchecked: {
+          backgroundColor: theme.colors.background,
+        },
+        checked: {
+          backgroundColor: theme.colors.primaryForeground,
+        },
+        disabled: {
+          backgroundColor: theme.colors.mutedForeground,
+        },
       },
     },
+    compoundVariants: [
+      {
+        variant: "destructive",
+        state: "checked",
+        styles: {
+          backgroundColor: theme.colors.destructiveForeground,
+        },
+      },
+    ],
   },
 }));

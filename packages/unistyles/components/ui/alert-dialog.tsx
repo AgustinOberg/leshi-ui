@@ -15,15 +15,15 @@ import {
   type TextStyle,
   type GestureResponderEvent,
 } from "react-native";
-import { StyleSheet, useUnistyles } from "react-native-unistyles";
+import { StyleSheet } from "react-native-unistyles";
 import { Modal, type ModalProps, type ModalSize } from "./modal";
 import { Text, type TextProps } from "./text";
 import { Button, type ButtonProps } from "./button";
 import { Pressable as SlotPressable } from "./slot";
-import { useTheme } from "../../theme/unistyles";
+import { useTheme } from "../../styles/context";
 
 /*──────────────────── Types */
-export type AlertDialogVariant = "default" | "destructive" | "warning";
+export type AlertDialogVariant = "destructive" | "warning" | "default";
 
 /*──────────────────── Context */
 interface AlertDialogContextValue {
@@ -130,8 +130,8 @@ function AlertDialogTrigger({ children, onPress, asChild, ...rest }: AlertDialog
 }
 
 /*──────────────────── Content */
-interface AlertDialogContentProps extends ViewProps, Omit<ModalProps, 'visible' | 'size'> {
-  // AlertDialog does not have close button by design (must use Action/Cancel)
+interface AlertDialogContentProps extends Omit<ViewProps, 'children'>, Omit<ModalProps, 'visible' | 'size' | 'children'> {
+  children?: React.ReactNode;
 }
 
 function AlertDialogContent({
@@ -145,7 +145,8 @@ function AlertDialogContent({
 }: AlertDialogContentProps) {
   const { open, setOpen, size, variant, loading, setLoading } = useAlertDialog();
   const theme = useTheme();
-  const { styles } = useUnistyles(stylesheet, { variant });
+  
+  styles.useVariants({ variant: variant as any });
 
   const handleRequestClose = useCallback(() => {
     // AlertDialog typically doesn't auto-close, but we respect the prop
@@ -178,8 +179,6 @@ function AlertDialogContent({
 
 /*──────────────────── Header */
 function AlertDialogHeader({ style, ...rest }: ViewProps) {
-  const { styles } = useUnistyles(stylesheet);
-  
   return <View style={[styles.header, style]} {...rest} />;
 }
 
@@ -193,8 +192,6 @@ function AlertDialogFooter({
   style, 
   ...rest 
 }: AlertDialogFooterProps) {
-  const { styles } = useUnistyles(stylesheet);
-  
   return (
     <View
       style={[
@@ -425,7 +422,7 @@ function AlertDialogCancel({
 }
 
 /*──────────────────── Styles */
-const stylesheet = StyleSheet.create((theme) => ({
+const styles = StyleSheet.create((theme) => ({
   content: {
     backgroundColor: theme.colors.card,
     borderRadius: theme.radii.xl,
@@ -437,13 +434,15 @@ const stylesheet = StyleSheet.create((theme) => ({
     
     variants: {
       variant: {
-        default: {},
+        default: {
+          borderColor: theme.colors.border,
+        },
         destructive: {
           borderColor: theme.colors.destructive,
           borderWidth: 2,
         },
         warning: {
-          borderColor: theme.colors.warning || theme.colors.primary,
+          borderColor: theme.colors.primary,
           borderWidth: 2,
         },
       },
@@ -478,7 +477,6 @@ export const AlertDialog = {
 };
 
 export type { 
-  AlertDialogRootProps,
   AlertDialogTriggerProps,
   AlertDialogContentProps,
   AlertDialogFooterProps,

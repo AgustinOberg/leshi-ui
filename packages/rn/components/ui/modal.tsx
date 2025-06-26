@@ -12,8 +12,8 @@ import {
   type StyleProp,
 } from "react-native";
 import { Portal } from "@gorhom/portal";
-import { useTheme } from "../../theme/native";
-import { getBackdropConfig, DEFAULT_MODAL_CONFIG } from "./modal-utils";
+import { useTheme } from "../../styles/theme";
+import { getBackdropConfig, DEFAULT_MODAL_CONFIG } from "../../lib/modal-utils";
 
 export type ModalSize = "sm" | "base" | "lg" | "xl" | "full";
 export type ModalAnimation = "fade" | "slide" | "scale" | "none";
@@ -210,6 +210,7 @@ export const Modal: React.FC<ModalProps> = ({
       const subscription = BackHandler.addEventListener("hardwareBackPress", handleBackButton);
       return () => subscription.remove();
     }
+    return undefined;
   }, [visible, handleBackButton]);
 
   // Handle animation when visibility changes
