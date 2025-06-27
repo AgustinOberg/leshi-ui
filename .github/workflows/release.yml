@@ -12,7 +12,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: oven-sh/setup-bun@v1
         with:
@@ -27,9 +27,8 @@ jobs:
       - run: git config user.name "github-actions"
       - run: git config user.email "github-actions@github.com"
 
-      # Bump CLI version within the workspace. Running from the workspace root
-      # avoids npm failing to resolve workspace protocol dependencies.
-      - run: npm --workspace cli version patch --no-git-tag-version
+      # Bump CLI version directly in the cli directory
+      - run: cd cli && npm version patch --no-git-tag-version
 
       - run: git add cli/package.json && git commit -m "bump version [skip ci]" && git push
 

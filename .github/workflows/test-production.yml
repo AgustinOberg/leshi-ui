@@ -196,7 +196,7 @@ jobs:
           npm install $GITHUB_WORKSPACE/cli/leshi-ui-*.tgz
           npx leshi-ui init --yes
           npx leshi-ui add button --yes
-          test -f src/components/ui/button.tsx || (echo "❌ Expo project failed" && exit 1)
+          test -f components/ui/button.tsx || (echo "❌ Expo project failed" && exit 1)
           echo "✅ Expo project structure works"
           
           # Test React Native project structure  
