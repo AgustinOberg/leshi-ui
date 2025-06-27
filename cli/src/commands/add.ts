@@ -27,6 +27,7 @@ addCommand
   .option('-p, --path <path>', 'the path to add the component to')
   .option('-s, --silent', 'mute output', false)
   .option('--unistyles', 'use Unistyles implementation', false)
+  .option('--rn', 'use React Native implementation (default)', false)
   .action(async (components: string[], rawOptions: unknown) => {
     try {
       // Validate options with Zod
@@ -56,17 +57,8 @@ async function handleAddCommand(componentNames: string[], options: AddOptions): 
     // Validate project structure
     await ProjectDetector.validateProjectStructure(projectInfo.framework, projectInfo.projectRoot);
 
-    // Load project config
-    let projectConfig = ProjectDetector.createDefaultConfig(projectInfo);
-    if (projectInfo.hasConfig && projectInfo.configPath) {
-      try {
-        projectConfig = await FileOperationsService.readJsonFile(projectInfo.configPath);
-      } catch (error) {
-        if (!options.silent) {
-          console.warn(chalk.yellow('Warning: Could not load project config, using defaults'));
-        }
-      }
-    }
+    // Use default project config (no more leshi-ui.json)
+    const projectConfig = ProjectDetector.createDefaultConfig(projectInfo);
 
     // Initialize dependency resolver
     const resolver = new DependencyResolver();

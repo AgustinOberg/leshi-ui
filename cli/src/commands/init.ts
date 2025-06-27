@@ -85,12 +85,8 @@ async function handleInitCommand(options: InitOptions & { target: string }): Pro
       spinner.succeed('Directory structure created');
     }
 
-    // Save configuration
-    const configPath = path.join(projectInfo.projectRoot, 'leshi-ui.json');
-    await FileOperationsService.writeJsonFile(configPath, projectConfig);
-
     if (!options.silent) {
-      spinner.succeed('Configuration saved');
+      spinner.succeed('Setup completed');
       
       console.log('');
       console.log(chalk.green('✨ leshi-ui initialized successfully!'));
