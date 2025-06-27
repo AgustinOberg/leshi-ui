@@ -1,7 +1,7 @@
 {
   "name": "leshi-ui",
-  "version": "0.0.12",
-  "description": "A shadcn-inspired CLI for React Native UI components",
+  "version": "0.0.13",
+  "description": "Professional CLI for React Native UI components with copy-paste approach, comprehensive theming, and smart dependency resolution",
   "main": "dist/index.js",
   "bin": {
     "leshi-ui": "./dist/index.js"
@@ -22,11 +22,28 @@
     "ui",
     "components",
     "cli",
-    "shadcn",
-    "unistyles"
+    "copy-paste",
+    "theming",
+    "typescript",
+    "unistyles",
+    "mobile",
+    "design-system"
   ],
-  "author": "Agustin Oberg",
+  "author": {
+    "name": "Agustin Oberg",
+    "email": "agustin.oberg@gmail.com",
+    "url": "https://www.linkedin.com/in/oberg-agustin"
+  },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AgustinOberg/leshi-ui.git",
+    "directory": "cli"
+  },
+  "homepage": "https://github.com/AgustinOberg/leshi-ui#readme",
+  "bugs": {
+    "url": "https://github.com/AgustinOberg/leshi-ui/issues"
+  },
   "files": [
     "dist/**/*",
     "component-registry.json",
