@@ -26,4 +26,6 @@ export const icons = {
   books: '📚',
   list: '📋',
   theme: '🎨',
+  question: '❓',
+  cancel: '❌',
 } as const;

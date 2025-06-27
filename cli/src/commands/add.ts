@@ -110,13 +110,59 @@ async function addComponents(componentNames: string[], options: AddOptions): Pro
     return;
   }
 
-  const spinner = ora('Resolving dependencies...').start();
+  let spinner = ora('Resolving dependencies...').start();
 
   try {
     // Resolve dependencies
     const resolvedComponents = await ComponentRegistryService.resolveDependencies(componentNames);
     
-    spinner.text = 'Checking for existing files...';
+    spinner.stop();
+    
+    // Show what will be installed and ask for confirmation if multiple components or dependencies
+    if (resolvedComponents.length > 1 && !options.yes) {
+      Logger.break();
+      Logger.info(`${icons.package} The following components will be installed:`);
+      
+      const requestedComponents = componentNames;
+      const additionalDependencies = resolvedComponents.filter(comp => !requestedComponents.includes(comp));
+      
+      // Show requested components
+      requestedComponents.forEach(name => {
+        Logger.log(`  ${colors.primary('✓')} ${colors.primary(name)} ${colors.dim('(requested)')}`);
+      });
+      
+      // Show dependencies if any
+      if (additionalDependencies.length > 0) {
+        Logger.log('');
+        Logger.log(`  ${colors.dim('Dependencies:')}`);
+        additionalDependencies.forEach(name => {
+          Logger.log(`  ${colors.dim('•')} ${colors.dim(name)}`);
+        });
+      }
+      
+      Logger.break();
+      Logger.log(`${colors.dim('Total:')} ${colors.primary(resolvedComponents.length)} component${resolvedComponents.length === 1 ? '' : 's'}`);
+      Logger.break();
+      
+      // Ask for confirmation
+      const { shouldContinue } = await inquirer.prompt([
+        {
+          type: 'confirm',
+          name: 'shouldContinue',
+          message: `${icons.question} Do you want to continue with the installation?`,
+          default: true,
+        },
+      ]);
+
+      if (!shouldContinue) {
+        Logger.info('Installation cancelled.');
+        return;
+      }
+      
+      Logger.break();
+    }
+    
+    spinner = ora('Checking for existing files...').start();
     
     // Check for existing files
     const config = await ProjectService.getProjectConfig(cwd);
@@ -133,23 +179,29 @@ async function addComponents(componentNames: string[], options: AddOptions): Pro
     if (existingFiles.length > 0 && !options.overwrite && !options.yes) {
       spinner.stop();
       
-      Logger.warning(`The following components already exist: ${existingFiles.join(', ')}`);
+      Logger.break();
+      Logger.warning(`${icons.warning} The following components already exist:`);
+      existingFiles.forEach(name => {
+        Logger.log(`  • ${colors.warning(name)}`);
+      });
       
+      Logger.break();
       const { shouldOverwrite } = await inquirer.prompt([
         {
           type: 'confirm',
           name: 'shouldOverwrite',
-          message: 'Do you want to overwrite them?',
+          message: `${icons.question} Do you want to overwrite existing components?`,
           default: false,
         },
       ]);
 
       if (!shouldOverwrite) {
-        Logger.info('Operation cancelled.');
+        Logger.info(`${icons.cancel} Installation cancelled.`);
         return;
       }
 
-      spinner.start('Installing components...');
+      const installSpinner = ora('Installing components...').start();
+      spinner = installSpinner;
     } else {
       spinner.text = 'Installing components...';
     }
