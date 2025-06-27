@@ -1,0 +1,16 @@
+{
+  "name": "@leshi/ui-rn",
+  "version": "0.1.0",
+  "main": "index.ts",
+  "types": "index.ts",
+  "exports": {
+    ".": {
+      "import": "./index.ts"
+    }
+  },
+  "peerDependencies": {
+    "@gorhom/portal": "^1.0.14",
+    "react": ">=18.0.0",
+    "react-native": ">=0.70.0"
+  }
+}
