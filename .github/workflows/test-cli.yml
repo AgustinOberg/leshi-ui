@@ -23,15 +23,13 @@ jobs:
           node-version: '18'
 
       - name: Setup Bun
-        if: matrix.package-manager == 'bun'
         uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
 
-      - name: Install CLI dependencies
+      - name: Install root dependencies (handles workspaces)
         run: |
-          cd cli
-          npm install
+          bun install
 
       - name: Build CLI
         run: |
@@ -288,10 +286,14 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Install CLI dependencies
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install root dependencies (handles workspaces)
         run: |
-          cd cli
-          npm install
+          bun install
 
       - name: Build CLI
         run: |
@@ -329,10 +331,14 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install CLI dependencies
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install root dependencies (handles workspaces)
         run: |
-          cd cli
-          npm install
+          bun install
 
       - name: Test import transformer unit tests
         run: |

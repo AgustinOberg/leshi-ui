@@ -20,10 +20,14 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install CLI dependencies
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install root dependencies (handles workspaces)
         run: |
-          cd cli
-          npm install
+          bun install
 
       - name: Build CLI
         run: |
@@ -153,10 +157,15 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install CLI dependencies and build
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install root dependencies and build CLI
         run: |
+          bun install
           cd cli
-          npm install
           npm run build
           npm pack
 
@@ -238,11 +247,19 @@ jobs:
         with:
           node-version: '18'
 
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install root dependencies
+        run: |
+          bun install
+
       # Check CLI TypeScript
       - name: Validate CLI TypeScript
         run: |
           cd cli
-          npm install
           echo "🔍 Checking CLI TypeScript..."
           npx tsc --noEmit || (echo "❌ CLI TypeScript errors" && exit 1)
           echo "✅ CLI TypeScript validation passed"

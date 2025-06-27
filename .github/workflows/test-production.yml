@@ -24,10 +24,10 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Build and pack CLI
+      - name: Install root dependencies and build CLI
         run: |
+          bun install
           cd cli
-          npm install
           npm run build
           npm pack
 
