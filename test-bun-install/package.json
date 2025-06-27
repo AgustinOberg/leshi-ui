@@ -1,0 +1,1 @@
+{ "name": "test-bun-project", "version": "1.0.0", "dependencies": { "leshi-ui": "../cli/leshi-ui-1.0.0.tgz", "react-native": "^0.70.0" } }

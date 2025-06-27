@@ -204,7 +204,7 @@ export class ImportTransformer {
       if (platformImports.length > 0) {
         // Add imports at the beginning
         for (const importDecl of platformImports.reverse()) {
-          ast.body.unshift(importDecl);
+          (ast as any).body.unshift(importDecl);
         }
       }
 

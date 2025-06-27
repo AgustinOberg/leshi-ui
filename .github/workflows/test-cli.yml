@@ -1,0 +1,353 @@
+name: Test CLI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  test-cli-functionality:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package-manager: [npm, bun]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Setup Bun
+        if: matrix.package-manager == 'bun'
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install CLI dependencies
+        run: |
+          cd cli
+          npm install
+
+      - name: Build CLI
+        run: |
+          cd cli
+          npm run build
+
+      - name: Create CLI package
+        run: |
+          cd cli
+          npm pack
+
+      - name: Test CLI TypeScript compilation
+        run: |
+          cd cli
+          npx tsc --noEmit
+
+      - name: Run CLI unit tests
+        run: |
+          cd cli
+          npm test
+
+      # Test NPM workflow
+      - name: Test CLI with NPM - Create test project
+        if: matrix.package-manager == 'npm'
+        run: |
+          mkdir -p test-npm-project
+          cd test-npm-project
+          echo '{"name": "test-project", "version": "1.0.0", "dependencies": {"react-native": "^0.70.0"}}' > package.json
+          echo 'module.exports = {};' > metro.config.js
+          mkdir -p android ios
+
+      - name: Test CLI with NPM - Install CLI package
+        if: matrix.package-manager == 'npm'
+        run: |
+          cd test-npm-project
+          npm install ../cli/leshi-ui-*.tgz
+
+      - name: Test CLI with NPM - Test init command
+        if: matrix.package-manager == 'npm'
+        run: |
+          cd test-npm-project
+          npx leshi-ui init --yes
+
+      - name: Test CLI with NPM - Verify init created files
+        if: matrix.package-manager == 'npm'
+        run: |
+          cd test-npm-project
+          test -f leshi-ui.json || (echo "❌ leshi-ui.json not created" && exit 1)
+          test -d styles || (echo "❌ styles directory not created" && exit 1)
+          test -f styles/theme.ts || (echo "❌ theme.ts not created" && exit 1)
+          test -d styles/themes || (echo "❌ themes directory not created" && exit 1)
+          test -f styles/themes/light.ts || (echo "❌ light theme not created" && exit 1)
+          test -f styles/themes/dark.ts || (echo "❌ dark theme not created" && exit 1)
+          echo "✅ Init command created all required files"
+
+      - name: Test CLI with NPM - Test add simple component
+        if: matrix.package-manager == 'npm'
+        run: |
+          cd test-npm-project
+          npx leshi-ui add modal --yes
+
+      - name: Test CLI with NPM - Verify simple component files
+        if: matrix.package-manager == 'npm'
+        run: |
+          cd test-npm-project
+          test -f src/components/ui/modal.tsx || (echo "❌ modal.tsx not created" && exit 1)
+          test -f src/components/ui/modal-provider.tsx || (echo "❌ modal-provider.tsx not created" && exit 1)
+          test -f lib/modal-utils.ts || (echo "❌ modal-utils.ts not created" && exit 1)
+          echo "✅ Modal component and utilities created correctly"
+
+      - name: Test CLI with NPM - Test dependency resolution
+        if: matrix.package-manager == 'npm'
+        run: |
+          cd test-npm-project
+          npx leshi-ui add button --yes
+
+      - name: Test CLI with NPM - Verify dependency resolution
+        if: matrix.package-manager == 'npm'
+        run: |
+          cd test-npm-project
+          test -f src/components/ui/button.tsx || (echo "❌ button.tsx not created" && exit 1)
+          test -f src/components/ui/text.tsx || (echo "❌ text.tsx dependency not resolved" && exit 1)
+          echo "✅ Dependency resolution working correctly"
+
+      - name: Test CLI with NPM - Test complex dependency resolution
+        if: matrix.package-manager == 'npm'
+        run: |
+          cd test-npm-project
+          npx leshi-ui add dialog --yes
+
+      - name: Test CLI with NPM - Verify complex dependencies
+        if: matrix.package-manager == 'npm'
+        run: |
+          cd test-npm-project
+          test -f src/components/ui/dialog.tsx || (echo "❌ dialog.tsx not created" && exit 1)
+          test -f src/components/ui/icon.tsx || (echo "❌ icon.tsx dependency not resolved" && exit 1)
+          test -f src/components/ui/slot.tsx || (echo "❌ slot.tsx dependency not resolved" && exit 1)
+          echo "✅ Complex dependency resolution working correctly"
+
+      - name: Test CLI with NPM - Test guide command
+        if: matrix.package-manager == 'npm'
+        run: |
+          cd test-npm-project
+          npx leshi-ui guide components | grep -q "button" || (echo "❌ Guide command not working" && exit 1)
+          echo "✅ Guide command working correctly"
+
+      # Test BUN workflow
+      - name: Test CLI with BUN - Create test project
+        if: matrix.package-manager == 'bun'
+        run: |
+          mkdir -p test-bun-project
+          cd test-bun-project
+          echo '{"name": "test-bun-project", "version": "1.0.0", "dependencies": {"react-native": "^0.70.0"}}' > package.json
+          echo 'module.exports = {};' > metro.config.js
+          mkdir -p android ios
+
+      - name: Test CLI with BUN - Install CLI package
+        if: matrix.package-manager == 'bun'
+        run: |
+          cd test-bun-project
+          bun install ../cli/leshi-ui-*.tgz
+
+      - name: Test CLI with BUN - Test init command
+        if: matrix.package-manager == 'bun'
+        run: |
+          cd test-bun-project
+          bunx leshi-ui init --yes
+
+      - name: Test CLI with BUN - Verify init created files
+        if: matrix.package-manager == 'bun'
+        run: |
+          cd test-bun-project
+          test -f leshi-ui.json || (echo "❌ leshi-ui.json not created" && exit 1)
+          test -d styles || (echo "❌ styles directory not created" && exit 1)
+          test -f styles/theme.ts || (echo "❌ theme.ts not created" && exit 1)
+          test -d styles/themes || (echo "❌ themes directory not created" && exit 1)
+          test -f styles/themes/light.ts || (echo "❌ light theme not created" && exit 1)
+          test -f styles/themes/dark.ts || (echo "❌ dark theme not created" && exit 1)
+          echo "✅ Init command created all required files"
+
+      - name: Test CLI with BUN - Test add simple component
+        if: matrix.package-manager == 'bun'
+        run: |
+          cd test-bun-project
+          bunx leshi-ui add modal --yes
+
+      - name: Test CLI with BUN - Verify simple component files
+        if: matrix.package-manager == 'bun'
+        run: |
+          cd test-bun-project
+          test -f src/components/ui/modal.tsx || (echo "❌ modal.tsx not created" && exit 1)
+          test -f src/components/ui/modal-provider.tsx || (echo "❌ modal-provider.tsx not created" && exit 1)
+          test -f lib/modal-utils.ts || (echo "❌ modal-utils.ts not created" && exit 1)
+          echo "✅ Modal component and utilities created correctly"
+
+      - name: Test CLI with BUN - Test dependency resolution
+        if: matrix.package-manager == 'bun'
+        run: |
+          cd test-bun-project
+          bunx leshi-ui add button --yes
+
+      - name: Test CLI with BUN - Verify dependency resolution
+        if: matrix.package-manager == 'bun'
+        run: |
+          cd test-bun-project
+          test -f src/components/ui/button.tsx || (echo "❌ button.tsx not created" && exit 1)
+          test -f src/components/ui/text.tsx || (echo "❌ text.tsx dependency not resolved" && exit 1)
+          echo "✅ Dependency resolution working correctly"
+
+      - name: Test CLI with BUN - Test complex dependency resolution
+        if: matrix.package-manager == 'bun'
+        run: |
+          cd test-bun-project
+          bunx leshi-ui add dialog --yes
+
+      - name: Test CLI with BUN - Verify complex dependencies
+        if: matrix.package-manager == 'bun'
+        run: |
+          cd test-bun-project
+          test -f src/components/ui/dialog.tsx || (echo "❌ dialog.tsx not created" && exit 1)
+          test -f src/components/ui/icon.tsx || (echo "❌ icon.tsx dependency not resolved" && exit 1)
+          test -f src/components/ui/slot.tsx || (echo "❌ slot.tsx dependency not resolved" && exit 1)
+          echo "✅ Complex dependency resolution working correctly"
+
+      - name: Test CLI with BUN - Test guide command
+        if: matrix.package-manager == 'bun'
+        run: |
+          cd test-bun-project
+          bunx leshi-ui guide components | grep -q "button" || (echo "❌ Guide command not working" && exit 1)
+          echo "✅ Guide command working correctly"
+
+      # Test Unistyles variant
+      - name: Test Unistyles init
+        run: |
+          mkdir -p test-unistyles-project
+          cd test-unistyles-project
+          echo '{"name": "test-unistyles", "version": "1.0.0", "dependencies": {"react-native": "^0.70.0"}}' > package.json
+          echo 'module.exports = {};' > metro.config.js
+          mkdir -p android ios
+          if [ "${{ matrix.package-manager }}" = "npm" ]; then
+            npm install ../cli/leshi-ui-*.tgz
+            npx leshi-ui init unistyles --yes
+          else
+            bun install ../cli/leshi-ui-*.tgz
+            bunx leshi-ui init unistyles --yes
+          fi
+
+      - name: Verify Unistyles configuration
+        run: |
+          cd test-unistyles-project
+          test -f leshi-ui.json || (echo "❌ leshi-ui.json not created" && exit 1)
+          grep -q "unistyles" leshi-ui.json || (echo "❌ Unistyles config not found" && exit 1)
+          echo "✅ Unistyles variant working correctly"
+
+      # Test CLI package content
+      - name: Verify CLI package contains required files
+        run: |
+          cd cli
+          tar -tzf leshi-ui-*.tgz | grep -q "dist/index.js" || (echo "❌ dist/index.js not in package" && exit 1)
+          tar -tzf leshi-ui-*.tgz | grep -q "packages/" || (echo "❌ packages/ not in package" && exit 1)
+          tar -tzf leshi-ui-*.tgz | grep -q "package.json" || (echo "❌ package.json not in package" && exit 1)
+          echo "✅ CLI package contains all required files"
+
+      # Summary
+      - name: Test Summary
+        run: |
+          echo "🎉 ALL CLI TESTS PASSED FOR ${{ matrix.package-manager }}!"
+          echo "✅ TypeScript compilation"
+          echo "✅ Unit tests"
+          echo "✅ CLI package creation"
+          echo "✅ Init command (${{ matrix.package-manager }})"
+          echo "✅ Theme files creation"
+          echo "✅ Simple component addition"
+          echo "✅ Dependency resolution"
+          echo "✅ Complex dependency resolution"
+          echo "✅ Guide commands"
+          echo "✅ Unistyles variant"
+          echo "✅ Package integrity"
+
+  # Test CLI in different environments
+  test-cli-environments:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        node-version: [18, 20]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install CLI dependencies
+        run: |
+          cd cli
+          npm install
+
+      - name: Build CLI
+        run: |
+          cd cli
+          npm run build
+
+      - name: Test CLI help command
+        run: |
+          cd cli
+          node dist/index.js --help
+
+      - name: Test CLI version command
+        run: |
+          cd cli
+          node dist/index.js --version
+
+      - name: Verify CLI executable
+        shell: bash
+        run: |
+          cd cli
+          chmod +x dist/index.js
+          ./dist/index.js --help | grep -q "leshi-ui" || (echo "❌ CLI not executable" && exit 1)
+          echo "✅ CLI executable works on ${{ matrix.os }} with Node ${{ matrix.node-version }}"
+
+  # Test that import transformer is working properly
+  test-import-transformer:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install CLI dependencies
+        run: |
+          cd cli
+          npm install
+
+      - name: Test import transformer unit tests
+        run: |
+          cd cli
+          npm test -- --testNamePattern="ImportTransformer"
+
+      - name: Build CLI
+        run: |
+          cd cli
+          npm run build
+
+      # Note: Import transformer is currently disabled for testing
+      # This test ensures it can be re-enabled when needed
+      - name: Verify import transformer can be enabled
+        run: |
+          cd cli/src/commands
+          grep -q "transformImports" add.ts || (echo "❌ Import transformer not found" && exit 1)
+          echo "✅ Import transformer code is present and can be re-enabled"

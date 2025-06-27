@@ -221,6 +221,21 @@ export class FileOperationsService {
   }
 
   /**
+   * Utility method to safely read text files
+   */
+  public static async readFile(filePath: string): Promise<string> {
+    try {
+      return await fs.readFile(filePath, 'utf8');
+    } catch (error) {
+      throw new FileOperationError(
+        'read file',
+        filePath,
+        error instanceof Error ? error : new Error(String(error))
+      );
+    }
+  }
+
+  /**
    * Utility method to safely read JSON files
    */
   public static async readJsonFile<T>(filePath: string): Promise<T> {

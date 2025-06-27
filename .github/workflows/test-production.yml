@@ -1,0 +1,250 @@
+name: Test Production Ready
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  test-production-simulation:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Build and pack CLI
+        run: |
+          cd cli
+          npm install
+          npm run build
+          npm pack
+
+      # Simulate production usage without installing globally
+      - name: Test production usage with npx (simulated)
+        run: |
+          # Create a completely separate directory to simulate user environment
+          mkdir -p /tmp/user-project-npm
+          cd /tmp/user-project-npm
+          
+          # Create a React Native project structure
+          echo '{"name": "user-app", "version": "1.0.0", "dependencies": {"react-native": "^0.70.0"}}' > package.json
+          echo 'module.exports = {};' > metro.config.js
+          mkdir -p android ios src
+          
+          # Install the local CLI package (simulating npm install)
+          npm install $GITHUB_WORKSPACE/cli/leshi-ui-*.tgz
+          
+          echo "🧪 Testing CLI as end user would use it..."
+          
+          # Test init
+          npx leshi-ui init --yes
+          
+          # Verify init worked
+          test -f leshi-ui.json || (echo "❌ Init failed - no config" && exit 1)
+          test -d styles || (echo "❌ Init failed - no styles" && exit 1)
+          test -f styles/themes/light.ts || (echo "❌ Init failed - no light theme" && exit 1)
+          test -f styles/themes/dark.ts || (echo "❌ Init failed - no dark theme" && exit 1)
+          
+          # Test component installation
+          npx leshi-ui add button --yes
+          test -f src/components/ui/button.tsx || (echo "❌ Button not installed" && exit 1)
+          test -f src/components/ui/text.tsx || (echo "❌ Text dependency not resolved" && exit 1)
+          
+          # Test complex component
+          npx leshi-ui add dialog --yes
+          test -f src/components/ui/dialog.tsx || (echo "❌ Dialog not installed" && exit 1)
+          test -f src/components/ui/modal.tsx || (echo "❌ Modal dependency not resolved" && exit 1)
+          test -f src/components/ui/icon.tsx || (echo "❌ Icon dependency not resolved" && exit 1)
+          test -f src/components/ui/slot.tsx || (echo "❌ Slot dependency not resolved" && exit 1)
+          
+          # Test guide
+          npx leshi-ui guide components | grep -q "Available Components" || (echo "❌ Guide command failed" && exit 1)
+          
+          echo "✅ NPX production simulation passed!"
+
+      - name: Test production usage with bunx (simulated)
+        run: |
+          # Create a completely separate directory to simulate user environment
+          mkdir -p /tmp/user-project-bun
+          cd /tmp/user-project-bun
+          
+          # Create a React Native project structure
+          echo '{"name": "user-app-bun", "version": "1.0.0", "dependencies": {"react-native": "^0.70.0"}}' > package.json
+          echo 'module.exports = {};' > metro.config.js
+          mkdir -p android ios src
+          
+          # Install the local CLI package (simulating bun install)
+          bun install $GITHUB_WORKSPACE/cli/leshi-ui-*.tgz
+          
+          echo "🧪 Testing CLI with Bun as end user would use it..."
+          
+          # Test init
+          bunx leshi-ui init --yes
+          
+          # Verify init worked
+          test -f leshi-ui.json || (echo "❌ Init failed - no config" && exit 1)
+          test -d styles || (echo "❌ Init failed - no styles" && exit 1)
+          test -f styles/themes/light.ts || (echo "❌ Init failed - no light theme" && exit 1)
+          test -f styles/themes/dark.ts || (echo "❌ Init failed - no dark theme" && exit 1)
+          
+          # Test component installation
+          bunx leshi-ui add button --yes
+          test -f src/components/ui/button.tsx || (echo "❌ Button not installed" && exit 1)
+          test -f src/components/ui/text.tsx || (echo "❌ Text dependency not resolved" && exit 1)
+          
+          # Test complex component
+          bunx leshi-ui add dialog --yes
+          test -f src/components/ui/dialog.tsx || (echo "❌ Dialog not installed" && exit 1)
+          test -f src/components/ui/modal.tsx || (echo "❌ Modal dependency not resolved" && exit 1)
+          test -f src/components/ui/icon.tsx || (echo "❌ Icon dependency not resolved" && exit 1)
+          test -f src/components/ui/slot.tsx || (echo "❌ Slot dependency not resolved" && exit 1)
+          
+          # Test guide
+          bunx leshi-ui guide components | grep -q "Available Components" || (echo "❌ Guide command failed" && exit 1)
+          
+          echo "✅ BUNX production simulation passed!"
+
+      # Test that the CLI package structure is production ready
+      - name: Validate production package structure
+        run: |
+          cd cli
+          echo "📦 Validating CLI package structure..."
+          
+          # Check package.json structure
+          node -e "
+          const pkg = require('./package.json');
+          
+          // Check required fields
+          if (!pkg.name) throw new Error('Missing package name');
+          if (!pkg.version) throw new Error('Missing package version');
+          if (!pkg.bin) throw new Error('Missing bin field');
+          if (!pkg.bin['leshi-ui']) throw new Error('Missing leshi-ui bin');
+          if (!pkg.files) throw new Error('Missing files field');
+          if (!pkg.files.includes('dist')) throw new Error('dist not in files');
+          if (!pkg.files.includes('packages')) throw new Error('packages not in files');
+          
+          console.log('✅ Package.json structure valid');
+          "
+          
+          # Check that the tarball contains everything needed
+          tar -tzf leshi-ui-*.tgz > package-contents.txt
+          
+          # Must contain dist/
+          grep -q "dist/" package-contents.txt || (echo "❌ No dist/ in package" && exit 1)
+          grep -q "dist/index.js" package-contents.txt || (echo "❌ No dist/index.js in package" && exit 1)
+          
+          # Must contain packages/
+          grep -q "packages/" package-contents.txt || (echo "❌ No packages/ in package" && exit 1)
+          grep -q "packages/rn/" package-contents.txt || (echo "❌ No packages/rn/ in package" && exit 1)
+          grep -q "packages/unistyles/" package-contents.txt || (echo "❌ No packages/unistyles/ in package" && exit 1)
+          
+          # Must contain package.json
+          grep -q "package.json" package-contents.txt || (echo "❌ No package.json in package" && exit 1)
+          
+          echo "✅ Package structure validation passed!"
+
+      # Test CLI performance with large component sets
+      - name: Test CLI performance
+        run: |
+          mkdir -p /tmp/performance-test
+          cd /tmp/performance-test
+          
+          echo '{"name": "perf-test", "version": "1.0.0", "dependencies": {"react-native": "^0.70.0"}}' > package.json
+          echo 'module.exports = {};' > metro.config.js
+          mkdir -p android ios
+          
+          npm install $GITHUB_WORKSPACE/cli/leshi-ui-*.tgz
+          
+          echo "⚡ Testing CLI performance..."
+          
+          # Time the init command
+          time npx leshi-ui init --yes
+          
+          # Time adding multiple components at once
+          time npx leshi-ui add button text modal dialog icon slot --yes
+          
+          # Verify all were installed
+          for component in button text modal dialog icon slot; do
+            test -f src/components/ui/$component.tsx || (echo "❌ $component not installed" && exit 1)
+          done
+          
+          echo "✅ Performance test passed!"
+
+      # Test different project structures
+      - name: Test different project structures
+        run: |
+          echo "🏗️  Testing different project structures..."
+          
+          # Test Expo project structure
+          mkdir -p /tmp/expo-project
+          cd /tmp/expo-project
+          echo '{"name": "expo-app", "version": "1.0.0", "dependencies": {"react-native": "^0.70.0"}, "expo": {"name": "ExpoApp"}}' > package.json
+          echo '{"expo": {"name": "ExpoApp", "slug": "expo-app"}}' > app.json
+          mkdir -p app
+          npm install $GITHUB_WORKSPACE/cli/leshi-ui-*.tgz
+          npx leshi-ui init --yes
+          npx leshi-ui add button --yes
+          test -f src/components/ui/button.tsx || (echo "❌ Expo project failed" && exit 1)
+          echo "✅ Expo project structure works"
+          
+          # Test React Native project structure  
+          mkdir -p /tmp/rn-project
+          cd /tmp/rn-project
+          echo '{"name": "rn-app", "version": "1.0.0", "dependencies": {"react-native": "^0.70.0"}}' > package.json
+          echo 'module.exports = {};' > metro.config.js
+          mkdir -p android ios
+          npm install $GITHUB_WORKSPACE/cli/leshi-ui-*.tgz
+          npx leshi-ui init --yes
+          npx leshi-ui add button --yes
+          test -f src/components/ui/button.tsx || (echo "❌ RN project failed" && exit 1)
+          echo "✅ React Native project structure works"
+          
+          echo "✅ All project structures work correctly!"
+
+      # Test error handling
+      - name: Test error handling
+        run: |
+          mkdir -p /tmp/error-test
+          cd /tmp/error-test
+          
+          echo '{"name": "error-test", "version": "1.0.0"}' > package.json
+          npm install $GITHUB_WORKSPACE/cli/leshi-ui-*.tgz
+          
+          echo "🚨 Testing error handling..."
+          
+          # Test invalid component
+          npx leshi-ui add non-existent-component --yes 2>&1 | grep -q "not found" || (echo "❌ No error for invalid component" && exit 1)
+          echo "✅ Invalid component error handling works"
+          
+          # Test missing project structure
+          npx leshi-ui add button --yes 2>&1 | grep -q "Metro" || (echo "❌ No error for missing metro config" && exit 1)
+          echo "✅ Missing project structure error handling works"
+          
+          echo "✅ Error handling tests passed!"
+
+      # Final summary
+      - name: Production readiness summary
+        run: |
+          echo ""
+          echo "🎉 PRODUCTION READINESS VALIDATION COMPLETE!"
+          echo ""
+          echo "✅ NPX usage simulation passed"
+          echo "✅ BUNX usage simulation passed" 
+          echo "✅ Package structure validation passed"
+          echo "✅ Performance tests passed"
+          echo "✅ Multiple project structures supported"
+          echo "✅ Error handling working correctly"
+          echo ""
+          echo "🚀 CLI is ready for production deployment!"

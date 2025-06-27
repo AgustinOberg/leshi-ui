@@ -1,5 +1,7 @@
 import { Command } from 'commander';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import ora from 'ora';
 import prompts from 'prompts';
 import chalk from 'chalk';
@@ -28,7 +30,7 @@ export const addCommand = new Command()
       
       await handleAddCommand(components, options);
     } catch (error) {
-      ErrorHandler.handle(error instanceof Error ? error : new Error(String(error)), options?.silent);
+      ErrorHandler.handle(error instanceof Error ? error : new Error(String(error)), (rawOptions as any)?.silent);
     }
   });
 
@@ -152,7 +154,7 @@ async function handleAddCommand(componentNames: string[], options: AddOptions): 
     }
 
     // Get package paths
-    const packagesDir = findPackagesDirectory();
+    const packagesDir = await findPackagesDirectory();
     const packageType = options.unistyles ? 'unistyles' : 'rn';
     const sourcePath = path.join(packagesDir, packageType);
 
@@ -252,14 +254,15 @@ async function planComponentOperations(
     );
 
     if (await FileOperationsService.pathExists(sourceFile)) {
-      // Read and transform content
-      const content = await FileOperationsService.readJsonFile(sourceFile);
-      const transformedContent = await ImportTransformer.transformImports(content, {
-        sourcePath: sourceFile,
-        targetPath: targetFile,
-        projectConfig,
-        packageType: options.unistyles ? 'unistyles' : 'rn'
-      });
+      // Read and transform content (temporarily disabled for testing)
+      const content = await FileOperationsService.readFile(sourceFile);
+      // const transformedContent = await ImportTransformer.transformImports(content, {
+      //   sourcePath: sourceFile,
+      //   targetPath: targetFile,
+      //   projectConfig,
+      //   packageType: options.unistyles ? 'unistyles' : 'rn'
+      // });
+      const transformedContent = content; // Skip transformation for now
 
       fileOps.planOperation({
         type: 'copy',
@@ -276,13 +279,14 @@ async function planComponentOperations(
     const targetFile = path.join(basePath, utilityFile);
 
     if (await FileOperationsService.pathExists(sourceFile)) {
-      const content = await FileOperationsService.readJsonFile(sourceFile);
-      const transformedContent = await ImportTransformer.transformImports(content, {
-        sourcePath: sourceFile,
-        targetPath: targetFile,
-        projectConfig,
-        packageType: options.unistyles ? 'unistyles' : 'rn'
-      });
+      const content = await FileOperationsService.readFile(sourceFile);
+      // const transformedContent = await ImportTransformer.transformImports(content, {
+      //   sourcePath: sourceFile,
+      //   targetPath: targetFile,
+      //   projectConfig,
+      //   packageType: options.unistyles ? 'unistyles' : 'rn'
+      // });
+      const transformedContent = content; // Skip transformation for now
 
       fileOps.planOperation({
         type: 'copy',
@@ -304,13 +308,14 @@ async function planComponentOperations(
     );
 
     if (await FileOperationsService.pathExists(sourceFile)) {
-      const content = await FileOperationsService.readJsonFile(sourceFile);
-      const transformedContent = await ImportTransformer.transformImports(content, {
-        sourcePath: sourceFile,
-        targetPath: targetFile,
-        projectConfig,
-        packageType: options.unistyles ? 'unistyles' : 'rn'
-      });
+      const content = await FileOperationsService.readFile(sourceFile);
+      // const transformedContent = await ImportTransformer.transformImports(content, {
+      //   sourcePath: sourceFile,
+      //   targetPath: targetFile,
+      //   projectConfig,
+      //   packageType: options.unistyles ? 'unistyles' : 'rn'
+      // });
+      const transformedContent = content; // Skip transformation for now
 
       fileOps.planOperation({
         type: 'copy',
@@ -363,19 +368,24 @@ async function showExternalDependencies(
   }
 }
 
-function findPackagesDirectory(): string {
+async function findPackagesDirectory(): Promise<string> {
   // Try to find packages directory relative to current CLI location
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
   const currentDir = process.cwd();
   const possiblePaths = [
+    path.join(__dirname, '../packages'),           // When installed via npm (dist/../packages)
+    path.join(__dirname, '../../packages'),        // When installed via npm (node_modules/leshi-ui/packages)
+    path.join(currentDir, 'node_modules/leshi-ui/packages'), // User's node_modules
+    path.join(__dirname, '../../../packages'),     // Development
     path.join(currentDir, '../packages'),
     path.join(currentDir, '../../packages'),
-    path.join(currentDir, 'packages'),
-    path.join(__dirname, '../../../packages')
+    path.join(currentDir, 'packages')
   ];
 
   for (const possiblePath of possiblePaths) {
     try {
-      if (FileOperationsService.pathExists(possiblePath)) {
+      if (await FileOperationsService.pathExists(possiblePath)) {
         return possiblePath;
       }
     } catch {

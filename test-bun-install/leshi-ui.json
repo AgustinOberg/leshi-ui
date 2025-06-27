@@ -1,0 +1,12 @@
+{
+  "$schema": "https://leshi-ui.dev/schema.json",
+  "framework": "react-native",
+  "typescript": false,
+  "style": "default",
+  "aliases": {
+    "components": "./src/components",
+    "lib": "./src/lib",
+    "styles": "./src/styles",
+    "utils": "./src/utils"
+  }
+}

@@ -1,5 +1,7 @@
 import { Command } from 'commander';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import ora from 'ora';
 import chalk from 'chalk';
 import { initOptionsSchema, type InitOptions } from '../schemas/index.js';
@@ -16,10 +18,10 @@ export const initCommand = new Command()
   .option('-s, --silent', 'mute output', false)
   .action(async (target: string, rawOptions: unknown) => {
     try {
-      const options = initOptionsSchema.parse({ ...rawOptions, target }) as InitOptions & { target: string };
+      const options = initOptionsSchema.parse({ ...(rawOptions as object), target }) as InitOptions & { target: string };
       await handleInitCommand(options);
     } catch (error) {
-      ErrorHandler.handle(error instanceof Error ? error : new Error(String(error)), options?.silent);
+      ErrorHandler.handle(error instanceof Error ? error : new Error(String(error)), (rawOptions as any)?.silent);
     }
   });
 
@@ -72,7 +74,7 @@ async function handleInitCommand(options: InitOptions & { target: string }): Pro
     }
 
     // Copy theme files
-    const packagesDir = findPackagesDirectory();
+    const packagesDir = await findPackagesDirectory();
     const sourcePath = path.join(packagesDir, options.target === 'unistyles' ? 'unistyles' : 'rn');
     const stylesSource = path.join(sourcePath, 'styles');
     const stylesTarget = path.join(projectInfo.projectRoot, 'styles');
@@ -110,11 +112,51 @@ async function handleInitCommand(options: InitOptions & { target: string }): Pro
 }
 
 async function copyThemeFiles(source: string, target: string, options: InitOptions): Promise<void> {
-  // Implementation for copying theme files
-  // This would copy the base theme structure
+  const fs = await import('fs-extra');
+  
+  if (!await fs.pathExists(source)) {
+    throw new Error(`Source theme folder not found: ${source}`);
+  }
+
+  // Ensure target directory exists
+  await fs.ensureDir(target);
+
+  // Copy all theme files
+  await fs.copy(source, target, {
+    overwrite: false,
+    errorOnExist: false
+  });
+
+  if (!options.silent) {
+    console.log('✅ Theme files copied');
+  }
 }
 
-function findPackagesDirectory(): string {
-  // Same implementation as in add.ts
-  return path.join(__dirname, '../../../packages');
+async function findPackagesDirectory(): Promise<string> {
+  // Try to find packages directory relative to current CLI location
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
+  const currentDir = process.cwd();
+  const possiblePaths = [
+    path.join(__dirname, '../packages'),           // When installed via npm (dist/../packages)
+    path.join(__dirname, '../../packages'),        // When installed via npm (node_modules/leshi-ui/packages)
+    path.join(currentDir, 'node_modules/leshi-ui/packages'), // User's node_modules
+    path.join(__dirname, '../../../packages'),     // Development
+    path.join(currentDir, '../packages'),
+    path.join(currentDir, '../../packages'),
+    path.join(currentDir, 'packages')
+  ];
+
+  const fs = await import('fs-extra');
+  for (const possiblePath of possiblePaths) {
+    try {
+      if (await fs.pathExists(possiblePath)) {
+        return possiblePath;
+      }
+    } catch {
+      // Continue searching
+    }
+  }
+
+  throw new Error('Packages directory not found. Please ensure leshi-ui is properly installed.');
 }

@@ -402,10 +402,7 @@ export class DependencyResolver {
       throw new ComponentNotFoundError(name, this.getAvailableComponents());
     }
 
-    return {
-      ...component,
-      files: [] // Files will be discovered at runtime
-    };
+    return component;
   }
 
   /**

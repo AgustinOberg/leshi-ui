@@ -89,3 +89,10 @@ export type ComponentRegistry = z.infer<typeof componentRegistrySchema>;
 export type RegistryFile = z.infer<typeof registryFileSchema>;
 export type PackageJson = z.infer<typeof packageJsonSchema>;
 export type FileOperation = z.infer<typeof fileOperationSchema>;
+
+// Operation result types
+export interface OperationResult {
+  success: boolean;
+  operations: FileOperation[];
+  error?: Error;
+}
