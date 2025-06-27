@@ -27,7 +27,9 @@ jobs:
       - run: git config user.name "github-actions"
       - run: git config user.email "github-actions@github.com"
 
-      - run: cd cli && npm version patch --no-git-tag-version
+      # Bump CLI version within the workspace. Running from the workspace root
+      # avoids npm failing to resolve workspace protocol dependencies.
+      - run: npm --workspace cli version patch --no-git-tag-version
 
       - run: git add cli/package.json && git commit -m "bump version [skip ci]" && git push
 
