@@ -27,9 +27,9 @@ jobs:
       - run: git config user.name "github-actions"
       - run: git config user.email "github-actions@github.com"
 
-      - run: cd cli && npm version patch
+      - run: cd cli && npm version patch --no-git-tag-version
 
-      - run: git add cli/package.json && git commit -m "bump version" && git push --follow-tags
+      - run: git add cli/package.json && git commit -m "bump version [skip ci]" && git push
 
       - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
