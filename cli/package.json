@@ -8,12 +8,10 @@
     "leshi-ui": "dist/index.js"
   },
   "files": [
-    "dist",
-    "packages"
+    "dist"
   ],
   "scripts": {
-    "build": "tsc && npm run copy-packages",
-    "copy-packages": "cp -r ../packages ./packages",
+    "build": "tsc",
     "dev": "tsc --watch",
     "test": "jest",
     "test:watch": "jest --watch",

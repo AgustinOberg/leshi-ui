@@ -153,18 +153,23 @@ async function copyThemeFiles(source: string, target: string, options: InitOptio
 }
 
 async function findPackagesDirectory(): Promise<string> {
-  // Try to find packages directory relative to current CLI location
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = dirname(__filename);
   const currentDir = process.cwd();
+  
+  // Try paths in order of most likely to work
   const possiblePaths = [
-    path.join(__dirname, '../packages'),           // When installed via npm (dist/../packages)
-    path.join(__dirname, '../../packages'),        // When installed via npm (node_modules/leshi-ui/packages)
-    path.join(currentDir, 'node_modules/leshi-ui/packages'), // User's node_modules
-    path.join(__dirname, '../../../packages'),     // Development
+    // Development: from cli/dist/commands/ to root packages/
+    path.join(__dirname, '../../../packages'),
+    // Development: alternative path
+    path.join(__dirname, '../../../../packages'),
+    // When npm published: from node_modules/leshi-ui/dist/commands/ to project root
+    path.join(currentDir, 'packages'),
     path.join(currentDir, '../packages'),
     path.join(currentDir, '../../packages'),
-    path.join(currentDir, 'packages')
+    // NPM global install attempts
+    path.join(__dirname, '../../packages'),
+    path.join(process.cwd(), 'node_modules/leshi-ui/packages')
   ];
 
   const fs = await import('fs-extra');
@@ -178,5 +183,5 @@ async function findPackagesDirectory(): Promise<string> {
     }
   }
 
-  throw new Error('Packages directory not found. Please ensure leshi-ui is properly installed.');
+  throw new Error('Packages directory not found. Make sure you are in a leshi-ui project or packages directory exists.');
 }
