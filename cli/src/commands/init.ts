@@ -121,14 +121,38 @@ async function copyThemeFiles(source: string, target: string, options: InitOptio
   // Ensure target directory exists
   await fs.ensureDir(target);
 
-  // Copy all theme files
-  await fs.copy(source, target, {
-    overwrite: false,
-    errorOnExist: false
-  });
+  // Copy base theme files (non-theme specific)
+  const baseFiles = ['context.tsx', 'theme.d.ts', 'theme.ts'];
+  for (const file of baseFiles) {
+    const sourcePath = path.join(source, file);
+    const targetPath = path.join(target, file);
+    if (await fs.pathExists(sourcePath)) {
+      await fs.copy(sourcePath, targetPath, { overwrite: false });
+    }
+  }
+
+  // Ensure themes directory exists
+  const themesDir = path.join(target, 'themes');
+  await fs.ensureDir(themesDir);
+
+  // Copy only basic themes (dark, light, common, index)
+  const basicThemeFiles = [
+    'dark.ts',
+    'light.ts', 
+    'common.ts',
+    'index.ts'
+  ];
+
+  for (const file of basicThemeFiles) {
+    const sourcePath = path.join(source, 'themes', file);
+    const targetPath = path.join(themesDir, file);
+    if (await fs.pathExists(sourcePath)) {
+      await fs.copy(sourcePath, targetPath, { overwrite: false });
+    }
+  }
 
   if (!options.silent) {
-    console.log('✅ Theme files copied');
+    console.log('✅ Basic theme files copied (dark, light)');
   }
 }
 

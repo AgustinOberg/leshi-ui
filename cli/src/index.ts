@@ -81,9 +81,64 @@ guideCommand
   .command('component <name>')
   .description('Show detailed guide for a component')
   .action((name: string) => {
-    console.log(chalk.blue(`📖 ${name.toUpperCase()} COMPONENT GUIDE`));
-    console.log('');
-    console.log(chalk.gray('For detailed documentation, visit: https://leshi-ui.dev'));
+    try {
+      // Import DependencyResolver to get component info
+      import('./services/dependency-resolver.js').then(({ DependencyResolver }) => {
+        const resolver = new DependencyResolver();
+        
+        if (!resolver.hasComponent(name)) {
+          console.log(chalk.red(`❌ Component "${name}" not found`));
+          console.log('');
+          console.log(chalk.blue('Available components:'));
+          resolver.getAvailableComponents().forEach(component => {
+            console.log(chalk.gray(`   • ${component}`));
+          });
+          return;
+        }
+        
+        const component = resolver.getComponent(name);
+        
+        console.log(chalk.blue(`📖 ${name.toUpperCase()} COMPONENT GUIDE`));
+        console.log('');
+        console.log(chalk.cyan('Name:'), component.name);
+        console.log(chalk.cyan('Description:'), component.description);
+        console.log('');
+        
+        if (component.registryDependencies.length > 0) {
+          console.log(chalk.cyan('Dependencies:'));
+          component.registryDependencies.forEach(dep => {
+            console.log(chalk.gray(`   • ${dep}`));
+          });
+          console.log('');
+        }
+        
+        if (component.dependencies.length > 0) {
+          console.log(chalk.cyan('External Dependencies:'));
+          component.dependencies.forEach(dep => {
+            console.log(chalk.gray(`   • ${dep}`));
+          });
+          console.log('');
+        }
+        
+        if (component.setup.length > 0) {
+          console.log(chalk.cyan('Setup Instructions:'));
+          component.setup.forEach((instruction, index) => {
+            console.log(chalk.gray(`   ${index + 1}. ${instruction}`));
+          });
+          console.log('');
+        }
+        
+        console.log(chalk.cyan('Example Usage:'));
+        console.log(chalk.gray(component.example));
+        console.log('');
+        
+        console.log(chalk.blue(`💡 Install with: ${chalk.cyan(`leshi-ui add component ${name}`)}`));
+      }).catch(() => {
+        console.log(chalk.red('❌ Failed to load component information'));
+      });
+    } catch (error) {
+      console.log(chalk.red('❌ Failed to load component information'));
+    }
   });
 
 program.addCommand(guideCommand);

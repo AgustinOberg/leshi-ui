@@ -14,8 +14,12 @@ import { ErrorHandler, ComponentNotFoundError, InvalidProjectError } from '../er
 
 export const addCommand = new Command()
   .name('add')
+  .description('Add UI components to your project');
+
+// Add the 'component' subcommand
+addCommand
+  .command('component [components...]')
   .description('Add UI components to your project')
-  .argument('[components...]', 'names of components to add')
   .option('-y, --yes', 'skip confirmation prompt', false)
   .option('-o, --overwrite', 'overwrite existing files', false)
   .option('-c, --cwd <cwd>', 'the working directory')
@@ -112,23 +116,64 @@ async function handleAddCommand(componentNames: string[], options: AddOptions): 
     }
 
     const allComponents = new Set<string>();
+    const dependenciesToAdd = new Set<string>();
+    
+    // Add explicitly requested components
+    componentNames.forEach(name => allComponents.add(name));
+    
+    // Check for dependencies that need to be resolved
     for (const componentName of componentNames) {
-      const dependencies = await resolver.resolveAllDependencies(componentName);
-      dependencies.forEach(dep => allComponents.add(dep));
+      const component = resolver.getComponent(componentName);
+      for (const dependency of component.registryDependencies) {
+        if (!componentNames.includes(dependency)) {
+          dependenciesToAdd.add(dependency);
+        }
+      }
+    }
+
+    const dependenciesArray = Array.from(dependenciesToAdd);
+    
+    if (!options.silent) {
+      spinner.succeed('Dependencies analyzed');
+    }
+
+    // Ask user permission for dependencies if any exist
+    if (dependenciesArray.length > 0 && !options.yes) {
+      console.log('');
+      console.log(chalk.yellow('⚠️  These components have dependencies:'));
+      
+      for (const componentName of componentNames) {
+        const component = resolver.getComponent(componentName);
+        const componentDeps = component.registryDependencies.filter(dep => !componentNames.includes(dep));
+        if (componentDeps.length > 0) {
+          console.log(chalk.blue(`   ${componentName}:`));
+          componentDeps.forEach(dep => console.log(chalk.gray(`     • ${dep}`)));
+        }
+      }
+      
+      console.log('');
+      const { shouldAddDependencies } = await prompts({
+        type: 'confirm',
+        name: 'shouldAddDependencies',
+        message: `Do you want to install the ${dependenciesArray.length} required dependencies?`,
+        initial: true
+      });
+      
+      if (!shouldAddDependencies) {
+        if (!options.silent) {
+          console.log(chalk.yellow('⚠️  Components may not work correctly without their dependencies.'));
+          console.log(chalk.blue('You can install them later manually.'));
+        }
+      } else {
+        // Add dependencies to installation list
+        dependenciesArray.forEach(dep => allComponents.add(dep));
+      }
+    } else if (dependenciesArray.length > 0 && options.yes) {
+      // Auto-add dependencies when --yes flag is used
+      dependenciesArray.forEach(dep => allComponents.add(dep));
     }
 
     const finalComponents = Array.from(allComponents);
-    
-    if (!options.silent) {
-      spinner.succeed(`Resolved ${finalComponents.length} components (including dependencies)`);
-      
-      if (finalComponents.length > componentNames.length) {
-        console.log(chalk.blue('Dependencies that will be installed:'));
-        finalComponents
-          .filter(name => !componentNames.includes(name))
-          .forEach(name => console.log(chalk.gray(`  • ${name}`)));
-      }
-    }
 
     // Check for existing files if not overwriting
     if (!options.overwrite) {
