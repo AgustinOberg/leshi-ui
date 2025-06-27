@@ -27,8 +27,8 @@ jobs:
       - run: git config user.name "github-actions"
       - run: git config user.email "github-actions@github.com"
 
-      # Bump CLI version directly in the cli directory
-      - run: cd cli && npm version patch --no-git-tag-version
+      # Bump CLI version using node (avoiding workspace conflicts)
+      - run: cd cli && node -e "const pkg=require('./package.json'); const v=pkg.version.split('.'); v[2]=parseInt(v[2])+1; pkg.version=v.join('.'); require('fs').writeFileSync('package.json', JSON.stringify(pkg, null, 2)+'\n');"
 
       - run: git add cli/package.json && git commit -m "bump version [skip ci]" && git push
 

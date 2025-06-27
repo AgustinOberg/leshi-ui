@@ -229,7 +229,7 @@ jobs:
           echo "✅ Invalid component error handling works"
           
           # Test missing project structure
-          npx leshi-ui add button --yes 2>&1 | grep -q "Metro" || (echo "❌ No error for missing metro config" && exit 1)
+          npx leshi-ui add button --yes 2>&1 | grep -q "React Native framework" || (echo "❌ No error for missing RN project" && exit 1)
           echo "✅ Missing project structure error handling works"
           
           echo "✅ Error handling tests passed!"
