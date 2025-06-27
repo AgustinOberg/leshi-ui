@@ -1,6 +1,6 @@
 {
   "name": "leshi-ui",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A CLI for adding React Native UI components to your project",
   "type": "module",
   "main": "dist/index.js",
