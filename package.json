@@ -3,19 +3,11 @@
   "private": true,
   "workspaces": [
     "packages/*",
-    "apps/*",
-    "cli"
+    "apps/*"
   ],
   "devDependencies": {
     "@types/bun": "latest",
     "typescript": "^5.0.0"
   },
-  "scripts": {
-    "build": "cd cli && npm run build",
-    "test": "cd cli && npm test",
-    "test:cli": "cd cli && npm test",
-    "lint": "cd cli && npm run lint",
-    "dev": "cd cli && npm run dev",
-    "release": "npm run build && cd cli && npm publish"
-  }
+  "scripts": {}
 }
