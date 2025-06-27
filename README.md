@@ -1,6 +1,6 @@
 # 🐱 Leshi UI
 
-> **Professional CLI for React Native** — Build beautiful React Native apps with copy-paste components, comprehensive theming, and excellent developer experience.
+> **Modern CLI for React Native** — Build beautiful React Native apps with copy-paste components, comprehensive theming, and excellent developer experience.
 
 ![npm](https://img.shields.io/npm/v/leshi-ui?color=%2332C037&label=npm) ![license](https://img.shields.io/badge/license-MIT-blue) ![node version](https://img.shields.io/badge/node-%3E%3D16.0.0-brightgreen) ![TypeScript](https://img.shields.io/badge/TypeScript-100%25-blue)
 
