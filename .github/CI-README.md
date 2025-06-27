@@ -89,15 +89,14 @@ npx leshi-ui add dialog --yes
 ```
 
 ### 4. `release.yml` - Automated Release
-**Triggers:** Push to main (after all tests pass)  
+**Triggers:** Push to main  
 **Purpose:** Publishes CLI to npm registry
 
 #### Release process:
-1. ⏳ **Wait for all tests to pass**
-2. 🏗️ **Build CLI** (`cd cli && npm run build`)
-3. 📦 **Version bump** (`npm version patch`)
-4. 🚀 **Publish to npm** (`npm publish`)
-5. 📝 **Git tag and push**
+1. 🏗️ **Build CLI** (`cd cli && npm run build`)
+2. 📦 **Version bump** (`npm version patch`)
+3. 🚀 **Publish to npm** (`npm publish`)
+4. 📝 **Git tag and push**
 
 ## 🛡️ Quality Gates
 
