@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Leshi UI is a **shadcn alternative for React Native** - an enterprise-grade CLI tool and component library that enables developers to build their own UI systems with excellent developer experience and performance. The goal is to provide a curated catalog of copy-paste components that developers can customize and own, rather than a traditional component library dependency.
+Leshi UI is a **shadcn-inspired CLI for React Native** - a professional-grade CLI tool that enables developers to build beautiful React Native apps with copy-paste components, comprehensive theming, and excellent developer experience. The goal is to provide a curated catalog of production-ready components that developers can customize and own, rather than depending on traditional component library packages.
 
 ## Core Philosophy
 
@@ -30,23 +30,28 @@ Leshi UI is a **shadcn alternative for React Native** - an enterprise-grade CLI 
   - `packages/unistyles/`: Unistyles variant (alternative styling approach)
 - **Demo Apps**: Showcase components and development testing
 
-### CLI Architecture (Enterprise-Grade)
+### CLI Architecture (Production-Ready)
 ```
 cli/
 ├── src/
-│   ├── commands/           # Modular command implementations
-│   │   ├── add.ts         # Component installation with dependency resolution
-│   │   ├── init.ts        # Project initialization with framework detection
-│   │   └── guide.ts       # Documentation and help system
-│   ├── services/          # Core business logic
-│   │   ├── dependency-resolver.ts    # Multi-pass dependency resolution
-│   │   ├── file-operations.ts       # Atomic file operations with rollback
-│   │   ├── project-detector.ts      # Automatic framework detection
-│   │   └── import-transformer.ts    # Babel-based import transformation
-│   ├── schemas/           # Zod validation schemas
-│   ├── errors/            # Structured error handling system
-│   ├── types/             # TypeScript type definitions
-│   └── __tests__/         # Comprehensive test suite
+│   ├── commands/                    # shadcn-inspired command implementations
+│   │   ├── add.ts                  # Component/theme installation with smart dependency resolution
+│   │   ├── init.ts                 # Project initialization with framework detection
+│   │   ├── list.ts                 # List components and themes with beautiful output
+│   │   └── guide.ts                # Built-in documentation and help system
+│   ├── services/                    # Core business logic
+│   │   ├── component-registry.ts   # Component registry and dependency resolution
+│   │   └── project-service.ts      # Project detection and file operations
+│   ├── utils/                       # Utility functions
+│   │   ├── colors.ts               # CLI colors and icons with chalk
+│   │   ├── logger.ts               # Professional logging with emojis
+│   │   └── file-utils.ts           # File operations with fs-extra
+│   ├── types/                       # TypeScript type definitions
+│   │   └── index.ts                # Framework, ComponentInfo, Registry types
+│   ├── component-registry.json      # Bundled component metadata
+│   └── packages/                    # Bundled source components and themes
+│       ├── rn/                     # React Native StyleSheet components
+│       └── unistyles/              # Unistyles v3 components
 ```
 
 ### Component Design Patterns
@@ -66,12 +71,11 @@ cli/
 ## Development Commands
 
 ### CLI Development & Testing
-- `npm run build`: Build the TypeScript CLI
-- `npm run test`: Run comprehensive test suite with Jest
-- `npm run test:coverage`: Generate coverage report
-- `npm run dev`: Watch mode for development
-- `npm run lint`: ESLint validation
-- `bun run release`: Publish to npm (builds CLI first)
+- `cd cli && npm run build`: Build the TypeScript CLI with bundled assets
+- `cd cli && npm run copy-assets`: Copy component registry and packages to dist/
+- `cd cli && npm run dev`: Watch mode for development
+- `cd cli && npm run lint`: ESLint validation
+- `bun run release <version>`: Smart release script with automatic version management
 
 ### Demo App Development
 - `cd apps/demo && bun start`: Start Expo development server for component testing
@@ -80,14 +84,22 @@ cli/
 
 ### CLI Usage in Development
 ```bash
-# Test CLI locally
+# Test CLI locally from project root
+node cli/dist/index.js init
 node cli/dist/index.js add component button
+node cli/dist/index.js list component
+node cli/dist/index.js guide component button
+node cli/dist/index.js guide theme
 
-# Test framework detection
-node cli/dist/index.js init --cwd /path/to/test-project
+# Test both frameworks
+node cli/dist/index.js init --unistyles
+node cli/dist/index.js add component button --unistyles
 
-# Test dependency resolution
-node cli/dist/index.js add component dialog --silent
+# Test in different directories
+mkdir test-project && cd test-project
+echo '{"name": "test-app", "dependencies": {"react-native": "0.72.0"}}' > package.json
+node ../cli/dist/index.js init --yes
+node ../cli/dist/index.js add component button --yes
 ```
 
 ## Component Development Guidelines

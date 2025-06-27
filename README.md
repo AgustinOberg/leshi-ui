@@ -1,191 +1,194 @@
 # 🐱 Leshi UI
 
-> **Beautiful components for React Native** — A powerful CLI tool and component library that enables developers to build their own UI systems with excellent developer experience and performance.
+> **Professional CLI for React Native** — Build beautiful React Native apps with copy-paste components, comprehensive theming, and excellent developer experience.
 
----
-
-![npm](https://img.shields.io/npm/v/leshi-ui?color=%2332C037&label=npm) ![license](https://img.shields.io/badge/license-MIT-blue) ![node version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen) ![bun version](https://img.shields.io/badge/bun-%3E%3D1.0.0-orange)
-
----
+![npm](https://img.shields.io/npm/v/leshi-ui?color=%2332C037&label=npm) ![license](https://img.shields.io/badge/license-MIT-blue) ![node version](https://img.shields.io/badge/node-%3E%3D16.0.0-brightgreen) ![TypeScript](https://img.shields.io/badge/TypeScript-100%25-blue)
 
 ## ✨ Features
 
-🎨 **Copy-paste components** — Own your components, don't depend on them  
-🎯 **Intuitive CLI** — Familiar CLI patterns and component APIs  
-⚡️ **Performance optimized** — Zero runtime overhead, only components you use  
-🎭 **Theme-first design** — Comprehensive theming with light/dark mode support  
-📱 **Cross-platform** — Works on React Native (iOS, Android, Web)  
-🎨 **Unistyles support** — Alternative styling approach with Unistyles v3  
-📖 **Rich documentation** — Built-in component guides and examples  
-🔧 **TypeScript ready** — Full TypeScript support with proper types
-
----
-
-## 🚀 Install
-
-With **Bun**:
-
-```bash
-bun add -g leshi-ui
-```
-
-With **npm**:
-
-```bash
-npm install -g leshi-ui
-```
-
----
+- 🎨 **Copy-paste components** — Own your code, don't depend on packages
+- 🚀 **Professional CLI** — Intuitive command patterns with `npx leshi-ui@latest`
+- ⚡️ **Zero runtime overhead** — Only copy the components you actually use
+- 🎭 **Comprehensive theming** — 25+ themes with light/dark mode support
+- 📱 **React Native + Web** — Works everywhere React Native does
+- 🎨 **StyleSheet + Unistyles** — Choose your preferred styling approach
+- 🧠 **Smart dependency resolution** — Automatic component dependency management
+- 📖 **Built-in documentation** — Component guides and examples included
+- 🔧 **100% TypeScript** — Fully typed with zero TypeScript errors
+- 🌟 **Professional UX** — Beautiful CLI with colors, emojis, and helpful messages
 
 ## 🚀 Quick Start
+
+No installation required! Use directly with any package manager:
+
+```bash
+# React Native StyleSheet (default)
+npx leshi-ui@latest init
+
+# Unistyles variant
+npx leshi-ui@latest init --unistyles
+```
 
 ### 1. Initialize Your Project
 
 ```bash
-# Initialize theme system (React Native)
+# Initialize with React Native StyleSheet
 npx leshi-ui@latest init
 
-# Or for Unistyles
-npx leshi-ui@latest init unistyles
+# Initialize with Unistyles
+npx leshi-ui@latest init --unistyles
+
+# Skip confirmation prompts
+npx leshi-ui@latest init --yes
 ```
 
 ### 2. Add Components
 
 ```bash
-# Add a component with automatic setup guidance
+# Add a single component
 npx leshi-ui@latest add component button
 
-# View detailed component guide
-npx leshi-ui@latest guide component button
+# Add multiple components
+npx leshi-ui@latest add component button text modal
+
+# Add with Unistyles
+npx leshi-ui@latest add component button --unistyles
+
+# Overwrite existing files
+npx leshi-ui@latest add component button --overwrite
 ```
 
-### 3. Set Up Modal Components (if needed)
-
-For modal-based components (Modal, Dialog, AlertDialog):
+### 3. Explore and Learn
 
 ```bash
-# Install required dependency
-bun add @gorhom/portal
+# List all available components
+npx leshi-ui@latest list component
 
-# Add ModalProvider to your _layout.tsx
-import { ModalProvider } from './components/ui/modal';
+# Get detailed component guide
+npx leshi-ui@latest guide component button
 
-export default function Layout() {
-  return (
-    <ModalProvider>
-      <YourApp />
-    </ModalProvider>
-  );
-}
+# List all available themes
+npx leshi-ui@latest list theme
+
+# Learn about the theme system
+npx leshi-ui@latest guide theme
 ```
 
----
+## 📋 Commands Reference
 
-## 📚 Commands Reference
+### Initialization
+```bash
+# Initialize with React Native StyleSheet
+npx leshi-ui@latest init [--rn] [--yes]
 
-### Component Management
+# Initialize with Unistyles  
+npx leshi-ui@latest init --unistyles [--yes]
+```
 
-| Command                                          | Description                              |
-| ------------------------------------------------ | ---------------------------------------- |
-| `npx leshi-ui@latest add component <name>`             | Add React Native component               |
-| `npx leshi-ui@latest add component <name> --unistyles` | Add Unistyles component                  |
-| `npx leshi-ui@latest guide component <name>`           | Show detailed component guide            |
-| `npx leshi-ui@latest guide components`                 | List all available components            |
+### Components
+```bash
+# Add components (with automatic dependency resolution)
+npx leshi-ui@latest add component <name> [--rn|--unistyles] [--overwrite] [--yes]
 
-### Theme Management
+# List all components
+npx leshi-ui@latest list component [--rn|--unistyles]
 
-| Command                                      | Description                          |
-| -------------------------------------------- | ------------------------------------ |
-| `npx leshi-ui@latest init`                         | Initialize React Native themes       |
-| `npx leshi-ui@latest init unistyles`               | Initialize Unistyles themes          |
-| `npx leshi-ui@latest add theme <name>`             | Add React Native theme               |
-| `npx leshi-ui@latest add theme <name> --unistyles` | Add Unistyles theme                  |
-| `npx leshi-ui@latest themes`                       | List available themes                |
+# Component documentation
+npx leshi-ui@latest guide component <name>
+```
 
-### Help & Discovery
+### Themes
+```bash
+# Add themes
+npx leshi-ui@latest add theme <name> [--rn|--unistyles] [--overwrite] [--yes]
 
-| Command                      | Description                 |
-| ---------------------------- | --------------------------- |
-| `npx leshi-ui@latest help`         | Show all commands           |
-| `npx leshi-ui@latest guide --help` | Show guide command help     |
+# List all themes
+npx leshi-ui@latest list theme [--rn|--unistyles]
 
----
+# Theme system guide
+npx leshi-ui@latest guide theme
+```
+
+### Package Manager Support
+```bash
+npx leshi-ui@latest <command>     # npm
+bunx leshi-ui@latest <command>    # bun  
+pnpm dlx leshi-ui@latest <command> # pnpm
+yarn dlx leshi-ui@latest <command> # yarn
+```
 
 ## 🎯 Available Components
 
-Leshi UI provides a curated set of components with consistent design patterns:
+Over 18 production-ready components with smart dependency resolution:
 
-### Basic Components
-- **Text** - Typography with variants (heading, body, caption) and weights
-- **Button** - Interactive buttons with variants (primary, secondary, outline, ghost, destructive)
-- **Surface** - Container with elevation, padding, and radius variants
+| Component | Description | Dependencies | External Deps |
+|-----------|-------------|--------------|---------------|
+| **button** | Versatile button with variants and sizes | `text` | None |
+| **text** | Typography with semantic variants | None | None |
+| **modal** | Flexible modal with animations | None | `@gorhom/portal` |
+| **dialog** | Dialog built on modal system | `modal`, `text`, `icon`, `slot` | `@gorhom/portal` |
+| **alert-dialog** | Confirmation dialogs | `modal`, `text`, `button`, `slot` | `@gorhom/portal` |
+| **surface** | Container with elevation | None | None |
+| **text-input** | Input with validation states | `label`, `text` | None |
+| **text-area** | Multi-line text input | `label`, `text` | None |
+| **checkbox** | Custom styled checkbox | `icon` | None |
+| **switch** | Animated toggle switch | None | `react-native-reanimated` |
+| **progress** | Animated progress bar | None | `react-native-reanimated` |
+| **skeleton** | Loading skeleton | None | `react-native-reanimated` |
+| **avatar** | Avatar with fallback | `text` | None |
+| **badge** | Status badges | `text` | None |
+| **divider** | Visual separator | None | None |
+| **icon** | Icon component | `text` | None |
+| **label** | Form labels | `text` | None |
+| **radio** | Radio group | `icon` | None |
+| **slot** | Component composition | None | None |
+| **spinner** | Loading spinner | None | `react-native-reanimated` |
 
-### Form Components
-- **TextInput** - Input fields with labels, validation states, and helper text
-- **TextArea** - Multi-line text input with row control
-- **Checkbox** - Checkboxes with custom styling and labels
-- **Switch** - Toggle switches with smooth animations
+> **Smart Dependencies**: The CLI automatically installs required components and warns about external dependencies.
 
-### Layout & Navigation
-- **Modal** - Full-screen and centered modals with portal rendering
-- **Dialog** - Dialogs with header, content, and footer sections
-- **AlertDialog** - Confirmation dialogs with action buttons
+## 💡 Built-in Documentation
 
-### Feedback & Display
-- **Badge** - Status indicators and labels
-- **Avatar** - User profile images with fallbacks
-- **Skeleton** - Loading placeholders with animations
-- **Progress** - Progress bars and indicators
-- **Icon** - Icon components with customizable sizes and colors
-
-### Utility
-- **Label** - Form labels with required indicators
-- **Slot** - Component composition utility
-
----
-
-## 💡 Component Guide System
-
-Each component comes with comprehensive documentation:
+Every component includes comprehensive documentation accessible via CLI:
 
 ```bash
-# List all components with dependencies
-npx leshi-ui@latest guide components
+# List all components with dependencies and external deps
+npx leshi-ui@latest list component
 
-# Get detailed guide for specific component
+# Get detailed guide for any component
 npx leshi-ui@latest guide component button
 ```
 
-Component guides include:
-- 📦 **Dependencies** - Required internal and external dependencies
-- 📋 **Setup instructions** - Step-by-step installation guide  
-- ⚙️ **Setup code** - Code snippets for configuration
-- 💡 **Usage examples** - Real-world usage patterns
+**Component guides include:**
+- 📖 Component description and capabilities
+- 🔗 leshi-ui component dependencies (automatically installed)
+- 📦 External npm dependencies (with install instructions)
+- 📋 Step-by-step setup instructions
+- 💻 Setup code examples
+- 💡 Real usage examples
 
----
+## 🎨 Comprehensive Theme System
 
-## 🎨 Theme System
-
-Leshi UI uses a powerful theme system supporting:
-
-- **Light/Dark modes** - Automatic system detection and manual control
-- **Custom themes** - 25+ pre-built themes (spotify, twitter, supabase, etc.)
-- **Type-safe** - Full TypeScript support for theme properties
-- **Performance optimized** - Minimal re-renders with optimized context
-
-### Available Themes
-
-Popular themes include: `spotify`, `twitter-light`, `twitter-dark`, `supabase-light`, `supabase-dark`, `retro-dark`, `grape-light`, and many more.
+25+ beautiful themes with smart system integration:
 
 ```bash
-# List all available themes
-npx leshi-ui@latest themes
+# List all available themes (categorized by light/dark)
+npx leshi-ui@latest list theme
 
-# Add a specific theme  
+# Add any theme to your project
 npx leshi-ui@latest add theme spotify
+
+# Learn about the theme system
+npx leshi-ui@latest guide theme
 ```
 
----
+**Theme Features:**
+- 🌓 **Automatic light/dark switching** - Follows system preferences
+- 🎨 **25+ pre-built themes** - spotify, twitter, supabase, retro, grape, ocean, etc.
+- 🔧 **Manual override** - `defaultMode="manual"` for user control
+- ⚡ **Performance optimized** - Minimal re-renders
+- 🛡️ **Type-safe** - Full TypeScript theme definitions
+
+**Popular themes:** `spotify`, `twitter-dark`, `supabase-light`, `retro-dark`, `ocean-light`, `grape-dark`, `mono-light`
 
 ## 🧑‍💻 Usage Examples
 
@@ -213,10 +216,11 @@ function MyComponent() {
 }
 ```
 
-### Dialog Example
+### Modal & Dialog Components
 
 ```tsx
-import { Dialog, Button } from './components/ui';
+import { Dialog, Button, Text } from './components/ui';
+import { useState } from 'react';
 
 function MyDialog() {
   const [open, setOpen] = useState(false);
@@ -244,7 +248,8 @@ function MyDialog() {
 ### Theme Integration
 
 ```tsx
-import { useTheme } from './theme/native';
+import { useTheme } from './styles/theme';
+import { View, Text } from 'react-native';
 
 function ThemedComponent() {
   const theme = useTheme();
@@ -252,52 +257,117 @@ function ThemedComponent() {
   return (
     <View style={{
       backgroundColor: theme.colors.background,
-      padding: theme.sizes.padding(4)
+      padding: theme.spacing.lg
     }}>
-      <Text style={{ color: theme.colors.foreground }}>
-        Themed content
+      <Text style={{ 
+        color: theme.colors.text,
+        fontSize: theme.fonts.sizes.lg 
+      }}>
+        Themed content that respects user preferences
       </Text>
     </View>
   );
 }
 ```
 
----
+### Complete App Setup
 
-## ⚡️ Architecture
+```tsx
+// App.tsx or _layout.tsx
+import { ThemeProvider } from './styles/context';
+import { ModalProvider } from './components/ui/modal-provider';
 
-### Copy-Paste Philosophy
+export default function App() {
+  return (
+    <ThemeProvider defaultTheme="light" defaultMode="system">
+      <ModalProvider>
+        <YourApp />
+      </ModalProvider>
+    </ThemeProvider>
+  );
+}
+```
 
-Unlike traditional component libraries, Leshi UI follows the **copy-paste approach**:
+## ⚡️ Architecture & Philosophy
 
-- ✅ **Full ownership** - Components are copied to your project, you own the code
-- ✅ **No dependencies** - No runtime bundle, only the components you use  
-- ✅ **Complete customization** - Modify components however you need
-- ✅ **Zero vendor lock-in** - You control the entire codebase
+### Copy-Paste Approach
 
-### Performance Features
+Leshi UI follows the proven **copy-paste philosophy**:
 
-- **StyleSheet optimization** - All styles use React Native's optimized StyleSheet.create
-- **Minimal re-renders** - Theme context designed for optimal performance
-- **Tree-shakeable** - Only copy components you actually need
-- **Platform-specific** - Automatic iOS/Android/Web optimizations
+- ✅ **Full ownership** - Components live in your codebase, you control everything
+- ✅ **Zero runtime overhead** - No component library bundle, only what you use
+- ✅ **Complete customization** - Modify any component to fit your exact needs
+- ✅ **No vendor lock-in** - Your components, your code, your decisions
+- ✅ **Framework flexibility** - Choose between StyleSheet or Unistyles
 
----
+### Performance Optimizations
+
+- **StyleSheet.create()** - All RN components use optimized StyleSheet patterns
+- **Unistyles v3** - Modern CSS-in-JS with superior performance
+- **Theme context optimization** - Minimal re-renders with smart context design
+- **Platform-specific code** - Automatic iOS/Android/Web optimizations
+- **Tree-shakeable by nature** - Only install components you actually use
+
+### CLI Features
+
+- **Smart dependency resolution** - Automatically installs required components
+- **Professional UX** - Colors, emojis, progress indicators, helpful error messages
+- **Framework detection** - Automatically detects React Native project type
+- **Built-in documentation** - No need for external docs, everything is in the CLI
+- **Universal package manager support** - Works with npm, bun, pnpm, yarn
+
+## 🚀 Publishing & Release
+
+Ready to publish your own version or contribute:
+
+```bash
+# Smart release with automatic versioning
+bun run release 1.2.3
+```
+
+This handles building, testing, publishing to npm, and creating git tags automatically.
 
 ## 👥 Contributing
 
-Contributions are always welcome!
-If you'd like to help:
+We welcome contributions! Here's how to get started:
 
-1. Fork the repo
-2. Create your branch (`git checkout -b feature/my-new-command`)
-3. Commit your changes (`git commit -m "feat: add new command"`)
-4. Push to the branch (`git push origin feature/my-new-command`)
-5. Open a Pull Request
+1. **Fork the repository** on GitHub
+2. **Clone your fork**: `git clone https://github.com/yourusername/leshi-ui`
+3. **Create a feature branch**: `git checkout -b feature/amazing-new-component`
+4. **Make your changes** following our guidelines in [AGENTS.md](AGENTS.md)
+5. **Test thoroughly**:
+   ```bash
+   cd cli && npm run build
+   node dist/index.js list component
+   # Test your changes
+   ```
+6. **Commit with clear messages**: `git commit -m "feat: add amazing new component"`
+7. **Push and create a Pull Request**
+
+### Development Guidelines
+
+- **Component changes**: Update both `packages/rn/` and `packages/unistyles/`
+- **CLI changes**: Test all commands locally before committing
+- **Registry updates**: Add new components to `component-notes.json`
+- **Demo updates**: Showcase new components in `apps/demo/`
+- **TypeScript**: Ensure zero TypeScript errors across all packages
+
+## 📄 License
+
+MIT License - see [LICENSE](LICENSE) for details.
+
+## 🙏 Credits
+
+**Built with ❤️ by [Agustin Oberg](https://www.linkedin.com/in/oberg-agustin)**
+
+Bringing excellent developer experience to React Native development.
 
 ---
 
-## 👤 About the Author
+**Ready to build something amazing?** 
 
-Built with ❤️ by **Agustin Oberg**
-[LinkedIn → linkedin.com/in/oberg-agustin](https://www.linkedin.com/in/oberg-agustin)
+```bash
+npx leshi-ui@latest init
+```
+
+Join the community of developers building beautiful React Native apps with leshi-ui! 🚀
