@@ -412,17 +412,18 @@ async function findPackagesDirectory(): Promise<string> {
   
   // Try paths in order of most likely to work
   const possiblePaths = [
+    // NPM package: from node_modules/leshi-ui/dist/commands/ to node_modules/leshi-ui/packages/
+    path.join(__dirname, '../../packages'),
     // Development: from cli/dist/commands/ to root packages/
     path.join(__dirname, '../../../packages'),
     // Development: alternative path
     path.join(__dirname, '../../../../packages'),
-    // When npm published: from node_modules/leshi-ui/dist/commands/ to project root
+    // When npm global: try in node_modules
+    path.join(process.cwd(), 'node_modules/leshi-ui/packages'),
+    // Last resort attempts
     path.join(currentDir, 'packages'),
     path.join(currentDir, '../packages'),
-    path.join(currentDir, '../../packages'),
-    // NPM global install attempts
-    path.join(__dirname, '../../packages'),
-    path.join(process.cwd(), 'node_modules/leshi-ui/packages')
+    path.join(currentDir, '../../packages')
   ];
 
   for (const possiblePath of possiblePaths) {
