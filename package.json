@@ -22,7 +22,7 @@
   "description": "Leshi CLI for UI utilities",
   "license": "MIT",
   "bin": {
-    "leshi-ui": "./cli/dist/index.js"
+    "leshi-ui": "./bin/cli.js"
   },
   "files": [
     "bin",
