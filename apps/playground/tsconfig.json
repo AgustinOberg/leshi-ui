@@ -1,0 +1,10 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,    
+    "paths": {
+      "@leshi/ui-unistyles": ["../../packages/unistyles"],
+      "@leshi/ui-rn": ["../../packages/rn"]
+    }
+  }
+}

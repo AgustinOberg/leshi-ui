@@ -1,0 +1,81 @@
+{
+  "name": "leshi-ui",
+  "version": "0.0.15",
+  "description": "Modern CLI for building and managing React Native UI components with copy-paste simplicity, custom theming, and open source design system support",
+  "main": "dist/index.js",
+  "bin": {
+    "leshi-ui": "./dist/index.js"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "tsc && npm run copy-assets",
+    "copy-assets": "cp component-registry.json dist/ && cp -r packages dist/",
+    "dev": "tsc --watch",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src --ext .ts",
+    "prepublishOnly": "npm run build",
+    "release": "npm run build && npm publish"
+  },
+  "keywords": [
+    "react-native",
+    "react native",
+    "cli",
+    "ui components",
+    "design system",
+    "unistyles",
+    "react-native components",
+    "component library",
+    "mobile ui",
+    "typescript",
+    "copy paste components",
+    "leshi",
+    "theming",
+    "react native ui",
+    "open source"
+  ],
+  "author": {
+    "name": "Agustin Oberg",
+    "email": "agustin.oberg@gmail.com",
+    "url": "https://www.linkedin.com/in/oberg-agustin"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AgustinOberg/leshi-ui.git",
+    "directory": "cli"
+  },
+  "homepage": "https://github.com/AgustinOberg/leshi-ui#readme",
+  "bugs": {
+    "url": "https://github.com/AgustinOberg/leshi-ui/issues"
+  },
+  "files": [
+    "dist/**/*",
+    "component-registry.json",
+    "packages/**/*"
+  ],
+  "dependencies": {
+    "commander": "^11.1.0",
+    "inquirer": "^9.2.12",
+    "chalk": "^5.3.0",
+    "ora": "^7.0.1",
+    "fs-extra": "^11.1.1",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.0",
+    "@types/fs-extra": "^11.0.2",
+    "@types/inquirer": "^9.0.6",
+    "typescript": "^5.2.2",
+    "eslint": "^8.50.0",
+    "@typescript-eslint/eslint-plugin": "^6.7.0",
+    "@typescript-eslint/parser": "^6.7.0",
+    "jest": "^29.7.0",
+    "@types/jest": "^29.5.5",
+    "ts-jest": "^29.1.1",
+    "memfs": "^4.6.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
