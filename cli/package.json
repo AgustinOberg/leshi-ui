@@ -1,5 +1,5 @@
 {
-  "name": "@leshi-ui/cli",
+  "name": "leshi-ui",
   "version": "1.0.0",
   "description": "A CLI for adding React Native UI components to your project",
   "type": "module",
