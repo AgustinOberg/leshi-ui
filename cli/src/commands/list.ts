@@ -1,6 +1,7 @@
 import { Command } from 'commander';
 import { ComponentRegistryService } from '../services/component-registry.js';
 import { ProjectService } from '../services/project-service.js';
+import { GitHubProjectService } from '../services/github-project-service.js';
 import { Logger } from '../utils/logger.js';
 import { colors, icons } from '../utils/colors.js';
 import { Framework } from '../types/index.js';
@@ -99,7 +100,7 @@ async function listThemes(options: ListOptions): Promise<void> {
   Logger.break();
 
   try {
-    const themes = await ProjectService.getAvailableThemes(framework);
+    const themes = await GitHubProjectService.getAvailableThemes(framework);
     
     if (themes.length === 0) {
       Logger.warning('No themes found');

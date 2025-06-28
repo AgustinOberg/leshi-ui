@@ -9,7 +9,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc && npm run copy-assets",
-    "copy-assets": "cp component-registry.json dist/ && cp -r packages dist/",
+    "copy-assets": "cp component-registry.json dist/",
     "dev": "tsc --watch",
     "test": "jest",
     "test:coverage": "jest --coverage",
@@ -51,8 +51,7 @@
   },
   "files": [
     "dist/**/*",
-    "component-registry.json",
-    "packages/**/*"
+    "component-registry.json"
   ],
   "dependencies": {
     "commander": "^11.1.0",
