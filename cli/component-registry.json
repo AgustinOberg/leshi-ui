@@ -15,7 +15,7 @@
       "Install external dependency: bun add @gorhom/portal",
       "Wrap your app with ModalProvider in _layout.tsx"
     ],
-    "setupCode": "import { ModalProvider } from './components/ui/modal';\n\nexport default function Layout() {\n  return (\n    <ModalProvider>\n      <YourApp />\n    </ModalProvider>\n  );\n}",
+    "setupCode": "import { ModalProvider } from './components/ui/modal';\n\nexport const Layout = () => {\n  return (\n    <ModalProvider>\n      <YourApp />\n    </ModalProvider>\n  );\n};",
     "example": "import { Modal } from './components/ui/modal';\n\n<Modal.Root open={open} onOpenChange={setOpen}>\n  <Modal.Trigger>\n    <Button text=\"Open Modal\" />\n  </Modal.Trigger>\n  <Modal.Content>\n    <Text>Modal content goes here</Text>\n  </Modal.Content>\n</Modal.Root>"
   },
   "dialog": {
@@ -26,7 +26,7 @@
       "Install components: leshi-ui add component modal text icon slot",
       "Wrap your app with ModalProvider in _layout.tsx"
     ],
-    "setupCode": "import { ModalProvider } from './components/ui/modal';\n\nexport default function Layout() {\n  return (\n    <ModalProvider>\n      <YourApp />\n    </ModalProvider>\n  );\n}",
+    "setupCode": "import { ModalProvider } from './components/ui/modal';\n\nexport const Layout = () => {\n  return (\n    <ModalProvider>\n      <YourApp />\n    </ModalProvider>\n  );\n};",
     "example": "import { Dialog } from './components/ui/dialog';\n\n<Dialog.Root open={open} onOpenChange={setOpen}>\n  <Dialog.Trigger>\n    <Button text=\"Open Dialog\" />\n  </Dialog.Trigger>\n  <Dialog.Content>\n    <Dialog.Header>\n      <Dialog.Title>Dialog Title</Dialog.Title>\n    </Dialog.Header>\n    <Text>Dialog content...</Text>\n    <Dialog.Footer>\n      <Button variant=\"outline\" text=\"Cancel\" />\n      <Button text=\"Confirm\" />\n    </Dialog.Footer>\n  </Dialog.Content>\n</Dialog.Root>"
   },
   "alert-dialog": {
@@ -37,7 +37,7 @@
       "Install components: leshi-ui add component modal text button slot",
       "Wrap your app with ModalProvider in _layout.tsx"
     ],
-    "setupCode": "import { ModalProvider } from './components/ui/modal';\n\nexport default function Layout() {\n  return (\n    <ModalProvider>\n      <YourApp />\n    </ModalProvider>\n  );\n}",
+    "setupCode": "import { ModalProvider } from './components/ui/modal';\n\nexport const Layout = () => {\n  return (\n    <ModalProvider>\n      <YourApp />\n    </ModalProvider>\n  );\n};",
     "example": "import { AlertDialog } from './components/ui/alert-dialog';\n\n<AlertDialog.Root open={open} onOpenChange={setOpen}>\n  <AlertDialog.Trigger>\n    <Button variant=\"destructive\" text=\"Delete\" />\n  </AlertDialog.Trigger>\n  <AlertDialog.Content>\n    <AlertDialog.Header>\n      <AlertDialog.Title>Are you sure?</AlertDialog.Title>\n      <AlertDialog.Description>\n        This action cannot be undone.\n      </AlertDialog.Description>\n    </AlertDialog.Header>\n    <AlertDialog.Footer>\n      <AlertDialog.Cancel>\n        <Button variant=\"outline\" text=\"Cancel\" />\n      </AlertDialog.Cancel>\n      <AlertDialog.Action>\n        <Button variant=\"destructive\" text=\"Delete\" />\n      </AlertDialog.Action>\n    </AlertDialog.Footer>\n  </AlertDialog.Content>\n</AlertDialog.Root>"
   },
   "text": {

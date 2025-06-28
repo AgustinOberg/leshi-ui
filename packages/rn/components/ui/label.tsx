@@ -1,5 +1,6 @@
-import Text, { type TextProps, type TextSize } from "./text";
+import React from "react";
 import { StyleSheet } from "react-native";
+import { Text, type TextProps } from "./text";
 
 interface LabelProps extends Omit<TextProps, "style" | "children"> {
   error?: boolean;
@@ -7,7 +8,7 @@ interface LabelProps extends Omit<TextProps, "style" | "children"> {
   disabled?: boolean;
 }
 
-const Label = ({ error, disabled, children, ...rest }: LabelProps) => {
+export const Label = ({ error, disabled, children, ...rest }: LabelProps) => {
   const styleObj = styles;
   return (
     <Text
@@ -21,7 +22,6 @@ const Label = ({ error, disabled, children, ...rest }: LabelProps) => {
   );
 };
 
-export default Label;
 
 const styles = StyleSheet.create({
   text: {},

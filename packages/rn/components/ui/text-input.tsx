@@ -1,14 +1,15 @@
+import { useCallback, useState, useMemo } from "react";
 import {
   TextInput as RNTextInput,
   View,
   type NativeSyntheticEvent,
   type TextInputProps as RNTextInputProps,
   type TextInputFocusEventData,
+  StyleSheet,
 } from "react-native";
-import { useCallback, useState, useMemo } from "react";
-import { StyleSheet } from "react-native";
 import { useTheme } from "../../styles/theme";
-import Label from "./label";
+import type { Theme } from "../../styles/theme";
+import { Label } from "./label";
 import { Text, type TextSize } from "./text";
 
 export type TextInputSize = "sm" | "base" | "lg" | "xl";
@@ -134,9 +135,6 @@ export const TextInput = ({
   );
 };
 
-export default TextInput;
-
-import type { Theme } from "../../styles/theme";
 
 const styles = (theme: Theme) => {
   const base = StyleSheet.create({

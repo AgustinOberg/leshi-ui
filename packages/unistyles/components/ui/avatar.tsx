@@ -17,8 +17,8 @@ import {
   type ImageErrorEventData,
 } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
-import Text from "./text";
 import { useTheme } from "../../styles/context";
+import { Text } from "./text";
 
 export type AvatarSize = "sm" | "md" | "lg" | "xl";
 

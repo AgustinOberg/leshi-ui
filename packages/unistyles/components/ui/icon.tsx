@@ -1,4 +1,5 @@
-import Text from "./text";
+import React from "react";
+import { Text } from "./text";
 
 export type IconName = "checkbox" | "x" | "minus";
 export interface IconProps {

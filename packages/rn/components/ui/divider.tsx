@@ -1,5 +1,7 @@
+import React from "react";
 import { View, StyleSheet, type ViewProps, type StyleProp, type ViewStyle } from "react-native";
 import { useTheme } from "../../styles/theme";
+import type { Theme } from "../../styles/theme";
 
 export type DividerOrientation = "horizontal" | "vertical";
 
@@ -14,8 +16,6 @@ export const Divider = ({ orientation = "horizontal", style, ...rest }: DividerP
   const orientStyle = stylesObj.orientation[orientation];
   return <View style={[stylesObj.container, orientStyle, style]} {...rest} />;
 };
-
-import type { Theme } from "../../styles/theme";
 
 const styles = (theme: Theme) => {
   const base = StyleSheet.create({

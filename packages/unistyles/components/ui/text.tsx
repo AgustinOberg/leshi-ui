@@ -1,5 +1,4 @@
 import { Text as RNText, type TextProps as RNTextProps, Platform } from "react-native";
-import React from "react";
 import { StyleSheet } from "react-native-unistyles";
 
 export type TextVariant =
@@ -72,7 +71,6 @@ export const Text = ({
   );
 };
 
-export default Text;
 
 const styles = StyleSheet.create((theme) => ({
   text: {
