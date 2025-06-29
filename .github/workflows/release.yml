@@ -13,6 +13,9 @@ on:
         required: true
         type: string
 
+permissions:
+  contents: write
+
 jobs:
   release:
     name: Release to NPM
@@ -56,9 +59,9 @@ jobs:
         run: bunx tsc --noEmit
         working-directory: ./cli
 
-      #- name: Run linting
-      #  run: bun run lint
-      #  working-directory: ./cli
+      # - name: Run linting
+      #   run: bun run lint
+      #   working-directory: ./cli
 
       - name: Update package.json version
         run: |
@@ -78,15 +81,16 @@ jobs:
           node ${{ github.workspace }}/cli/dist/index.js --help
           node ${{ github.workspace }}/cli/dist/index.js list component
 
-      - name: Configure Git
+      - name: Configure Git credentials
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
 
       - name: Commit version bump
         run: |
           git add cli/package.json
-          git commit -m "chore: bump version to ${{ inputs.version }}"
+          git commit -m "chore: bump version to ${{ inputs.version }}" || echo "No changes to commit"
 
       - name: Create and push tag
         run: |
