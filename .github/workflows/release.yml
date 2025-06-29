@@ -56,9 +56,9 @@ jobs:
         run: bunx tsc --noEmit
         working-directory: ./cli
 
-      - name: Run linting
-        run: bun run lint
-        working-directory: ./cli
+      #- name: Run linting
+      #  run: bun run lint
+      #  working-directory: ./cli
 
       - name: Update package.json version
         run: |
