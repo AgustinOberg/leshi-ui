@@ -54,3 +54,12 @@ jobs:
           echo '{"name": "test", "dependencies": {"react-native": "0.72.0"}}' > package.json
           node ${{ github.workspace }}/cli/dist/index.js --help
           node ${{ github.workspace }}/cli/dist/index.js list component
+      
+      # E2E Integration Test
+      - name: Install E2E test project dependencies
+        run: bun install
+        working-directory: ./cli/test-projects/test-rn
+      
+      - name: Run E2E Integration Test
+        run: bun run test:e2e
+        working-directory: ./cli

@@ -5,26 +5,28 @@ Este proyecto incluye dos workflows de GitHub Actions para automatizar testing y
 ## 🧪 Workflow Automático: Tests y TypeScript
 
 **Archivo:** `test.yml`  
-**Trigger:** Automático en PRs y commits a `main`
+**Trigger:** Automático en PRs y commits a `main`  
+**Runtime:** ⚡ **Bun** (3-10x más rápido que npm)
 
 ### Qué hace:
-- ✅ TypeScript check en todos los packages (CLI, RN, Unistyles)
-- ✅ Ejecuta tests del CLI
-- ✅ Ejecuta linting en todos los packages
-- ✅ Builds del CLI para verificar compilación
+- ✅ TypeScript check del CLI
+- ✅ Ejecuta tests del CLI con `bun test`
+- ✅ Ejecuta linting del CLI
+- ✅ Build del CLI para verificar compilación
 - ✅ Test funcional básico del CLI
 
 ### Packages verificados:
-- `cli/` - CLI principal
-- `packages/rn/` - Componentes React Native
-- `packages/unistyles/` - Componentes Unistyles
+- `cli/` - CLI principal (con Bun)
+- `packages/rn/` - Componentes copy-paste (validados al instalar)
+- `packages/unistyles/` - Componentes copy-paste (validados al instalar)
 
 ---
 
 ## 🚀 Workflow Manual: Release a NPM
 
 **Archivo:** `release.yml`  
-**Trigger:** Manual desde GitHub Actions tab
+**Trigger:** Manual desde GitHub Actions tab  
+**Runtime:** ⚡ **Bun** para build + **npm** para publish
 
 ### Parámetros requeridos:
 - **Branch:** Rama desde la cual hacer el deploy (default: `main`)
@@ -32,13 +34,13 @@ Este proyecto incluye dos workflows de GitHub Actions para automatizar testing y
 
 ### Proceso de release:
 1. 🔍 Valida formato de versión
-2. 🧪 Ejecuta tests y TypeScript checks
+2. 🧪 Ejecuta tests y TypeScript checks con **Bun** ⚡
 3. 📝 Actualiza `package.json` con nueva versión
-4. 🏗️ Builds del CLI
+4. 🏗️ Build del CLI con **Bun** ⚡
 5. 🧪 Test funcional del CLI built
 6. 📝 Commit del version bump
 7. 🏷️ Crea y pushea git tag `v{version}`
-8. 📦 Publica a NPM
+8. 📦 Publica a NPM (usando npm para compatibilidad)
 9. 📋 Crea GitHub Release
 
 ### Cómo ejecutar el release:
