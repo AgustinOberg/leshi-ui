@@ -1,9 +1,7 @@
-import { jest, describe, it, expect, beforeEach, afterEach } from '@jest/globals';
+import { describe, it, expect, beforeEach, afterEach } from 'bun:test';
 import { vol } from 'memfs';
 
-// Mock fs module to use memfs
-jest.mock('fs', () => require('memfs').fs);
-jest.mock('fs/promises', () => require('memfs').fs.promises);
+// Note: Bun test doesn't use jest.mock, we directly use memfs fs
 
 describe('Memory Filesystem Integration Tests', () => {
   beforeEach(() => {
