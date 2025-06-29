@@ -4,6 +4,7 @@ import {
   type PressableProps,
   type StyleProp,
   type ViewStyle,
+  StyleSheet,
 } from "react-native";
 import Animated, {
   useSharedValue,
@@ -11,8 +12,8 @@ import Animated, {
   withTiming,
   Easing,
 } from "react-native-reanimated";
-import { StyleSheet } from "react-native";
 import { useTheme } from "../../styles/theme";
+import type { Theme } from "../../styles/theme";
 
 export type SwitchSize = "sm" | "base" | "lg";
 export type SwitchVariant = "default" | "destructive";
@@ -116,8 +117,6 @@ export const Switch = React.memo<SwitchProps>(({
 });
 
 Switch.displayName = "Switch";
-
-import type { Theme } from "../../styles/theme";
 
 const createStyles = (theme: Theme) => {
   const track = StyleSheet.create({

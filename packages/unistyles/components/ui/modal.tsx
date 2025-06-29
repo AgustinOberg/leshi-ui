@@ -322,4 +322,3 @@ const stylesheet = StyleSheet.create((theme) => ({
   },
 }));
 
-export default Modal;

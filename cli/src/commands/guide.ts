@@ -119,7 +119,7 @@ async function showThemeGuide(): Promise<void> {
   
   const setupCode = `import { ThemeProvider } from './styles/context';
 
-export default function App() {
+export const App = () => {
   return (
     <ThemeProvider defaultTheme="light" defaultMode="system">
       <YourApp />
@@ -140,7 +140,7 @@ export default function App() {
   
   const usageCode = `import { useTheme } from './styles/theme';
 
-export function MyComponent() {
+export const MyComponent = () => {
   const { theme, setTheme, defaultMode } = useTheme();
   
   return (

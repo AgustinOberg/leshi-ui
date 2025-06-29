@@ -1,3 +1,4 @@
+import React from "react";
 import { View, type ViewProps, type StyleProp, type ViewStyle } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
 

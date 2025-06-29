@@ -72,7 +72,6 @@ export const Skeleton = ({
   );
 };
 
-export default Skeleton;
 
 const styles = StyleSheet.create((theme) => ({
   skeleton: {

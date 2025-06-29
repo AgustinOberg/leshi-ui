@@ -1,15 +1,15 @@
+import React, { useMemo } from "react";
 import {
   Pressable,
   type PressableProps,
   type StyleProp,
   type ViewStyle,
   ActivityIndicator,
+  StyleSheet,
 } from "react-native";
-import React, { useMemo } from "react";
-import { StyleSheet } from "react-native";
 import { useTheme } from "../../styles/theme";
-import Text, { type TextVariant } from "./text";
 import type { Theme } from "../../styles/theme";
+import { Text, type TextVariant } from "./text";
 
 export type ButtonVariant =
   | "primary"

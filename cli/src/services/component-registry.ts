@@ -1,6 +1,7 @@
 import { ComponentRegistry, ComponentInfo } from '../types/index.js';
 import { FileUtils } from '../utils/file-utils.js';
 import { Logger } from '../utils/logger.js';
+import { GitHubService } from './github-service.js';
 
 export class ComponentRegistryService {
   private static registryCache: ComponentRegistry | null = null;
@@ -11,20 +12,28 @@ export class ComponentRegistryService {
     }
 
     try {
-      // Get the CLI package directory and look for the bundled registry file
-      const cliDir = FileUtils.dirname(FileUtils.dirname(new URL(import.meta.url).pathname));
-      const registryPath = FileUtils.join(cliDir, 'component-registry.json');
-      
-      if (!(await FileUtils.exists(registryPath))) {
-        throw new Error('Component registry not found');
-      }
-
-      const registryData = await FileUtils.readJson<ComponentRegistry>(registryPath);
+      // First try to load from GitHub
+      const registryData = await GitHubService.getRegistry();
       this.registryCache = registryData;
-      
       return registryData;
     } catch (error) {
-      Logger.error('Failed to load component registry');
+      Logger.error('Failed to load component registry from GitHub');
+      
+      // Fallback to local bundled registry if GitHub fails
+      try {
+        const cliDir = FileUtils.dirname(FileUtils.dirname(new URL(import.meta.url).pathname));
+        const registryPath = FileUtils.join(cliDir, 'component-registry.json');
+        
+        if (await FileUtils.exists(registryPath)) {
+          Logger.info('Using local fallback registry...');
+          const registryData = await FileUtils.readJson<ComponentRegistry>(registryPath);
+          this.registryCache = registryData;
+          return registryData;
+        }
+      } catch (fallbackError) {
+        Logger.error('Failed to load local fallback registry');
+      }
+      
       throw error;
     }
   }

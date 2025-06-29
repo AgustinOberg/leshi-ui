@@ -4,7 +4,6 @@ import React, {
   useContext,
   useMemo,
   useState,
-  useEffect,
   type ReactNode,
 } from "react";
 import {

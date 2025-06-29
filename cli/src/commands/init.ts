@@ -5,6 +5,7 @@ import { Framework } from '../types/index.js';
 import { Logger } from '../utils/logger.js';
 import { FileUtils } from '../utils/file-utils.js';
 import { ProjectService } from '../services/project-service.js';
+import { GitHubProjectService } from '../services/github-project-service.js';
 import { colors, icons } from '../utils/colors.js';
 
 interface InitOptions {
@@ -77,51 +78,31 @@ async function initProject(options: InitOptions): Promise<void> {
     await FileUtils.ensureDir(config.stylesDir);
     await FileUtils.ensureDir(config.libDir);
 
-    spinner.text = 'Copying theme files...';
+    spinner.text = 'Downloading theme files from GitHub...';
 
-    // Copy styles directory
-    const sourceStylesPath = ProjectService.getStylesPath(framework);
+    // Download core style files from GitHub
     const targetStylesPath = config.stylesDir;
+    const { success: styleSuccess, files: downloadedStyleFiles } = await GitHubProjectService.downloadStyleFiles(
+      framework, 
+      targetStylesPath, 
+      true
+    );
 
-    if (await FileUtils.exists(sourceStylesPath)) {
-      // Copy core theme files
-      const coreFiles = ['context.tsx', 'theme.ts'];
-      
-      // Add theme.d.ts for RN implementation
-      if (framework === 'rn') {
-        coreFiles.push('theme.d.ts');
-      }
-      
-      // Add breakpoints.ts for Unistyles implementation
-      if (framework === 'unistyles') {
-        coreFiles.push('breakpoints.ts');
-      }
+    if (!styleSuccess) {
+      spinner.fail('Failed to download style files from GitHub');
+      throw new Error('Failed to download style files');
+    }
 
-      for (const file of coreFiles) {
-        const sourcePath = FileUtils.join(sourceStylesPath, file);
-        const targetPath = FileUtils.join(targetStylesPath, file);
-        
-        if (await FileUtils.exists(sourcePath)) {
-          await FileUtils.copy(sourcePath, targetPath, true);
-        }
-      }
-
-      // Copy basic themes (light and dark only)
-      const themesSourcePath = FileUtils.join(sourceStylesPath, 'themes');
-      const themesTargetPath = FileUtils.join(targetStylesPath, 'themes');
-      
-      await FileUtils.ensureDir(themesTargetPath);
-      
-      const basicThemes = ['light.ts', 'dark.ts', 'common.ts', 'index.ts'];
-      
-      for (const theme of basicThemes) {
-        const sourcePath = FileUtils.join(themesSourcePath, theme);
-        const targetPath = FileUtils.join(themesTargetPath, theme);
-        
-        if (await FileUtils.exists(sourcePath)) {
-          await FileUtils.copy(sourcePath, targetPath, true);
-        }
-      }
+    // Download basic themes (light and dark only)
+    spinner.text = 'Downloading basic themes...';
+    const themesTargetPath = FileUtils.join(targetStylesPath, 'themes');
+    await FileUtils.ensureDir(themesTargetPath);
+    
+    const basicThemes = ['light', 'dark', 'common', 'index'];
+    
+    for (const themeName of basicThemes) {
+      const targetPath = FileUtils.join(themesTargetPath, `${themeName}.ts`);
+      await GitHubProjectService.downloadTheme(framework, themeName, targetPath, true);
     }
 
     spinner.succeed('Project initialized successfully!');

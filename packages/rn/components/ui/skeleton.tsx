@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
-import { View, type ViewProps, type DimensionValue } from "react-native";
-import { StyleSheet } from "react-native";
+import { View, type ViewProps, type DimensionValue, StyleSheet } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -10,6 +9,7 @@ import Animated, {
   interpolate,
 } from "react-native-reanimated";
 import { useTheme } from "../../styles/theme";
+import type { Theme } from "../../styles/theme";
 
 export interface SkeletonProps extends Omit<ViewProps, "style"> {
   width?: DimensionValue;
@@ -76,9 +76,6 @@ export const Skeleton = ({
   );
 };
 
-export default Skeleton;
-
-import type { Theme } from "../../styles/theme";
 
 const createStyles = (theme: Theme) =>
   StyleSheet.create({

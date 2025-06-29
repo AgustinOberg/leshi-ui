@@ -59,7 +59,20 @@ function main() {
       console.log('⚠️  Linting issues found, but continuing...');
     }
 
-    // Publish to npm
+    // Commit version bump
+    console.log('📝 Committing version bump...');
+    execSync(`git add cli/package.json`, { stdio: 'inherit' });
+    execSync(`git commit -m "chore: bump version to ${version}"`, { stdio: 'inherit' });
+    console.log('✅ Version bump committed');
+
+    // Create git tag BEFORE publishing
+    console.log('🏷️  Creating git tag...');
+    execSync(`git tag v${version}`, { stdio: 'inherit' });
+    execSync(`git push origin main`, { stdio: 'inherit' });
+    execSync(`git push origin v${version}`, { stdio: 'inherit' });
+    console.log('✅ Git tag created and pushed');
+
+    // Publish to npm (after tag is created)
     console.log('📦 Publishing to npm...');
     execSync('npm publish', { 
       cwd: join(__dirname, 'cli'), 
@@ -67,12 +80,6 @@ function main() {
       env: { ...process.env, NODE_ENV: 'production' }
     });
     console.log('✅ Successfully published to npm');
-
-    // Create git tag
-    console.log('🏷️  Creating git tag...');
-    execSync(`git tag v${version}`, { stdio: 'inherit' });
-    execSync(`git push origin v${version}`, { stdio: 'inherit' });
-    console.log('✅ Git tag created and pushed');
 
     console.log('');
     console.log('🎉 Release completed successfully!');

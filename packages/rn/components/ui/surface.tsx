@@ -1,6 +1,7 @@
-import { View, type ViewProps, StyleSheet } from "react-native";
 import React, { useMemo } from "react";
+import { View, type ViewProps, StyleSheet } from "react-native";
 import { useTheme } from "../../styles/theme";
+import type { Theme } from "../../styles/theme";
 
 export type SurfaceElevation = "xs" | "md" | "lg" | "xl" | "2xl" | "3xl" | "none";
 export type SurfaceVariant = "filled" | "outlined" | "default" | "secondary" | "muted" | "accent";
@@ -40,8 +41,6 @@ export const Surface = ({
     </View>
   );
 };
-
-import type { Theme } from "../../styles/theme";
 
 const createStyles = (theme: Theme) => {
   const base = StyleSheet.create({

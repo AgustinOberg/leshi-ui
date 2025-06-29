@@ -1,3 +1,4 @@
+import React from "react";
 import { View, type ViewProps } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
 import { Text, type TextProps, type TextSize, type TextVariant } from "./text";

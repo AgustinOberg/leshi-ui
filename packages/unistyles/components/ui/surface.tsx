@@ -1,5 +1,4 @@
 import { View, type ViewProps } from "react-native";
-import React from "react";
 import { StyleSheet } from "react-native-unistyles";
 
 export type SurfaceElevation = "xs" | "md" | "lg" | "xl" | "2xl" | "3xl" | "none";

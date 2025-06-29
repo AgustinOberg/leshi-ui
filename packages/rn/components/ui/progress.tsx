@@ -4,14 +4,15 @@ import {
   type ViewProps,
   type StyleProp,
   type ViewStyle,
+  StyleSheet,
 } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
-import { StyleSheet } from "react-native";
 import { useTheme } from "../../styles/theme";
+import type { Theme } from "../../styles/theme";
 
 export type ProgressSize = "sm" | "md" | "lg";
 export type ProgressVariant = "primary" | "secondary" | "destructive";
@@ -65,8 +66,6 @@ export const Progress = ({
     </View>
   );
 };
-
-import type { Theme } from "../../styles/theme";
 
 const styles = (theme: Theme) => {
   const base = StyleSheet.create({

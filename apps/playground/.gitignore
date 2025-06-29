@@ -35,5 +35,15 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
-android
-ios
+# React Native/Expo native directories (contains build artifacts)
+android/build/
+android/.gradle/
+android/app/build/
+ios/build/
+ios/Pods/
+ios/*.xcworkspace/xcuserdata/
+ios/*.xcodeproj/xcuserdata/
+
+# Keep source files but ignore build artifacts
+!android/app/src/
+!ios/demo/

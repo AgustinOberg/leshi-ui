@@ -6,6 +6,8 @@ import { Logger } from '../utils/logger.js';
 import { FileUtils } from '../utils/file-utils.js';
 import { ProjectService } from '../services/project-service.js';
 import { ComponentRegistryService } from '../services/component-registry.js';
+import { GitHubProjectService } from '../services/github-project-service.js';
+import { GitHubService } from '../services/github-service.js';
 import { colors, icons } from '../utils/colors.js';
 
 interface AddOptions {
@@ -94,6 +96,10 @@ async function addComponents(componentNames: string[], options: AddOptions): Pro
 
   Logger.title(`${icons.package} Adding components`);
   Logger.subtitle(`Framework: ${framework === 'rn' ? 'React Native StyleSheet' : 'Unistyles'}`);
+  
+  // Show which GitHub ref we're using for debugging
+  const githubRef = await GitHubService.getCurrentRef();
+  Logger.subtitle(`Source: GitHub @ ${githubRef}`);
   Logger.break();
 
   // Validate components exist
@@ -206,18 +212,23 @@ async function addComponents(componentNames: string[], options: AddOptions): Pro
       spinner.text = 'Installing components...';
     }
 
-    // Copy components
+    // Download components from GitHub
     await FileUtils.ensureDir(config.componentsDir);
     
     const installedComponents: string[] = [];
     const componentDetails: Array<{ name: string; dependencies: string[]; externalDeps: string[]; utilities?: string[] }> = [];
 
     for (const componentName of resolvedComponents) {
-      const sourcePath = ProjectService.getComponentPath(framework, componentName);
       const targetPath = FileUtils.join(config.componentsDir, `${componentName}.tsx`);
       
-      if (await FileUtils.exists(sourcePath)) {
-        await FileUtils.copy(sourcePath, targetPath, options.overwrite || false);
+      const success = await GitHubProjectService.downloadComponent(
+        framework, 
+        componentName, 
+        targetPath, 
+        options.overwrite || false
+      );
+      
+      if (success) {
         installedComponents.push(componentName);
         
         // Get component details for setup instructions
@@ -233,16 +244,18 @@ async function addComponents(componentNames: string[], options: AddOptions): Pro
       }
     }
 
-    // Copy utility files
+    // Download utility files from GitHub
     for (const detail of componentDetails) {
       if (detail.utilities) {
         for (const utilityFile of detail.utilities) {
-          const sourcePath = FileUtils.join(ProjectService.getLibPath(framework), FileUtils.basename(utilityFile));
           const targetPath = FileUtils.join(config.libDir, FileUtils.basename(utilityFile));
           
-          if (await FileUtils.exists(sourcePath)) {
-            await FileUtils.copy(sourcePath, targetPath, options.overwrite || false);
-          }
+          await GitHubProjectService.downloadUtility(
+            framework, 
+            utilityFile, 
+            targetPath, 
+            options.overwrite || false
+          );
         }
       }
     }
@@ -308,7 +321,7 @@ async function addThemes(themeNames: string[], options: AddOptions): Promise<voi
 
   // If no themes specified, show interactive selection
   if (themeNames.length === 0) {
-    const availableThemes = await ProjectService.getAvailableThemes(framework);
+    const availableThemes = await GitHubProjectService.getAvailableThemes(framework);
     
     if (availableThemes.length === 0) {
       Logger.error('No themes available');
@@ -350,13 +363,7 @@ async function addThemes(themeNames: string[], options: AddOptions): Promise<voi
     const skippedThemes: string[] = [];
 
     for (const themeName of themeNames) {
-      const sourcePath = FileUtils.join(ProjectService.getThemesPath(framework), `${themeName}.ts`);
       const targetPath = FileUtils.join(themesDir, `${themeName}.ts`);
-
-      if (!(await FileUtils.exists(sourcePath))) {
-        skippedThemes.push(themeName);
-        continue;
-      }
 
       // Check if file exists
       if (await FileUtils.exists(targetPath) && !options.overwrite && !options.yes) {
@@ -375,8 +382,18 @@ async function addThemes(themeNames: string[], options: AddOptions): Promise<voi
         }
       }
 
-      await FileUtils.copy(sourcePath, targetPath, options.overwrite || false);
-      installedThemes.push(themeName);
+      const success = await GitHubProjectService.downloadTheme(
+        framework, 
+        themeName, 
+        targetPath, 
+        options.overwrite || false
+      );
+      
+      if (success) {
+        installedThemes.push(themeName);
+      } else {
+        skippedThemes.push(themeName);
+      }
     }
 
     spinner.succeed(`Successfully added ${installedThemes.length} theme${installedThemes.length === 1 ? '' : 's'}!`);

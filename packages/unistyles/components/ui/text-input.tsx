@@ -1,3 +1,4 @@
+import { useCallback, useState } from "react";
 import {
   TextInput as RNTextInput,
   View,
@@ -5,11 +6,10 @@ import {
   type TextInputProps as RNTextInputProps,
   type TextInputFocusEventData,
 } from "react-native";
-import { useCallback, useState } from "react";
 import { StyleSheet } from "react-native-unistyles";
-import Label from "./label";
-import { Text, type TextSize } from "./text";
 import { useTheme } from "../../styles/context";
+import { Label } from "./label";
+import { Text, type TextSize } from "./text";
 
 export type TextInputSize = "sm" | "base" | "lg" | "xl";
 export type TextInputContentSize = "base" | "sm" | "lg" | "xl";
@@ -122,7 +122,6 @@ export const TextInput = ({
   );
 };
 
-export default TextInput;
 
 const styles = StyleSheet.create((theme) => ({
   container: {

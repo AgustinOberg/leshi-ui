@@ -1,7 +1,8 @@
+import React from "react";
 import { View, StyleSheet, type ViewProps } from "react-native";
 import { useTheme } from "../../styles/theme";
-import { Text, type TextProps, type TextSize, type TextVariant } from "./text";
 import type { Theme } from "../../styles/theme";
+import { Text, type TextProps, type TextSize, type TextVariant } from "./text";
 
 export type BadgeVariant = "primary" | "secondary" | "destructive" | "outline";
 const TEXT_VARIANT: Record<BadgeVariant, TextVariant> = {
