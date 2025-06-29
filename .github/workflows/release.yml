@@ -12,6 +12,16 @@ on:
         description: "Version number (e.g., 1.0.0, 1.0.0-beta.1)"
         required: true
         type: string
+      tag:
+        description: "NPM tag to publish as"
+        required: true
+        default: "latest"
+        type: choice
+        options:
+          - latest
+          - beta
+          - next
+          - dev
 
 permissions:
   contents: write
@@ -99,7 +109,7 @@ jobs:
           git push origin "v${{ inputs.version }}"
 
       - name: Publish to NPM
-        run: npm publish
+        run: npm publish --tag ${{ inputs.tag }}
         working-directory: ./cli
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -118,8 +128,8 @@ jobs:
 
             ### Installation
             ```bash
-            npx leshi-ui@latest init
-            npx leshi-ui@latest add component button
+            npx leshi-ui@${{ inputs.tag }} init
+            npx leshi-ui@${{ inputs.tag }} add component button
             ```
 
             ### Changes
@@ -135,4 +145,4 @@ jobs:
           echo "🎉 Successfully released leshi-ui@${{ inputs.version }}"
           echo "📦 NPM: https://www.npmjs.com/package/leshi-ui"
           echo "🏷️ Tag: v${{ inputs.version }}"
-          echo "🚀 Install with: npx leshi-ui@latest"
+          echo "🚀 Install with: npx leshi-ui@${{ inputs.tag }}"
