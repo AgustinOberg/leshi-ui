@@ -9,10 +9,12 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@gorhom/portal": "^1.0.14",
     "expo": "~53.0.13",
     "expo-status-bar": "~2.2.3",
     "react": "19.0.0",
-    "react-native": "0.79.4"
+    "react-native": "0.79.4",
+    "react-native-reanimated": "^3.18.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
