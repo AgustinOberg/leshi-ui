@@ -1,0 +1,80 @@
+name: Tests and TypeScript Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Test and TypeScript Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      # CLI Tests and TypeScript
+      - name: Install CLI dependencies
+        run: npm ci
+        working-directory: ./cli
+
+      - name: Run CLI TypeScript check
+        run: npx tsc --noEmit
+        working-directory: ./cli
+
+      - name: Run CLI tests
+        run: npm test
+        working-directory: ./cli
+
+      - name: Run CLI linting
+        run: npm run lint
+        working-directory: ./cli
+
+      # RN Package TypeScript
+      - name: Install RN package dependencies
+        run: npm ci
+        working-directory: ./packages/rn
+
+      - name: Run RN TypeScript check
+        run: npx tsc --noEmit
+        working-directory: ./packages/rn
+
+      - name: Run RN linting
+        run: npm run lint
+        working-directory: ./packages/rn
+
+      # Unistyles Package TypeScript  
+      - name: Install Unistyles package dependencies
+        run: npm ci
+        working-directory: ./packages/unistyles
+
+      - name: Run Unistyles TypeScript check
+        run: npx tsc --noEmit
+        working-directory: ./packages/unistyles
+
+      - name: Run Unistyles linting
+        run: npm run lint
+        working-directory: ./packages/unistyles
+
+      # Build CLI to ensure it compiles
+      - name: Build CLI
+        run: npm run build
+        working-directory: ./cli
+
+      # Test CLI functionality
+      - name: Test CLI commands
+        run: |
+          cd /tmp
+          mkdir test-cli
+          cd test-cli
+          echo '{"name": "test", "dependencies": {"react-native": "0.72.0"}}' > package.json
+          node $GITHUB_WORKSPACE/cli/dist/index.js --help
+        shell: bash
