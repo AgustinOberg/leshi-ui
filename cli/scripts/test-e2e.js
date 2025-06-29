@@ -72,7 +72,29 @@ function getAllComponents() {
   const registry = JSON.parse(readFileSync(registryPath, 'utf8'));
   const components = Object.keys(registry);
   log(`  ✅ Found ${components.length} components: ${components.join(', ')}`);
-  return components;
+  return { components, registry };
+}
+
+function installExternalDependencies(registry, components) {
+  log('📦 Installing external dependencies...', 'blue');
+  
+  const externalDeps = new Set();
+  
+  components.forEach(componentName => {
+    const component = registry[componentName];
+    if (component.externalDeps && component.externalDeps.length > 0) {
+      component.externalDeps.forEach(dep => externalDeps.add(dep));
+    }
+  });
+  
+  if (externalDeps.size > 0) {
+    const depsArray = Array.from(externalDeps);
+    log(`  📦 Installing: ${depsArray.join(', ')}`);
+    exec(`bun add ${depsArray.join(' ')}`);
+    log(`  ✅ External dependencies installed successfully`);
+  } else {
+    log(`  ✅ No external dependencies required`);
+  }
 }
 
 function installComponent(componentName) {
@@ -140,15 +162,18 @@ async function main() {
     verifyInstallation();
     
     // Step 6: Get all components from registry
-    const components = getAllComponents();
+    const { components, registry } = getAllComponents();
     
-    // Step 7: Install all components
+    // Step 7: Install external dependencies
+    installExternalDependencies(registry, components);
+    
+    // Step 8: Install all components
     log(`📦 Installing ${components.length} components...`, 'blue');
     for (const component of components) {
       installComponent(component);
     }
     
-    // Step 8: Run TypeScript check
+    // Step 9: Run TypeScript check
     runTypeScriptCheck();
     
     // Success!
