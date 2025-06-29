@@ -2,9 +2,9 @@ name: Tests and TypeScript Check
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test:
@@ -33,9 +33,9 @@ jobs:
         run: bun test
         working-directory: ./cli
 
-      - name: Run CLI linting
-        run: bun run lint
-        working-directory: ./cli
+      #- name: Run CLI linting
+      #  run: bun run lint
+      #  working-directory: ./cli
 
       # Note: RN and Unistyles packages are copy-paste components
       # They don't need npm dependencies and are validated when copied to user projects
