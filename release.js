@@ -38,13 +38,13 @@ function main() {
 
     // Build the CLI
     console.log('🔨 Building CLI...');
-    execSync('npm run build', { cwd: join(__dirname, 'cli'), stdio: 'inherit' });
+    execSync('bun run build', { cwd: join(__dirname, 'cli'), stdio: 'inherit' });
     console.log('✅ CLI build completed');
 
     // Run tests
     console.log('🧪 Running tests...');
     try {
-      execSync('npm test', { cwd: join(__dirname, 'cli'), stdio: 'inherit' });
+      execSync('bun test', { cwd: join(__dirname, 'cli'), stdio: 'inherit' });
       console.log('✅ All tests passed');
     } catch (error) {
       console.log('⚠️  Tests not configured yet, skipping...');
@@ -53,7 +53,7 @@ function main() {
     // Run linting
     console.log('🔍 Running linter...');
     try {
-      execSync('npm run lint', { cwd: join(__dirname, 'cli'), stdio: 'inherit' });
+      execSync('bun run lint', { cwd: join(__dirname, 'cli'), stdio: 'inherit' });
       console.log('✅ Linting passed');
     } catch (error) {
       console.log('⚠️  Linting issues found, but continuing...');

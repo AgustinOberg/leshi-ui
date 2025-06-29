@@ -25,11 +25,15 @@ jobs:
           ref: ${{ inputs.branch }}
           fetch-depth: 0
 
-      - name: Setup Node.js
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Setup Node.js (for npm publish)
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Validate version format
@@ -41,19 +45,19 @@ jobs:
           echo "✅ Version format is valid: ${{ inputs.version }}"
 
       - name: Install CLI dependencies
-        run: npm ci
+        run: bun install
         working-directory: ./cli
 
       - name: Run tests before release
-        run: npm test
+        run: bun test
         working-directory: ./cli
 
       - name: Run TypeScript check
-        run: npx tsc --noEmit
+        run: bunx tsc --noEmit
         working-directory: ./cli
 
       - name: Run linting
-        run: npm run lint
+        run: bun run lint
         working-directory: ./cli
 
       - name: Update package.json version
@@ -62,7 +66,7 @@ jobs:
         working-directory: ./cli
 
       - name: Build CLI
-        run: npm run build
+        run: bun run build
         working-directory: ./cli
 
       - name: Test CLI functionality
@@ -71,9 +75,8 @@ jobs:
           mkdir test-release
           cd test-release
           echo '{"name": "test", "dependencies": {"react-native": "0.72.0"}}' > package.json
-          node $GITHUB_WORKSPACE/cli/dist/index.js --help
-          node $GITHUB_WORKSPACE/cli/dist/index.js list component
-        shell: bash
+          node ${{ github.workspace }}/cli/dist/index.js --help
+          node ${{ github.workspace }}/cli/dist/index.js list component
 
       - name: Configure Git
         run: |
