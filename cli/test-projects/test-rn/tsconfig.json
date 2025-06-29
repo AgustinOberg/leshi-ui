@@ -1,0 +1,20 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "skipLibCheck": true,
+    "noImplicitAny": false,
+    "types": ["react-native", "expo"]
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "components/**/*",
+    "styles/**/*",
+    "lib/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "babel.config.js"
+  ]
+}

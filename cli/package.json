@@ -13,6 +13,7 @@
     "dev": "tsc --watch",
     "test": "jest",
     "test:coverage": "jest --coverage",
+    "test:e2e": "node scripts/test-e2e.js",
     "lint": "eslint src --ext .ts",
     "prepublishOnly": "bun run build",
     "release": "bun run build && npm publish"
