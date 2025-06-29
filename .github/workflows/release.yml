@@ -4,12 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: 'Branch to deploy from'
+        description: "Branch to deploy from"
         required: true
-        default: 'main'
+        default: "main"
         type: string
       version:
-        description: 'Version number (e.g., 1.0.0, 1.0.0-beta.1)'
+        description: "Version number (e.g., 1.0.0, 1.0.0-beta.1)"
         required: true
         type: string
 
@@ -17,7 +17,7 @@ jobs:
   release:
     name: Release to NPM
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -33,12 +33,12 @@ jobs:
       - name: Setup Node.js (for npm publish)
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: "18"
+          registry-url: "https://registry.npmjs.org"
 
       - name: Validate version format
         run: |
-          if [[ ! "${{ inputs.version }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9-]+)?$ ]]; then
+          if [[ ! "${{ inputs.version }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.-]+)?$ ]]; then
             echo "❌ Invalid version format. Use semantic versioning (e.g., 1.0.0, 1.0.0-beta.1)"
             exit 1
           fi
@@ -109,19 +109,19 @@ jobs:
           release_name: "leshi-ui v${{ inputs.version }}"
           body: |
             ## leshi-ui v${{ inputs.version }}
-            
+
             Released from branch: `${{ inputs.branch }}`
-            
+
             ### Installation
             ```bash
             npx leshi-ui@latest init
             npx leshi-ui@latest add component button
             ```
-            
+
             ### Changes
             - Version bump to ${{ inputs.version }}
             - Components downloaded from GitHub @ v${{ inputs.version }}
-            
+
             🚀 **Version pinning**: This CLI version will always download components from the exact GitHub tag `v${{ inputs.version }}`, ensuring consistency.
           draft: false
           prerelease: ${{ contains(inputs.version, '-') }}
