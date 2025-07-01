@@ -12,6 +12,7 @@ import Animated, {
   interpolateColor,
   Easing,
 } from 'react-native-reanimated';
+import { useTheme } from '../../styles/theme';
 
 interface DashConfig { width: number; gap: number; }
 
@@ -76,7 +77,7 @@ export const CircleProgress = ({
   width,
   backgroundWidth,
   fill = 0,
-  tintColor = 'black',
+  tintColor,
   tintColorSecondary,
   backgroundColor,
   rotation = 90,
@@ -91,6 +92,7 @@ export const CircleProgress = ({
   renderCap,
   ...rest
 }: CircleProgressProps) => {
+  const theme = useTheme();
   const clamped = Math.max(0, Math.min(fill, 100));
   const fillValue = useSharedValue(clamped);
   const [jsFill, setJsFill] = useState(clamped);
@@ -113,9 +115,9 @@ export const CircleProgress = ({
       ? (interpolateColor(
           fillValue.value,
           [0, 100],
-          [tintColor, tintColorSecondary],
+          [tintColor ?? theme.colors.primary, tintColorSecondary],
         ) as string)
-      : tintColor;
+      : tintColor ?? theme.colors.primary;
     return {
       d: circlePath(center, center, radius, 0, current),
       stroke,

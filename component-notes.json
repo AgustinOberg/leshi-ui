@@ -130,7 +130,7 @@
     "setup": [
       "Install external dependency: bun add react-native-svg react-native-reanimated"
     ],
-    "example": "import { CircleProgress } from './components/ui/circle-progress';\n\n<CircleProgress size={120} width={12} fill={75} tintColor='#00e0ff' backgroundColor='#3d5875' />"
+    "example": "import { CircleProgress } from './components/ui/circle-progress';\n\n<CircleProgress size={120} width={12} fill={75} />"
   },
   "switch": {
     "dependencies": [],
