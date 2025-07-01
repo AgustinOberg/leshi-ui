@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback, useMemo } from "react";
+import React, { useEffect, useRef, useCallback, useMemo } from 'react';
 import {
   View,
   Pressable,
@@ -10,13 +10,13 @@ import {
   type ViewProps,
   type ViewStyle,
   type StyleProp,
-} from "react-native";
-import { Portal, PortalProvider } from "@gorhom/portal";
-import { useTheme } from "../../styles/theme";
-import { getBackdropConfig, DEFAULT_MODAL_CONFIG } from "../../lib/modal-utils";
+} from 'react-native';
+import { Portal, PortalProvider } from '@gorhom/portal';
+import { useTheme } from '../../styles/theme';
+import { getBackdropConfig, DEFAULT_MODAL_CONFIG } from '../../lib/modal-utils';
 
-export type ModalSize = "sm" | "base" | "lg" | "xl" | "full";
-export type ModalAnimation = "fade" | "slide" | "scale" | "none";
+export type ModalSize = 'sm' | 'base' | 'lg' | 'xl' | 'full';
+export type ModalAnimation = 'fade' | 'slide' | 'scale' | 'none';
 
 export interface ModalProps extends ViewProps {
   visible: boolean;
@@ -31,21 +31,36 @@ export interface ModalProps extends ViewProps {
   children: React.ReactNode;
 }
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 const SIZE_CONFIG = {
-  sm: { width: Math.min(400, SCREEN_WIDTH * 0.9), maxHeight: SCREEN_HEIGHT * 0.6 },
-  base: { width: Math.min(500, SCREEN_WIDTH * 0.9), maxHeight: SCREEN_HEIGHT * 0.8 },
-  lg: { width: Math.min(600, SCREEN_WIDTH * 0.95), maxHeight: SCREEN_HEIGHT * 0.85 },
-  xl: { width: Math.min(800, SCREEN_WIDTH * 0.95), maxHeight: SCREEN_HEIGHT * 0.9 },
+  sm: {
+    width: Math.min(400, SCREEN_WIDTH * 0.9),
+    maxHeight: SCREEN_HEIGHT * 0.6,
+  },
+  base: {
+    width: Math.min(500, SCREEN_WIDTH * 0.9),
+    maxHeight: SCREEN_HEIGHT * 0.8,
+  },
+  lg: {
+    width: Math.min(600, SCREEN_WIDTH * 0.95),
+    maxHeight: SCREEN_HEIGHT * 0.85,
+  },
+  xl: {
+    width: Math.min(800, SCREEN_WIDTH * 0.95),
+    maxHeight: SCREEN_HEIGHT * 0.9,
+  },
   full: { width: SCREEN_WIDTH, height: SCREEN_HEIGHT },
-} as const satisfies Record<ModalSize, { width: number; height?: number; maxHeight?: number }>;
+} as const satisfies Record<
+  ModalSize,
+  { width: number; height?: number; maxHeight?: number }
+>;
 
 export const Modal: React.FC<ModalProps> = ({
   visible,
   onRequestClose,
-  animationType = "fade",
-  size = "base",
+  animationType = 'fade',
+  size = 'base',
   closeOnBackdrop = DEFAULT_MODAL_CONFIG.closeOnBackdrop,
   closeOnBackButton = DEFAULT_MODAL_CONFIG.closeOnBackButton,
   backdropOpacity,
@@ -57,7 +72,7 @@ export const Modal: React.FC<ModalProps> = ({
 }) => {
   const theme = useTheme();
   const backdropConfig = useMemo(() => getBackdropConfig(theme), [theme]);
-  
+
   // Use provided values or fall back to theme defaults
   const finalBackdropOpacity = backdropOpacity ?? backdropConfig.opacity;
   const backdropOpacityAnim = useRef(new Animated.Value(0)).current;
@@ -77,16 +92,16 @@ export const Modal: React.FC<ModalProps> = ({
     ];
 
     switch (animationType) {
-      case "fade":
+      case 'fade':
         animations.push(
           Animated.timing(contentAnim, {
             toValue: 1,
             duration: 250,
             useNativeDriver: true,
-          })
+          }),
         );
         break;
-      case "scale":
+      case 'scale':
         animations.push(
           Animated.parallel([
             Animated.timing(contentAnim, {
@@ -100,20 +115,20 @@ export const Modal: React.FC<ModalProps> = ({
               friction: 8,
               useNativeDriver: true,
             }),
-          ])
+          ]),
         );
         break;
-      case "slide":
+      case 'slide':
         animations.push(
           Animated.spring(slideAnim, {
             toValue: 0,
             tension: 100,
             friction: 8,
             useNativeDriver: true,
-          })
+          }),
         );
         break;
-      case "none":
+      case 'none':
         backdropOpacityAnim.setValue(finalBackdropOpacity);
         contentAnim.setValue(1);
         scaleAnim.setValue(1);
@@ -142,16 +157,16 @@ export const Modal: React.FC<ModalProps> = ({
       ];
 
       switch (animationType) {
-        case "fade":
+        case 'fade':
           animations.push(
             Animated.timing(contentAnim, {
               toValue: 0,
               duration: 200,
               useNativeDriver: true,
-            })
+            }),
           );
           break;
-        case "scale":
+        case 'scale':
           animations.push(
             Animated.parallel([
               Animated.timing(contentAnim, {
@@ -164,19 +179,19 @@ export const Modal: React.FC<ModalProps> = ({
                 duration: 200,
                 useNativeDriver: true,
               }),
-            ])
+            ]),
           );
           break;
-        case "slide":
+        case 'slide':
           animations.push(
             Animated.timing(slideAnim, {
               toValue: SCREEN_HEIGHT,
               duration: 250,
               useNativeDriver: true,
-            })
+            }),
           );
           break;
-        case "none":
+        case 'none':
           backdropOpacityAnim.setValue(0);
           contentAnim.setValue(0);
           scaleAnim.setValue(0.95);
@@ -187,7 +202,7 @@ export const Modal: React.FC<ModalProps> = ({
 
       Animated.parallel(animations).start(callback);
     },
-    [backdropOpacityAnim, contentAnim, scaleAnim, slideAnim, animationType]
+    [backdropOpacityAnim, contentAnim, scaleAnim, slideAnim, animationType],
   );
 
   const handleBackdropPress = useCallback(() => {
@@ -207,7 +222,10 @@ export const Modal: React.FC<ModalProps> = ({
   // Handle Android back button
   useEffect(() => {
     if (visible) {
-      const subscription = BackHandler.addEventListener("hardwareBackPress", handleBackButton);
+      const subscription = BackHandler.addEventListener(
+        'hardwareBackPress',
+        handleBackButton,
+      );
       return () => subscription.remove();
     }
     return undefined;
@@ -224,24 +242,27 @@ export const Modal: React.FC<ModalProps> = ({
       scaleAnim.setValue(0.95);
       slideAnim.setValue(SCREEN_HEIGHT);
     }
-  }, [visible, animateIn, backdropOpacityAnim, contentAnim, scaleAnim, slideAnim]);
+  }, [
+    visible,
+    animateIn,
+    backdropOpacityAnim,
+    contentAnim,
+    scaleAnim,
+    slideAnim,
+  ]);
 
   const getContentStyle = useCallback((): StyleProp<ViewStyle> => {
-    const baseStyle = [
-      styles.content,
-      sizeConfig,
-      style,
-    ];
+    const baseStyle = [styles.content, sizeConfig, style];
 
     switch (animationType) {
-      case "fade":
+      case 'fade':
         return [
           ...baseStyle,
           {
             opacity: contentAnim,
           },
         ];
-      case "scale":
+      case 'scale':
         return [
           ...baseStyle,
           {
@@ -249,7 +270,7 @@ export const Modal: React.FC<ModalProps> = ({
             transform: [{ scale: scaleAnim }],
           },
         ];
-      case "slide":
+      case 'slide':
         return [
           ...baseStyle,
           {
@@ -267,7 +288,12 @@ export const Modal: React.FC<ModalProps> = ({
 
   return (
     <Portal>
-      {statusBarTranslucent && <StatusBar translucent backgroundColor="transparent" />}
+      {statusBarTranslucent && (
+        <StatusBar
+          translucent
+          backgroundColor='transparent'
+        />
+      )}
       <View style={styles.container}>
         <Animated.View
           style={[
@@ -281,8 +307,8 @@ export const Modal: React.FC<ModalProps> = ({
         <Pressable
           style={styles.overlay}
           onPress={handleBackdropPress}
-          accessibilityRole="button"
-          accessibilityLabel="Close modal"
+          accessibilityRole='button'
+          accessibilityLabel='Close modal'
         >
           <Animated.View
             style={getContentStyle()}
@@ -298,7 +324,7 @@ export const Modal: React.FC<ModalProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
@@ -306,7 +332,7 @@ const styles = StyleSheet.create({
     zIndex: 1000,
   },
   backdrop: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
@@ -314,14 +340,14 @@ const styles = StyleSheet.create({
   },
   overlay: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 16,
   },
   content: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 12,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
 });
 
@@ -332,11 +358,11 @@ export interface ModalProviderProps {
 
 /**
  * ModalProvider - Portal provider for modals
- * 
+ *
  * Usage:
  * ```tsx
  * import { ModalProvider } from './components/ui/modal';
- * 
+ *
  * function App() {
  *   return (
  *     <ModalProvider>
@@ -351,4 +377,3 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
 };
 
 ModalProvider.displayName = 'ModalProvider';
-

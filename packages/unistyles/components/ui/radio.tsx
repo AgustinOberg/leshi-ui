@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from "react";
+import { createContext, useContext } from 'react';
 import {
   View,
   Pressable,
@@ -6,10 +6,10 @@ import {
   type PressableProps,
   type StyleProp,
   type ViewStyle,
-} from "react-native";
-import { StyleSheet } from "react-native-unistyles";
+} from 'react-native';
+import { StyleSheet } from 'react-native-unistyles';
 
-export type RadioSize = "sm" | "md" | "lg";
+export type RadioSize = 'sm' | 'md' | 'lg';
 
 interface RadioGroupContextValue {
   value: string | undefined;
@@ -21,7 +21,8 @@ const RadioGroupContext = createContext<RadioGroupContextValue | null>(null);
 
 const useRadioGroup = () => {
   const ctx = useContext(RadioGroupContext);
-  if (!ctx) throw new Error("RadioGroup primitives must be inside <RadioGroup>");
+  if (!ctx)
+    throw new Error('RadioGroup primitives must be inside <RadioGroup>');
   return ctx;
 };
 
@@ -41,7 +42,11 @@ export const RadioGroup = ({
 }: RadioGroupProps) => {
   return (
     <RadioGroupContext.Provider value={{ value, onValueChange, disabled }}>
-      <View accessibilityRole="radiogroup" style={style} {...rest}>
+      <View
+        accessibilityRole='radiogroup'
+        style={style}
+        {...rest}
+      >
         {children}
       </View>
     </RadioGroupContext.Provider>
@@ -57,7 +62,7 @@ export interface RadioGroupItemProps extends PressableProps {
 
 export const RadioGroupItem = ({
   value: itemValue,
-  size = "md",
+  size = 'md',
   disabled = false,
   style,
   ...rest
@@ -68,7 +73,7 @@ export const RadioGroupItem = ({
 
   return (
     <Pressable
-      accessibilityRole="radio"
+      accessibilityRole='radio'
       accessibilityState={{ checked, disabled: groupDisabled || disabled }}
       onPress={() => !groupDisabled && !disabled && onValueChange(itemValue)}
       style={[styles.item, style]}
@@ -82,8 +87,8 @@ export const RadioGroupItem = ({
 
 const styles = StyleSheet.create((theme) => ({
   item: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     borderWidth: 1,
     borderColor: theme.colors.border,
     borderRadius: theme.radii.full,
@@ -117,5 +122,3 @@ const styles = StyleSheet.create((theme) => ({
     },
   },
 }));
-
-

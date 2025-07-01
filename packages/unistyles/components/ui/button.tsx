@@ -1,23 +1,23 @@
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react';
 import {
   Pressable,
   type PressableProps,
   type StyleProp,
   type ViewStyle,
   ActivityIndicator,
-} from "react-native";
-import { StyleSheet } from "react-native-unistyles";
-import { Text, type TextVariant } from "./text";
+} from 'react-native';
+import { StyleSheet } from 'react-native-unistyles';
+import { Text, type TextVariant } from './text';
 
 export type ButtonVariant =
-  | "primary"
-  | "destructive"
-  | "outline"
-  | "secondary"
-  | "ghost"
-  | "link";
+  | 'primary'
+  | 'destructive'
+  | 'outline'
+  | 'secondary'
+  | 'ghost'
+  | 'link';
 
-export type ButtonSize = "base" | "sm" | "lg" | "icon";
+export type ButtonSize = 'base' | 'sm' | 'lg' | 'icon';
 
 export interface ButtonProps extends PressableProps {
   variant?: ButtonVariant;
@@ -31,17 +31,17 @@ export interface ButtonProps extends PressableProps {
 }
 
 const TEXT_VARIANT: Record<ButtonVariant, TextVariant> = {
-  primary: "primaryForeground",
-  destructive: "destructiveForeground",
-  ghost: "primary",
-  outline: "primary",
-  secondary: "secondaryForeground",
-  link: "primary",
+  primary: 'primaryForeground',
+  destructive: 'destructiveForeground',
+  ghost: 'primary',
+  outline: 'primary',
+  secondary: 'secondaryForeground',
+  link: 'primary',
 };
 
 export const Button = ({
-  variant = "primary",
-  size = "base",
+  variant = 'primary',
+  size = 'base',
   fullWidth,
   text,
   loading,
@@ -70,7 +70,7 @@ export const Button = ({
 
   return (
     <Pressable
-      accessibilityRole={rest.accessibilityRole ?? "button"}
+      accessibilityRole={rest.accessibilityRole ?? 'button'}
       accessibilityState={{ disabled: isDisabled }}
       style={(state) => [
         styles.container,
@@ -83,14 +83,17 @@ export const Button = ({
     >
       <>
         {loading && (
-          <ActivityIndicator 
-            size="small" 
+          <ActivityIndicator
+            size='small'
             color={spinnerColor}
           />
         )}
         {!loading && prefix && <>{prefix}</>}
         {text && !loading && (
-          <Text weight="medium" variant={textVariant}>
+          <Text
+            weight='medium'
+            variant={textVariant}
+          >
             {text}
           </Text>
         )}
@@ -108,18 +111,18 @@ const styles = StyleSheet.create((theme) => ({
     opacity: 0.6,
   },
   container: {
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
     gap: theme.sizes.gap(2),
     borderRadius: theme.radii.md,
     variants: {
       fullWidth: {
         true: {
-          width: "100%",
+          width: '100%',
         },
         false: {
-          width: "auto",
+          width: 'auto',
         },
       },
       variant: {

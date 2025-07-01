@@ -1,12 +1,25 @@
-import React, { useMemo } from "react";
-import { View, type ViewProps, StyleSheet } from "react-native";
-import { useTheme } from "../../styles/theme";
-import type { Theme } from "../../styles/theme";
+import { useMemo } from 'react';
+import { View, type ViewProps, StyleSheet } from 'react-native';
+import { useTheme } from '../../styles/theme';
+import type { Theme } from '../../styles/theme';
 
-export type SurfaceElevation = "xs" | "md" | "lg" | "xl" | "2xl" | "3xl" | "none";
-export type SurfaceVariant = "filled" | "outlined" | "default" | "secondary" | "muted" | "accent";
-export type SurfacePadding = "none" | "sm" | "base" | "lg" | "xl";
-export type SurfaceRadius = "none" | "sm" | "md" | "lg" | "xl" | "2xl";
+export type SurfaceElevation =
+  | 'xs'
+  | 'md'
+  | 'lg'
+  | 'xl'
+  | '2xl'
+  | '3xl'
+  | 'none';
+export type SurfaceVariant =
+  | 'filled'
+  | 'outlined'
+  | 'default'
+  | 'secondary'
+  | 'muted'
+  | 'accent';
+export type SurfacePadding = 'none' | 'sm' | 'base' | 'lg' | 'xl';
+export type SurfaceRadius = 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
 export interface SurfaceProps extends ViewProps {
   elevation?: SurfaceElevation;
@@ -16,27 +29,33 @@ export interface SurfaceProps extends ViewProps {
 }
 export const Surface = ({
   children,
-  elevation = "md",
+  elevation = 'md',
   style,
-  variant = "filled",
+  variant = 'filled',
   padding,
-  radius = "xl",
+  radius = 'xl',
   ...rest
 }: SurfaceProps) => {
   const theme = useTheme();
   const styleObj = useMemo(() => createStyles(theme), [theme]);
-  
-  const combinedStyle = useMemo(() => [
-    styleObj.container,
-    styleObj.elevation[elevation],
-    styleObj.variant[variant],
-    styleObj.radius[radius],
-    padding && styleObj.padding[padding],
-    style,
-  ], [styleObj, elevation, variant, radius, padding, style]);
+
+  const combinedStyle = useMemo(
+    () => [
+      styleObj.container,
+      styleObj.elevation[elevation],
+      styleObj.variant[variant],
+      styleObj.radius[radius],
+      padding && styleObj.padding[padding],
+      style,
+    ],
+    [styleObj, elevation, variant, radius, padding, style],
+  );
 
   return (
-    <View style={combinedStyle} {...rest}>
+    <View
+      style={combinedStyle}
+      {...rest}
+    >
       {children}
     </View>
   );
@@ -52,20 +71,20 @@ const createStyles = (theme: Theme) => {
 
   const variant = {
     filled: { backgroundColor: theme.colors.card },
-    outlined: { backgroundColor: "transparent" },
-    default: { 
+    outlined: { backgroundColor: 'transparent' },
+    default: {
       backgroundColor: theme.colors.background,
       borderColor: theme.colors.border,
     },
-    secondary: { 
+    secondary: {
       backgroundColor: theme.colors.secondary,
       borderColor: theme.colors.secondary,
     },
-    muted: { 
+    muted: {
       backgroundColor: theme.colors.muted,
       borderColor: theme.colors.border,
     },
-    accent: { 
+    accent: {
       backgroundColor: theme.colors.accent,
       borderColor: theme.colors.accent,
     },
@@ -76,8 +95,8 @@ const createStyles = (theme: Theme) => {
     md: theme.shadows.md,
     lg: theme.shadows.lg,
     xl: theme.shadows.xl,
-    "2xl": theme.shadows["2xl"],
-    "3xl": theme.shadows["3xl"],
+    '2xl': theme.shadows['2xl'],
+    '3xl': theme.shadows['3xl'],
     none: {},
   } as const;
 
@@ -95,7 +114,7 @@ const createStyles = (theme: Theme) => {
     md: { borderRadius: theme.radii.md },
     lg: { borderRadius: theme.radii.lg },
     xl: { borderRadius: theme.radii.xl },
-    "2xl": { borderRadius: theme.radii["2xl"] },
+    '2xl': { borderRadius: theme.radii['2xl'] },
   } as const;
 
   return { ...base, variant, elevation, padding, radius };

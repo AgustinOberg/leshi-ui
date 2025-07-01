@@ -239,7 +239,7 @@ npm install @gorhom/portal
 ```tsx
 // App.tsx or _layout.tsx
 import { ThemeProvider } from './styles/context';
-import { ModalProvider } from './components/ui/modal-provider';
+import { ModalProvider } from './components/ui/modal';
 
 export default function App() {
   return (

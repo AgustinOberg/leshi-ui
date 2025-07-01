@@ -1,4 +1,4 @@
-import { fonts, shadows, sizes, radii, backdrop } from "./themes/common";
+import { fonts, shadows, sizes, radii, backdrop } from './themes/common';
 
 export type Theme = {
   fonts: typeof fonts;

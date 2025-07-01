@@ -1,21 +1,21 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 import {
   View,
   type ViewProps,
   type StyleProp,
   type ViewStyle,
   StyleSheet,
-} from "react-native";
+} from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
-} from "react-native-reanimated";
-import { useTheme } from "../../styles/theme";
-import type { Theme } from "../../styles/theme";
+} from 'react-native-reanimated';
+import { useTheme } from '../../styles/theme';
+import type { Theme } from '../../styles/theme';
 
-export type ProgressSize = "sm" | "md" | "lg";
-export type ProgressVariant = "primary" | "secondary" | "destructive";
+export type ProgressSize = 'sm' | 'md' | 'lg';
+export type ProgressVariant = 'primary' | 'secondary' | 'destructive';
 
 export interface ProgressProps extends ViewProps {
   value?: number;
@@ -26,8 +26,8 @@ export interface ProgressProps extends ViewProps {
 
 export const Progress = ({
   value = 0,
-  size = "md",
-  variant = "primary",
+  size = 'md',
+  variant = 'primary',
   style,
   ...rest
 }: ProgressProps) => {
@@ -53,14 +53,14 @@ export const Progress = ({
 
   return (
     <View
-      accessibilityRole="progressbar"
+      accessibilityRole='progressbar'
       accessibilityValue={{ min: 0, max: 100, now: clamped }}
-      data-slot="progress"
+      data-slot='progress'
       style={[styleObj.track, styleObj.size[size], style]}
       {...rest}
     >
       <Animated.View
-        data-slot="progress-indicator"
+        data-slot='progress-indicator'
         style={[styleObj.indicator, animatedStyle, { backgroundColor }]}
       />
     </View>
@@ -70,12 +70,12 @@ export const Progress = ({
 const styles = (theme: Theme) => {
   const base = StyleSheet.create({
     track: {
-      width: "100%",
-      overflow: "hidden",
+      width: '100%',
+      overflow: 'hidden',
       borderRadius: theme.radii.full,
       backgroundColor: theme.colors.muted,
     },
-    indicator: { height: "100%" },
+    indicator: { height: '100%' },
   });
 
   const size = {

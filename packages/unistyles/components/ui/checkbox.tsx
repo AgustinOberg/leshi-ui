@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo } from 'react';
 import {
   Pressable,
   type PressableProps,
@@ -6,17 +6,18 @@ import {
   type StyleProp,
   type ViewStyle,
   type DimensionValue,
-} from "react-native";
-import { StyleSheet } from "react-native-unistyles";
-import { useTheme } from "../../styles/context";
-import { Icon } from "./icon";
+} from 'react-native';
+import { StyleSheet } from 'react-native-unistyles';
+import { useTheme } from '../../styles/context';
+import { Icon } from './icon';
 
 /*──────────────────── Types */
-export type CheckboxSize = "sm" | "base" | "lg";
-export type CheckboxVariant = "default" | "destructive";
-export type CheckboxState = "checked" | "unchecked" | "indeterminate";
+export type CheckboxSize = 'sm' | 'base' | 'lg';
+export type CheckboxVariant = 'default' | 'destructive';
+export type CheckboxState = 'checked' | 'unchecked' | 'indeterminate';
 
-export interface CheckboxProps extends Omit<PressableProps, "children" | "style"> {
+export interface CheckboxProps
+  extends Omit<PressableProps, 'children' | 'style'> {
   /** Current checked state */
   checked?: boolean;
   /** Default checked state for uncontrolled component */
@@ -42,182 +43,190 @@ export interface CheckboxProps extends Omit<PressableProps, "children" | "style"
   /** Unique identifier for the checkbox, useful for forms and labels */
   id?: string;
   /** Accessible name for the checkbox */
-  "aria-label"?: string;
+  'aria-label'?: string;
   /** Additional description for screen readers */
-  "aria-describedby"?: string;
+  'aria-describedby'?: string;
   /** ID of element that labels this checkbox */
-  "aria-labelledby"?: string;
+  'aria-labelledby'?: string;
 }
 
 /*──────────────────── Component */
-export const Checkbox = React.memo<CheckboxProps>(({
-  checked: checkedProp,
-  defaultChecked = false,
-  onCheckedChange,
-  size = "base",
-  variant = "default",
-  disabled = false,
-  indeterminate = false,
-  style,
-  width,
-  height,
-  testID,
-  id,
-  "aria-label": ariaLabel,
-  "aria-describedby": ariaDescribedby,
-  "aria-labelledby": ariaLabelledby,
-  onPress,
-  ...pressableProps
-}) => {
-  const theme = useTheme();
-  
-  // Handle controlled vs uncontrolled state
-  const [internalChecked, setInternalChecked] = React.useState(defaultChecked);
-  const isControlled = checkedProp !== undefined;
-  const checked = isControlled ? checkedProp : internalChecked;
-  
-  // Determine the current visual state
-  const state: CheckboxState = useMemo(() => {
-    if (indeterminate) return "indeterminate";
-    return checked ? "checked" : "unchecked";
-  }, [checked, indeterminate]);
+export const Checkbox = React.memo<CheckboxProps>(
+  ({
+    checked: checkedProp,
+    defaultChecked = false,
+    onCheckedChange,
+    size = 'base',
+    variant = 'default',
+    disabled = false,
+    indeterminate = false,
+    style,
+    width,
+    height,
+    testID,
+    id,
+    'aria-label': ariaLabel,
+    'aria-describedby': ariaDescribedby,
+    'aria-labelledby': ariaLabelledby,
+    onPress,
+    ...pressableProps
+  }) => {
+    const theme = useTheme();
 
-  // Setup Unistyles variants
-  styles.useVariants({
-    size: size as any,
-    variant: variant as any,
-    state: state as any,
-    disabled: disabled,
-  });
+    // Handle controlled vs uncontrolled state
+    const [internalChecked, setInternalChecked] =
+      React.useState(defaultChecked);
+    const isControlled = checkedProp !== undefined;
+    const checked = isControlled ? checkedProp : internalChecked;
 
-  // Handle press events
-  const handlePress = useCallback((event: any) => {
-    if (disabled) return;
-    
-    const newChecked = !checked;
-    
-    // Update internal state if uncontrolled
-    if (!isControlled) {
-      setInternalChecked(newChecked);
-    }
-    
-    // Call callbacks
-    onCheckedChange?.(newChecked);
-    onPress?.(event);
-  }, [checked, disabled, isControlled, onCheckedChange, onPress]);
+    // Determine the current visual state
+    const state: CheckboxState = useMemo(() => {
+      if (indeterminate) return 'indeterminate';
+      return checked ? 'checked' : 'unchecked';
+    }, [checked, indeterminate]);
 
-  // Memoized icon properties for performance
-  const iconConfig = useMemo(() => {
-    const iconColor = variant === "destructive" 
-      ? theme.colors.destructiveForeground 
-      : theme.colors.primaryForeground;
-    
-    const iconSize = size === "sm" ? 12 : size === "base" ? 14 : 16;
-    
-    return { color: iconColor, size: iconSize };
-  }, [variant, theme, size]);
+    // Setup Unistyles variants
+    styles.useVariants({
+      size: size as any,
+      variant: variant as any,
+      state: state as any,
+      disabled: disabled,
+    });
 
-  const renderIcon = useCallback(() => {
-    if (state === "indeterminate") {
-      return (
-        <Icon 
-          name="minus" 
-          color={iconConfig.color}
-          size={iconConfig.size}
-        />
-      );
-    }
-    
-    if (state === "checked") {
-      return (
-        <Icon 
-          name="checkbox" 
-          color={iconConfig.color}
-          size={iconConfig.size}
-        />
-      );
-    }
-    
-    return null;
-  }, [state, iconConfig]);
+    // Handle press events
+    const handlePress = useCallback(
+      (event: any) => {
+        if (disabled) return;
 
-  const containerStyle = useMemo(() => {
-    const baseStyle: StyleProp<ViewStyle>[] = [styles.container];
-    if (width) baseStyle.push({ width });
-    if (height) baseStyle.push({ height });
-    if (style) baseStyle.push(style);
-    return baseStyle;
-  }, [width, height, style]);
+        const newChecked = !checked;
 
-  // Enhanced accessibility
-  const accessibilityProps = useMemo(() => {
-    const stateDescription = indeterminate 
-      ? "partially checked" 
-      : checked 
-        ? "checked" 
-        : "unchecked";
-    
-    const baseAccessibilityLabel = ariaLabel || 
-      pressableProps.accessibilityLabel || 
-      `Checkbox, ${stateDescription}`;
-    
-    const accessibilityHint = pressableProps.accessibilityHint || 
-      disabled 
-        ? "Checkbox is disabled" 
-        : `Double tap to ${checked ? "uncheck" : "check"}`;
+        // Update internal state if uncontrolled
+        if (!isControlled) {
+          setInternalChecked(newChecked);
+        }
 
-    return {
-      accessibilityRole: "checkbox" as const,
-      accessibilityLabel: baseAccessibilityLabel,
-      accessibilityHint,
-      accessibilityState: {
-        checked: indeterminate ? "mixed" as const : checked,
-        disabled,
+        // Call callbacks
+        onCheckedChange?.(newChecked);
+        onPress?.(event);
       },
-      ...(ariaDescribedby && { accessibilityDescribedBy: ariaDescribedby }),
-      ...(ariaLabelledby && { accessibilityLabelledBy: ariaLabelledby }),
-    };
-  }, [
-    ariaLabel, 
-    ariaDescribedby, 
-    ariaLabelledby, 
-    indeterminate, 
-    checked, 
-    disabled, 
-    pressableProps.accessibilityLabel, 
-    pressableProps.accessibilityHint
-  ]);
+      [checked, disabled, isControlled, onCheckedChange, onPress],
+    );
 
-  return (
-    <Pressable
-      style={({ pressed }: PressableStateCallbackType) => [
-        ...containerStyle,
-        pressed && !disabled && styles.pressed,
-      ]}
-      onPress={handlePress}
-      disabled={disabled}
-      testID={testID || id}
-      nativeID={id}
-      {...accessibilityProps}
-      {...pressableProps}
-    >
-      {renderIcon()}
-    </Pressable>
-  );
-});
+    // Memoized icon properties for performance
+    const iconConfig = useMemo(() => {
+      const iconColor =
+        variant === 'destructive'
+          ? theme.colors.destructiveForeground
+          : theme.colors.primaryForeground;
 
-Checkbox.displayName = "Checkbox";
+      const iconSize = size === 'sm' ? 12 : size === 'base' ? 14 : 16;
+
+      return { color: iconColor, size: iconSize };
+    }, [variant, theme, size]);
+
+    const renderIcon = useCallback(() => {
+      if (state === 'indeterminate') {
+        return (
+          <Icon
+            name='minus'
+            color={iconConfig.color}
+            size={iconConfig.size}
+          />
+        );
+      }
+
+      if (state === 'checked') {
+        return (
+          <Icon
+            name='checkbox'
+            color={iconConfig.color}
+            size={iconConfig.size}
+          />
+        );
+      }
+
+      return null;
+    }, [state, iconConfig]);
+
+    const containerStyle = useMemo(() => {
+      const baseStyle: StyleProp<ViewStyle>[] = [styles.container];
+      if (width) baseStyle.push({ width });
+      if (height) baseStyle.push({ height });
+      if (style) baseStyle.push(style);
+      return baseStyle;
+    }, [width, height, style]);
+
+    // Enhanced accessibility
+    const accessibilityProps = useMemo(() => {
+      const stateDescription = indeterminate
+        ? 'partially checked'
+        : checked
+        ? 'checked'
+        : 'unchecked';
+
+      const baseAccessibilityLabel =
+        ariaLabel ||
+        pressableProps.accessibilityLabel ||
+        `Checkbox, ${stateDescription}`;
+
+      const accessibilityHint =
+        pressableProps.accessibilityHint || disabled
+          ? 'Checkbox is disabled'
+          : `Double tap to ${checked ? 'uncheck' : 'check'}`;
+
+      return {
+        accessibilityRole: 'checkbox' as const,
+        accessibilityLabel: baseAccessibilityLabel,
+        accessibilityHint,
+        accessibilityState: {
+          checked: indeterminate ? ('mixed' as const) : checked,
+          disabled,
+        },
+        ...(ariaDescribedby && { accessibilityDescribedBy: ariaDescribedby }),
+        ...(ariaLabelledby && { accessibilityLabelledBy: ariaLabelledby }),
+      };
+    }, [
+      ariaLabel,
+      ariaDescribedby,
+      ariaLabelledby,
+      indeterminate,
+      checked,
+      disabled,
+      pressableProps.accessibilityLabel,
+      pressableProps.accessibilityHint,
+    ]);
+
+    return (
+      <Pressable
+        style={({ pressed }: PressableStateCallbackType) => [
+          ...containerStyle,
+          pressed && !disabled && styles.pressed,
+        ]}
+        onPress={handlePress}
+        disabled={disabled}
+        testID={testID || id}
+        nativeID={id}
+        {...accessibilityProps}
+        {...pressableProps}
+      >
+        {renderIcon()}
+      </Pressable>
+    );
+  },
+);
+
+Checkbox.displayName = 'Checkbox';
 
 /*──────────────────── Styles */
 const styles = StyleSheet.create((theme) => ({
   container: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: theme.radii.sm,
     borderWidth: 2,
     borderColor: theme.colors.border,
     backgroundColor: theme.colors.background,
-    
+
     variants: {
       size: {
         sm: {
@@ -260,20 +269,20 @@ const styles = StyleSheet.create((theme) => ({
         false: {},
       },
     },
-    
+
     // Compound variants for destructive variant
     compoundVariants: [
       {
-        variant: "destructive",
-        state: "checked",
+        variant: 'destructive',
+        state: 'checked',
         styles: {
           backgroundColor: theme.colors.destructive,
           borderColor: theme.colors.destructive,
         },
       },
       {
-        variant: "destructive", 
-        state: "indeterminate",
+        variant: 'destructive',
+        state: 'indeterminate',
         styles: {
           backgroundColor: theme.colors.destructive,
           borderColor: theme.colors.destructive,
@@ -281,7 +290,7 @@ const styles = StyleSheet.create((theme) => ({
       },
     ],
   },
-  
+
   pressed: {
     opacity: 0.8,
     transform: [{ scale: 0.95 }],

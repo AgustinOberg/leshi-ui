@@ -42,6 +42,7 @@ Leshi UI is a **component distribution system** that brings a proven copy-paste 
 ### **Key Features**
 
 #### 🚀 **Enterprise CLI**
+
 - **Atomic Operations**: All-or-nothing file operations with automatic rollback
 - **Multi-Pass Dependency Resolution**: Automatically resolves component dependencies
 - **Framework Detection**: Auto-detects Expo, React Native, or Expo Router
@@ -49,6 +50,7 @@ Leshi UI is a **component distribution system** that brings a proven copy-paste 
 - **TypeScript Integration**: Full TypeScript support with validation
 
 #### 📦 **Component System**
+
 - **Dual Architecture**: React Native StyleSheet + Unistyles v3 variants
 - **Theme-First Design**: All components built with comprehensive theming
 - **Variant System**: Primary, secondary, outline, ghost patterns with consistent APIs
@@ -56,6 +58,7 @@ Leshi UI is a **component distribution system** that brings a proven copy-paste 
 - **Performance Optimized**: StyleSheet.create patterns, minimal re-renders
 
 #### 🎨 **Advanced Theming**
+
 - **Context-Based**: React Context with system/manual theme switching
 - **Type-Safe**: Full TypeScript theme definitions
 - **Extensible**: Easy custom theme creation and overrides
@@ -64,6 +67,7 @@ Leshi UI is a **component distribution system** that brings a proven copy-paste 
 ## 📊 Current Status (v0.0.16-beta.3)
 
 ### **Production Features**
+
 - ✅ **CLI System**: Enterprise-grade with comprehensive error handling
 - ✅ **Component Library**: 15+ production-ready components
 - ✅ **Theme System**: Complete theming with light/dark modes
@@ -73,6 +77,7 @@ Leshi UI is a **component distribution system** that brings a proven copy-paste 
 - ✅ **Documentation**: Complete developer documentation
 
 ### **Available Components**
+
 ```
 UI Components:
 ├── button (variants: primary, secondary, outline, ghost, destructive)
@@ -82,14 +87,11 @@ UI Components:
 ├── icon (with custom icon support)
 ├── avatar (with fallbacks and sizes)
 ├── badge (with variants and sizes)
-├── card (with header, content, footer)
 ├── dialog (with animations and backdrop)
 ├── progress (linear with theming)
-├── separator (horizontal/vertical)
+├── divider (horizontal/vertical)
 ├── skeleton (with animations)
-├── switch (with smooth animations)
-├── tabs (with indicator animations)
-└── toast (with queue management)
+└── switch (with smooth animations)
 
 Utilities:
 ├── theme system (context + hooks)
@@ -101,6 +103,7 @@ Utilities:
 ## 🛠️ Technology Stack
 
 ### **CLI Technology**
+
 - **Language**: TypeScript with ES modules
 - **Runtime**: Node.js 16+ (Bun recommended for development)
 - **Dependencies**: Commander, Inquirer, Chalk, Ora, fs-extra, Zod
@@ -108,6 +111,7 @@ Utilities:
 - **Build**: TypeScript compiler with asset bundling
 
 ### **Component Technology**
+
 - **React Native**: 0.72+ with modern patterns
 - **Styling**: StyleSheet.create + Unistyles v3 alternatives
 - **Theming**: React Context with TypeScript definitions
@@ -115,6 +119,7 @@ Utilities:
 - **Icons**: Lucide React Native (customizable)
 
 ### **Development Stack**
+
 - **Package Manager**: Bun (development) / npm (publishing)
 - **Linting**: ESLint with TypeScript rules
 - **Testing**: Jest (coverage) + Bun (speed)
@@ -124,6 +129,7 @@ Utilities:
 ## 🎯 Design Principles
 
 ### **1. Developer Experience First**
+
 ```bash
 # Simple, intuitive commands
 leshi-ui init                    # Setup in seconds
@@ -133,18 +139,21 @@ leshi-ui guide component button  # Built-in documentation
 ```
 
 ### **2. Performance by Default**
+
 - **Zero Runtime Overhead**: No component library bundle
 - **Optimized Patterns**: StyleSheet.create for all styling
 - **Minimal Re-renders**: Efficient theme context design
 - **Tree-Shakeable**: Only copy components you use
 
 ### **3. Enterprise Ready**
+
 - **Atomic Operations**: Bulletproof file operations
 - **Error Recovery**: Automatic rollback on failures
 - **Comprehensive Testing**: Unit + Integration + E2E
 - **Production Validation**: Real-world usage patterns
 
 ### **4. Mobile-First Design**
+
 - **Touch Targets**: Minimum 44px interactive elements
 - **Platform Conventions**: iOS/Android design guidelines
 - **Responsive**: Adaptive layouts for different screen sizes
@@ -153,6 +162,7 @@ leshi-ui guide component button  # Built-in documentation
 ## 🚀 Getting Started
 
 ### **Quick Installation**
+
 ```bash
 # Install CLI globally
 npm install -g leshi-ui
@@ -165,6 +175,7 @@ leshi-ui add component button
 ```
 
 ### **What Gets Installed**
+
 ```
 your-project/
 ├── components/ui/
@@ -181,6 +192,7 @@ your-project/
 ## 🎨 Theming System
 
 ### **Theme Structure**
+
 ```typescript
 export interface Theme {
   colors: {
@@ -198,30 +210,36 @@ export interface Theme {
     bold: string;
   };
   spacing: {
-    xs: number; sm: number; base: number;
-    lg: number; xl: number;
+    xs: number;
+    sm: number;
+    base: number;
+    lg: number;
+    xl: number;
   };
   borderRadius: {
-    sm: number; base: number; lg: number;
+    sm: number;
+    base: number;
+    lg: number;
   };
 }
 ```
 
 ### **Usage Example**
+
 ```typescript
-import { useTheme } from './components/ui/theme-provider';
+import { useTheme } from "./components/ui/theme-provider";
 
 export const MyComponent = () => {
   const theme = useTheme();
-  
+
   const styles = StyleSheet.create({
     container: {
       backgroundColor: theme.colors.card,
       padding: theme.spacing.base,
       borderRadius: theme.borderRadius.base,
-    }
+    },
   });
-  
+
   return <View style={styles.container} />;
 };
 ```
@@ -229,12 +247,14 @@ export const MyComponent = () => {
 ## 📱 Platform Support
 
 ### **React Native Platforms**
+
 - ✅ **iOS**: Native iOS styling and interactions
 - ✅ **Android**: Material Design adaptations
 - ✅ **Web**: React Native Web with responsive design
 - ✅ **Windows/macOS**: Cross-platform support available
 
 ### **Framework Support**
+
 - ✅ **Expo**: Full Expo SDK integration
 - ✅ **React Native CLI**: Bare React Native projects
 - ✅ **Expo Router**: File-based routing support
@@ -242,19 +262,20 @@ export const MyComponent = () => {
 
 ## 🔄 Comparison with Alternatives
 
-| Feature | Leshi UI | NativeBase | React Native Elements | Tamagui |
-|---------|----------|------------|---------------------|----------|
-| **Ownership** | ✅ Copy & Own | ❌ Dependency | ❌ Dependency | ❌ Dependency |
-| **Bundle Size** | ✅ Zero runtime | ❌ Large bundle | ❌ Large bundle | ⚠️ Medium |
-| **Customization** | ✅ Full control | ⚠️ Limited | ⚠️ Limited | ✅ High |
-| **TypeScript** | ✅ 100% coverage | ✅ Good | ⚠️ Partial | ✅ Excellent |
-| **Performance** | ✅ Optimal | ⚠️ Good | ⚠️ Good | ✅ Excellent |
-| **Learning Curve** | ✅ Minimal | ❌ Steep | ✅ Easy | ❌ Steep |
-| **Maintenance** | ✅ Self-maintained | ❌ External dep | ❌ External dep | ❌ External dep |
+| Feature            | Leshi UI           | NativeBase      | React Native Elements | Tamagui         |
+| ------------------ | ------------------ | --------------- | --------------------- | --------------- |
+| **Ownership**      | ✅ Copy & Own      | ❌ Dependency   | ❌ Dependency         | ❌ Dependency   |
+| **Bundle Size**    | ✅ Zero runtime    | ❌ Large bundle | ❌ Large bundle       | ⚠️ Medium       |
+| **Customization**  | ✅ Full control    | ⚠️ Limited      | ⚠️ Limited            | ✅ High         |
+| **TypeScript**     | ✅ 100% coverage   | ✅ Good         | ⚠️ Partial            | ✅ Excellent    |
+| **Performance**    | ✅ Optimal         | ⚠️ Good         | ⚠️ Good               | ✅ Excellent    |
+| **Learning Curve** | ✅ Minimal         | ❌ Steep        | ✅ Easy               | ❌ Steep        |
+| **Maintenance**    | ✅ Self-maintained | ❌ External dep | ❌ External dep       | ❌ External dep |
 
 ## 🎯 Use Cases
 
 ### **Perfect For:**
+
 - 🏢 **Enterprise Applications**: Full control and customization
 - 🚀 **Startups**: Rapid prototyping with production-ready code
 - 👩‍💻 **Freelancers**: Consistent component library across projects
@@ -262,6 +283,7 @@ export const MyComponent = () => {
 - 📱 **Cross-Platform Apps**: Unified component system
 
 ### **Not Ideal For:**
+
 - 🏃‍♂️ **Quick Prototypes**: Use if you plan to customize heavily
 - 👶 **Learning Projects**: May be overkill for simple learning apps
 - 🔒 **Locked Ecosystems**: If you prefer dependency-managed libraries

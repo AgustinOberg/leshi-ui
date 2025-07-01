@@ -1,20 +1,20 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState } from 'react';
 import {
   TextInput as RNTextInput,
   View,
   type NativeSyntheticEvent,
   type TextInputProps as RNTextInputProps,
   type TextInputFocusEventData,
-} from "react-native";
-import { StyleSheet } from "react-native-unistyles";
-import { useTheme } from "../../styles/context";
-import { Label } from "./label";
-import { Text, type TextSize } from "./text";
+} from 'react-native';
+import { StyleSheet } from 'react-native-unistyles';
+import { useTheme } from '../../styles/context';
+import { Label } from './label';
+import { Text, type TextSize } from './text';
 
-export type TextAreaSize = "sm" | "base" | "lg" | "xl";
-export type TextAreaVariant = "destructive" | "default";
+export type TextAreaSize = 'sm' | 'base' | 'lg' | 'xl';
+export type TextAreaVariant = 'destructive' | 'default';
 export type TextAreaRows = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
-export type TextAreaResize = "none" | "vertical" | "horizontal" | "both";
+export type TextAreaResize = 'none' | 'vertical' | 'horizontal' | 'both';
 
 export interface TextAreaProps extends Omit<RNTextInputProps, 'multiline'> {
   error?: string;
@@ -30,10 +30,10 @@ export interface TextAreaProps extends Omit<RNTextInputProps, 'multiline'> {
 }
 
 export const LABEL_SIZE: Record<TextAreaSize, TextSize> = {
-  sm: "sm",
-  base: "sm", 
-  lg: "lg",
-  xl: "xl",
+  sm: 'sm',
+  base: 'sm',
+  lg: 'lg',
+  xl: 'xl',
 };
 
 export const TextArea = ({
@@ -43,10 +43,10 @@ export const TextArea = ({
   labelSize,
   onBlur,
   onFocus,
-  size = "base",
-  variant = "default",
+  size = 'base',
+  variant = 'default',
   rows = 4,
-  resize = "vertical",
+  resize = 'vertical',
   maxLength,
   showCharacterCount = false,
   value,
@@ -74,7 +74,7 @@ export const TextArea = ({
       setIsFocused(true);
       onFocus?.(e);
     },
-    [onFocus]
+    [onFocus],
   );
 
   const handleBlur = useCallback(
@@ -82,13 +82,16 @@ export const TextArea = ({
       setIsFocused(false);
       onBlur?.(e);
     },
-    [onBlur]
+    [onBlur],
   );
 
   return (
     <View style={styles.container}>
       {label && (
-        <Label size={labelSize ?? LABEL_SIZE[size]} error={!!error}>
+        <Label
+          size={labelSize ?? LABEL_SIZE[size]}
+          error={!!error}
+        >
           {label}
         </Label>
       )}
@@ -99,7 +102,7 @@ export const TextArea = ({
           style={styles.textArea}
           multiline
           numberOfLines={rows}
-          textAlignVertical="top"
+          textAlignVertical='top'
           onFocus={handleFocus}
           onBlur={handleBlur}
           placeholderTextColor={theme.colors.mutedForeground}
@@ -116,19 +119,29 @@ export const TextArea = ({
 
       <View style={styles.footer}>
         {description && (
-          <Text variant="mutedForeground" size="sm">
+          <Text
+            variant='mutedForeground'
+            size='sm'
+          >
             {description}
           </Text>
         )}
         {error && (
-          <Text variant="destructive" size="sm">
+          <Text
+            variant='destructive'
+            size='sm'
+          >
             {error}
           </Text>
         )}
         {showCharacterCount && maxLength && (
-          <Text 
-            variant={characterCount > maxLength * 0.9 ? "destructive" : "mutedForeground"} 
-            size="sm"
+          <Text
+            variant={
+              characterCount > maxLength * 0.9
+                ? 'destructive'
+                : 'mutedForeground'
+            }
+            size='sm'
             style={styles.characterCount}
           >
             {characterCount}/{maxLength}
@@ -139,11 +152,10 @@ export const TextArea = ({
   );
 };
 
-
 const styles = StyleSheet.create((theme) => ({
   container: {
     gap: theme.sizes.gap(1),
-    width: "100%",
+    width: '100%',
     variants: {
       disabled: {
         true: {
@@ -221,7 +233,7 @@ const styles = StyleSheet.create((theme) => ({
     fontSize: theme.sizes.fonts.base,
     minHeight: 0,
     includeFontPadding: false,
-    textAlignVertical: "top",
+    textAlignVertical: 'top',
 
     variants: {
       rows: {
@@ -240,13 +252,13 @@ const styles = StyleSheet.create((theme) => ({
   },
 
   footer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     gap: theme.sizes.gap(2),
   },
 
   characterCount: {
-    marginLeft: "auto",
+    marginLeft: 'auto',
   },
 }));

@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import { View, type ViewProps, type DimensionValue } from "react-native";
-import { StyleSheet } from "react-native-unistyles";
+import { useEffect } from 'react';
+import { View, type ViewProps, type DimensionValue } from 'react-native';
+import { StyleSheet } from 'react-native-unistyles';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -8,18 +8,18 @@ import Animated, {
   withTiming,
   Easing,
   interpolate,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
-export interface SkeletonProps extends Omit<ViewProps, "style"> {
+export interface SkeletonProps extends Omit<ViewProps, 'style'> {
   width?: DimensionValue;
   height?: DimensionValue;
   borderRadius?: number;
-  style?: ViewProps["style"];
+  style?: ViewProps['style'];
   animated?: boolean;
 }
 
 export const Skeleton = ({
-  width = "100%",
+  width = '100%',
   height = 20,
   borderRadius,
   style,
@@ -36,7 +36,7 @@ export const Skeleton = ({
           easing: Easing.inOut(Easing.ease),
         }),
         -1,
-        false
+        false,
       );
     }
   }, [animated, shimmerValue]);
@@ -53,7 +53,7 @@ export const Skeleton = ({
     };
   }, [animated]);
 
-  const defaultBorderRadius = typeof height === "number" ? height / 4 : 4;
+  const defaultBorderRadius = typeof height === 'number' ? height / 4 : 4;
 
   return (
     <Animated.View
@@ -71,7 +71,6 @@ export const Skeleton = ({
     />
   );
 };
-
 
 const styles = StyleSheet.create((theme) => ({
   skeleton: {

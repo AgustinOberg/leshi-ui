@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
 ```typescript
 // 1. Check ModalProvider is set up
 // App.tsx
-import { ModalProvider } from './components/ui/modal-provider';
+import { ModalProvider } from './components/ui/modal';
 
 export default function App() {
   return (

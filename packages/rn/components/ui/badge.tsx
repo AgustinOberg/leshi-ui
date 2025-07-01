@@ -1,15 +1,15 @@
-import React from "react";
-import { View, StyleSheet, type ViewProps } from "react-native";
-import { useTheme } from "../../styles/theme";
-import type { Theme } from "../../styles/theme";
-import { Text, type TextProps, type TextSize, type TextVariant } from "./text";
+import React from 'react';
+import { View, StyleSheet, type ViewProps } from 'react-native';
+import { useTheme } from '../../styles/theme';
+import type { Theme } from '../../styles/theme';
+import { Text, type TextProps, type TextSize, type TextVariant } from './text';
 
-export type BadgeVariant = "primary" | "secondary" | "destructive" | "outline";
+export type BadgeVariant = 'primary' | 'secondary' | 'destructive' | 'outline';
 const TEXT_VARIANT: Record<BadgeVariant, TextVariant> = {
-  primary: "primaryForeground",
-  secondary: "secondaryForeground",
-  destructive: "destructiveForeground",
-  outline: "foreground",
+  primary: 'primaryForeground',
+  secondary: 'secondaryForeground',
+  destructive: 'destructiveForeground',
+  outline: 'foreground',
 };
 export interface BadgeProps extends ViewProps {
   variant?: BadgeVariant;
@@ -20,12 +20,12 @@ export interface BadgeProps extends ViewProps {
 }
 export const Badge = ({
   children,
-  size = "xs",
+  size = 'xs',
   style,
   textOptions,
   prefix,
   suffix,
-  variant = "primary",
+  variant = 'primary',
 }: BadgeProps) => {
   const theme = useTheme();
   const variantStyle = styles(theme).variant[variant];
@@ -36,7 +36,7 @@ export const Badge = ({
         variant={textOptions?.variant ?? TEXT_VARIANT[variant]}
         {...textOptions}
         size={size}
-        weight={textOptions?.weight ?? "medium"}
+        weight={textOptions?.weight ?? 'medium'}
       >
         {children}
       </Text>
@@ -48,35 +48,35 @@ export const Badge = ({
 const styles = (theme: Theme) => {
   const base = StyleSheet.create({
     container: {
-      alignItems: "center",
-      justifyContent: "center",
+      alignItems: 'center',
+      justifyContent: 'center',
       borderRadius: theme.radii.md,
       borderWidth: 1,
       gap: theme.sizes.gap(0.5),
-      flexDirection: "row",
+      flexDirection: 'row',
       paddingHorizontal: theme.sizes.padding(2),
       paddingVertical: theme.sizes.padding(0.5),
-      alignSelf: "flex-start",
+      alignSelf: 'flex-start',
       flexShrink: 0,
     },
   });
 
   const variant = {
     primary: {
-      borderColor: "transparent",
+      borderColor: 'transparent',
       backgroundColor: theme.colors.primary,
     },
     secondary: {
-      borderColor: "transparent",
+      borderColor: 'transparent',
       backgroundColor: theme.colors.secondary,
     },
     destructive: {
-      borderColor: "transparent",
+      borderColor: 'transparent',
       backgroundColor: theme.colors.destructive,
     },
     outline: {
       borderColor: theme.colors.border,
-      backgroundColor: "transparent",
+      backgroundColor: 'transparent',
     },
   } as const;
 

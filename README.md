@@ -275,7 +275,7 @@ function ThemedComponent() {
 ```tsx
 // App.tsx or _layout.tsx
 import { ThemeProvider } from './styles/context';
-import { ModalProvider } from './components/ui/modal-provider';
+import { ModalProvider } from './components/ui/modal';
 
 export default function App() {
   return (
@@ -361,6 +361,16 @@ MIT License - see [LICENSE](LICENSE) for details.
 **Built with ❤️ by [Agustin Oberg](https://www.linkedin.com/in/oberg-agustin)**
 
 Bringing excellent developer experience to React Native development.
+
+---
+
+**☕ Support the project**
+
+If Leshi UI has been helpful for your projects, consider supporting the development:
+
+[![Cafecito](https://img.shields.io/badge/☕_Support_on-Cafecito-orange?style=for-the-badge)](https://cafecito.app/agustin-oberg)
+
+Your support helps maintain and improve this project! 🚀
 
 ---
 

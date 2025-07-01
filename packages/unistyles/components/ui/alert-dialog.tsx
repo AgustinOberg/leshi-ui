@@ -5,7 +5,7 @@ import React, {
   useMemo,
   useState,
   type ReactNode,
-} from "react";
+} from 'react';
 import {
   Pressable,
   View,
@@ -14,16 +14,16 @@ import {
   type StyleProp,
   type TextStyle,
   type GestureResponderEvent,
-} from "react-native";
-import { StyleSheet } from "react-native-unistyles";
-import { Modal, type ModalProps, type ModalSize } from "./modal";
-import { Text, type TextProps } from "./text";
-import { Button, type ButtonProps } from "./button";
-import { Pressable as SlotPressable } from "./slot";
-import { useTheme } from "../../styles/context";
+} from 'react-native';
+import { StyleSheet } from 'react-native-unistyles';
+import { Modal, type ModalProps, type ModalSize } from './modal';
+import { Text, type TextProps } from './text';
+import { Button, type ButtonProps } from './button';
+import { Pressable as SlotPressable } from './slot';
+import { useTheme } from '../../styles/context';
 
 /*──────────────────── Types */
-export type AlertDialogVariant = "destructive" | "warning" | "default";
+export type AlertDialogVariant = 'destructive' | 'warning' | 'default';
 
 /*──────────────────── Context */
 interface AlertDialogContextValue {
@@ -39,7 +39,10 @@ const AlertDialogContext = createContext<AlertDialogContextValue | null>(null);
 
 const useAlertDialog = () => {
   const ctx = useContext(AlertDialogContext);
-  if (!ctx) throw new Error("AlertDialog components must be used within <AlertDialog.Root>");
+  if (!ctx)
+    throw new Error(
+      'AlertDialog components must be used within <AlertDialog.Root>',
+    );
   return ctx;
 };
 
@@ -60,14 +63,14 @@ function AlertDialogRoot({
   onOpenChange,
   children,
   unmountOnClose = false,
-  size = "sm",
-  variant = "default",
+  size = 'sm',
+  variant = 'default',
 }: AlertDialogRootProps) {
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
   const [loading, setLoading] = useState(false);
-  
+
   const open = controlledOpen ?? uncontrolledOpen;
-  
+
   const setOpen = useCallback(
     (v: boolean) => {
       if (controlledOpen === undefined) {
@@ -75,12 +78,12 @@ function AlertDialogRoot({
       }
       onOpenChange?.(v);
     },
-    [controlledOpen, onOpenChange]
+    [controlledOpen, onOpenChange],
   );
 
   const value = useMemo(
     () => ({ open, setOpen, size, variant, loading, setLoading }),
-    [open, setOpen, size, variant, loading, setLoading]
+    [open, setOpen, size, variant, loading, setLoading],
   );
 
   if (unmountOnClose && !open) {
@@ -100,9 +103,14 @@ interface AlertDialogTriggerProps extends PressableProps {
   asChild?: boolean;
 }
 
-function AlertDialogTrigger({ children, onPress, asChild, ...rest }: AlertDialogTriggerProps) {
+function AlertDialogTrigger({
+  children,
+  onPress,
+  asChild,
+  ...rest
+}: AlertDialogTriggerProps) {
   const { setOpen, loading } = useAlertDialog();
-  
+
   const handlePress = useCallback(
     (e: GestureResponderEvent) => {
       if (loading) return;
@@ -111,26 +119,36 @@ function AlertDialogTrigger({ children, onPress, asChild, ...rest }: AlertDialog
         setOpen(true);
       }
     },
-    [onPress, setOpen, loading]
+    [onPress, setOpen, loading],
   );
 
   if (asChild && React.isValidElement(children)) {
     return (
-      <SlotPressable {...rest} onPress={handlePress} disabled={loading}>
+      <SlotPressable
+        {...rest}
+        onPress={handlePress}
+        disabled={loading}
+      >
         {children}
       </SlotPressable>
     );
   }
 
   return (
-    <Pressable onPress={handlePress} disabled={loading} {...rest}>
+    <Pressable
+      onPress={handlePress}
+      disabled={loading}
+      {...rest}
+    >
       {children}
     </Pressable>
   );
 }
 
 /*──────────────────── Content */
-interface AlertDialogContentProps extends Omit<ViewProps, 'children'>, Omit<ModalProps, 'visible' | 'size' | 'children'> {
+interface AlertDialogContentProps
+  extends Omit<ViewProps, 'children'>,
+    Omit<ModalProps, 'visible' | 'size' | 'children'> {
   children?: React.ReactNode;
 }
 
@@ -138,14 +156,15 @@ function AlertDialogContent({
   children,
   style,
   statusBarTranslucent = true,
-  animationType = "scale",
+  animationType = 'scale',
   closeOnBackdrop = false, // AlertDialog should not close on backdrop by default
   closeOnBackButton = false, // AlertDialog should not close on back button by default
   ...rest
 }: AlertDialogContentProps) {
-  const { open, setOpen, size, variant, loading, setLoading } = useAlertDialog();
+  const { open, setOpen, size, variant, loading, setLoading } =
+    useAlertDialog();
   const theme = useTheme();
-  
+
   styles.useVariants({ variant: variant as any });
 
   const handleRequestClose = useCallback(() => {
@@ -170,7 +189,9 @@ function AlertDialogContent({
       style={[styles.content, style]}
       {...rest}
     >
-      <AlertDialogContext.Provider value={{ open, setOpen, size, variant, loading, setLoading }}>
+      <AlertDialogContext.Provider
+        value={{ open, setOpen, size, variant, loading, setLoading }}
+      >
         {children}
       </AlertDialogContext.Provider>
     </Modal>
@@ -179,24 +200,29 @@ function AlertDialogContent({
 
 /*──────────────────── Header */
 function AlertDialogHeader({ style, ...rest }: ViewProps) {
-  return <View style={[styles.header, style]} {...rest} />;
+  return (
+    <View
+      style={[styles.header, style]}
+      {...rest}
+    />
+  );
 }
 
 /*──────────────────── Footer */
 interface AlertDialogFooterProps extends ViewProps {
-  orientation?: "horizontal" | "vertical";
+  orientation?: 'horizontal' | 'vertical';
 }
 
-function AlertDialogFooter({ 
-  orientation = "horizontal", 
-  style, 
-  ...rest 
+function AlertDialogFooter({
+  orientation = 'horizontal',
+  style,
+  ...rest
 }: AlertDialogFooterProps) {
   return (
     <View
       style={[
         styles.footer,
-        orientation === "vertical" && styles.footerVertical,
+        orientation === 'vertical' && styles.footerVertical,
         style,
       ]}
       {...rest}
@@ -211,18 +237,18 @@ interface AlertDialogTitleProps extends TextProps {
 
 const AlertDialogTitle: React.FC<AlertDialogTitleProps> = ({
   children,
-  size = "lg",
-  weight = "semibold",
-  variant = "foreground",
+  size = 'lg',
+  weight = 'semibold',
+  variant = 'foreground',
   style,
   ...textProps
 }) => (
-  <Text 
-    size={size} 
-    weight={weight} 
+  <Text
+    size={size}
+    weight={weight}
     variant={variant}
     style={style}
-    accessibilityRole="header"
+    accessibilityRole='header'
     {...textProps}
   >
     {children}
@@ -236,14 +262,14 @@ interface AlertDialogDescriptionProps extends TextProps {
 
 const AlertDialogDescription: React.FC<AlertDialogDescriptionProps> = ({
   children,
-  variant = "mutedForeground",
-  size = "base",
+  variant = 'mutedForeground',
+  size = 'base',
   style,
   ...textProps
 }) => (
-  <Text 
-    variant={variant} 
-    size={size} 
+  <Text
+    variant={variant}
+    size={size}
     style={style}
     {...textProps}
   >
@@ -264,23 +290,28 @@ function AlertDialogAction({
   asChild,
   children,
   closeOnPress = true,
-  text = "Continue",
+  text = 'Continue',
   variant: buttonVariant,
   loading: buttonLoading,
   disabled,
   ...buttonProps
 }: AlertDialogActionProps) {
-  const { setOpen, variant: dialogVariant, loading: dialogLoading, setLoading } = useAlertDialog();
-  
+  const {
+    setOpen,
+    variant: dialogVariant,
+    loading: dialogLoading,
+    setLoading,
+  } = useAlertDialog();
+
   // Determine button variant based on alert dialog variant
   const defaultVariant = useMemo(() => {
     switch (dialogVariant) {
-      case "destructive":
-        return "destructive";
-      case "warning":
-        return "primary";
+      case 'destructive':
+        return 'destructive';
+      case 'warning':
+        return 'primary';
       default:
-        return "primary";
+        return 'primary';
     }
   }, [dialogVariant]);
 
@@ -296,7 +327,7 @@ function AlertDialogAction({
         if (onPress) {
           setLoading(true);
           const result = onPress(e);
-          
+
           // Handle async functions
           if (result instanceof Promise) {
             await result;
@@ -307,29 +338,28 @@ function AlertDialogAction({
           setOpen(false);
         }
       } catch (error) {
-        console.error("AlertDialog.Action error:", error);
+        console.error('AlertDialog.Action error:', error);
       } finally {
         setLoading(false);
       }
     },
-    [onPress, closeOnPress, setOpen, setLoading, isDisabled]
+    [onPress, closeOnPress, setOpen, setLoading, isDisabled],
   );
 
   if (asChild) {
     if (!React.isValidElement(children)) {
-      throw new Error("AlertDialog.Action with asChild requires a single React element as child");
+      throw new Error(
+        'AlertDialog.Action with asChild requires a single React element as child',
+      );
     }
 
     const childElement = children as React.ReactElement<ButtonProps>;
-    return React.cloneElement(
-      childElement,
-      {
-        ...buttonProps,
-        disabled: isDisabled,
-        loading: isLoading,
-        onPress: handlePress,
-      }
-    );
+    return React.cloneElement(childElement, {
+      ...buttonProps,
+      disabled: isDisabled,
+      loading: isLoading,
+      onPress: handlePress,
+    });
   }
 
   return (
@@ -357,14 +387,14 @@ function AlertDialogCancel({
   asChild,
   children,
   closeOnPress = true,
-  text = "Cancel",
-  variant = "outline",
+  text = 'Cancel',
+  variant = 'outline',
   loading: buttonLoading,
   disabled,
   ...buttonProps
 }: AlertDialogCancelProps) {
   const { setOpen, loading: dialogLoading } = useAlertDialog();
-  
+
   const isLoading = buttonLoading ?? dialogLoading;
   const isDisabled = disabled || isLoading;
 
@@ -375,7 +405,7 @@ function AlertDialogCancel({
       try {
         if (onPress) {
           const result = onPress(e);
-          
+
           // Handle async functions
           if (result instanceof Promise) {
             await result;
@@ -386,27 +416,26 @@ function AlertDialogCancel({
           setOpen(false);
         }
       } catch (error) {
-        console.error("AlertDialog.Cancel error:", error);
+        console.error('AlertDialog.Cancel error:', error);
       }
     },
-    [onPress, closeOnPress, setOpen, isDisabled]
+    [onPress, closeOnPress, setOpen, isDisabled],
   );
 
   if (asChild) {
     if (!React.isValidElement(children)) {
-      throw new Error("AlertDialog.Cancel with asChild requires a single React element as child");
+      throw new Error(
+        'AlertDialog.Cancel with asChild requires a single React element as child',
+      );
     }
 
     const childElement = children as React.ReactElement<ButtonProps>;
-    return React.cloneElement(
-      childElement,
-      {
-        ...buttonProps,
-        disabled: isDisabled,
-        loading: isLoading,
-        onPress: handlePress,
-      }
-    );
+    return React.cloneElement(childElement, {
+      ...buttonProps,
+      disabled: isDisabled,
+      loading: isLoading,
+      onPress: handlePress,
+    });
   }
 
   return (
@@ -431,7 +460,7 @@ const styles = StyleSheet.create((theme) => ({
     ...theme.shadows.xl,
     borderWidth: 1,
     borderColor: theme.colors.border,
-    
+
     variants: {
       variant: {
         default: {
@@ -452,14 +481,14 @@ const styles = StyleSheet.create((theme) => ({
     gap: theme.sizes.gap(2),
   },
   footer: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
     gap: theme.sizes.gap(2),
     marginTop: theme.sizes.gap(2),
   },
   footerVertical: {
-    flexDirection: "column-reverse",
-    alignItems: "stretch",
+    flexDirection: 'column-reverse',
+    alignItems: 'stretch',
   },
 }));
 
@@ -476,7 +505,7 @@ export const AlertDialog = {
   Cancel: AlertDialogCancel,
 };
 
-export type { 
+export type {
   AlertDialogTriggerProps,
   AlertDialogContentProps,
   AlertDialogFooterProps,

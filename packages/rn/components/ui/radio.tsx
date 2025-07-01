@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from "react";
+import { createContext, useContext } from 'react';
 import {
   View,
   Pressable,
@@ -7,11 +7,11 @@ import {
   type StyleProp,
   type ViewStyle,
   StyleSheet,
-} from "react-native";
-import { useTheme } from "../../styles/theme";
-import type { Theme } from "../../styles/theme";
+} from 'react-native';
+import { useTheme } from '../../styles/theme';
+import type { Theme } from '../../styles/theme';
 
-export type RadioSize = "sm" | "md" | "lg";
+export type RadioSize = 'sm' | 'md' | 'lg';
 
 interface RadioGroupContextValue {
   value: string | undefined;
@@ -23,7 +23,8 @@ const RadioGroupContext = createContext<RadioGroupContextValue | null>(null);
 
 const useRadioGroup = () => {
   const ctx = useContext(RadioGroupContext);
-  if (!ctx) throw new Error("RadioGroup primitives must be inside <RadioGroup>");
+  if (!ctx)
+    throw new Error('RadioGroup primitives must be inside <RadioGroup>');
   return ctx;
 };
 
@@ -43,7 +44,11 @@ export const RadioGroup = ({
 }: RadioGroupProps) => {
   return (
     <RadioGroupContext.Provider value={{ value, onValueChange, disabled }}>
-      <View accessibilityRole="radiogroup" style={style} {...rest}>
+      <View
+        accessibilityRole='radiogroup'
+        style={style}
+        {...rest}
+      >
         {children}
       </View>
     </RadioGroupContext.Provider>
@@ -59,7 +64,7 @@ export interface RadioGroupItemProps extends PressableProps {
 
 export const RadioGroupItem = ({
   value: itemValue,
-  size = "md",
+  size = 'md',
   disabled = false,
   style,
   ...rest
@@ -72,7 +77,7 @@ export const RadioGroupItem = ({
 
   return (
     <Pressable
-      accessibilityRole="radio"
+      accessibilityRole='radio'
       accessibilityState={{ checked, disabled: groupDisabled || disabled }}
       onPress={() => !groupDisabled && !disabled && onValueChange(itemValue)}
       style={[
@@ -85,7 +90,9 @@ export const RadioGroupItem = ({
       disabled={groupDisabled || disabled}
       {...rest}
     >
-      {checked && <View style={[stylesObj.indicator, stylesObj.indicatorSize[size]]} />}
+      {checked && (
+        <View style={[stylesObj.indicator, stylesObj.indicatorSize[size]]} />
+      )}
     </Pressable>
   );
 };
@@ -93,8 +100,8 @@ export const RadioGroupItem = ({
 const styles = (theme: Theme) => {
   const base = StyleSheet.create({
     container: {
-      alignItems: "center",
-      justifyContent: "center",
+      alignItems: 'center',
+      justifyContent: 'center',
       borderWidth: 1,
       borderColor: theme.colors.border,
       borderRadius: theme.radii.full,
@@ -126,5 +133,3 @@ const styles = (theme: Theme) => {
 
   return { ...base, size, indicatorSize };
 };
-
-

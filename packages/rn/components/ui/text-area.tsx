@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo } from "react";
+import { useCallback, useState, useMemo } from 'react';
 import {
   TextInput as RNTextInput,
   View,
@@ -6,15 +6,15 @@ import {
   type TextInputProps as RNTextInputProps,
   type TextInputFocusEventData,
   StyleSheet,
-} from "react-native";
-import { useTheme } from "../../styles/theme";
-import type { Theme } from "../../styles/theme";
-import { Label } from "./label";
-import { Text, type TextSize } from "./text";
+} from 'react-native';
+import { useTheme } from '../../styles/theme';
+import type { Theme } from '../../styles/theme';
+import { Label } from './label';
+import { Text, type TextSize } from './text';
 
-export type TextAreaSize = "sm" | "base" | "lg" | "xl";
-export type TextAreaVariant = "default" | "destructive";
-export type TextAreaResize = "none" | "vertical" | "horizontal" | "both";
+export type TextAreaSize = 'sm' | 'base' | 'lg' | 'xl';
+export type TextAreaVariant = 'default' | 'destructive';
+export type TextAreaResize = 'none' | 'vertical' | 'horizontal' | 'both';
 
 export interface TextAreaProps extends Omit<RNTextInputProps, 'multiline'> {
   error?: string;
@@ -30,10 +30,10 @@ export interface TextAreaProps extends Omit<RNTextInputProps, 'multiline'> {
 }
 
 export const LABEL_SIZE: Record<TextAreaSize, TextSize> = {
-  sm: "sm",
-  base: "sm", 
-  lg: "lg",
-  xl: "xl",
+  sm: 'sm',
+  base: 'sm',
+  lg: 'lg',
+  xl: 'xl',
 };
 
 export const TextArea = ({
@@ -43,10 +43,10 @@ export const TextArea = ({
   labelSize,
   onBlur,
   onFocus,
-  size = "base",
-  variant = "default",
+  size = 'base',
+  variant = 'default',
   rows = 4,
-  resize = "vertical",
+  resize = 'vertical',
   maxLength,
   showCharacterCount = false,
   value,
@@ -55,26 +55,52 @@ export const TextArea = ({
   const [isFocused, setIsFocused] = useState(false);
   const theme = useTheme();
   const styleObj = useMemo(() => createStyles(theme), [theme]);
-  
+
   const isDisabled = rest.editable === false;
   const isReadOnly = rest.readOnly;
   const characterCount = value?.length || 0;
 
-  const containerStyle = useMemo(() => [
-    styleObj.container,
-    isDisabled && styleObj.disabled.true,
-    isReadOnly && styleObj.readOnly.true,
-  ], [styleObj.container, styleObj.disabled.true, styleObj.readOnly.true, isDisabled, isReadOnly]);
+  const containerStyle = useMemo(
+    () => [
+      styleObj.container,
+      isDisabled && styleObj.disabled.true,
+      isReadOnly && styleObj.readOnly.true,
+    ],
+    [
+      styleObj.container,
+      styleObj.disabled.true,
+      styleObj.readOnly.true,
+      isDisabled,
+      isReadOnly,
+    ],
+  );
 
-  const textAreaWrapperStyle = useMemo(() => [
-    styleObj.textAreaWrapper,
-    styleObj.size[size],
-    styleObj.variant[variant],
-    isFocused && styleObj.isFocused.true,
-    error && styleObj.error.true,
-    isDisabled && styleObj.textAreaWrapperDisabled.true,
-    isReadOnly && styleObj.textAreaWrapperReadOnly.true,
-  ], [styleObj.textAreaWrapper, styleObj.size, styleObj.variant, styleObj.isFocused.true, styleObj.error.true, styleObj.textAreaWrapperDisabled.true, styleObj.textAreaWrapperReadOnly.true, size, variant, isFocused, error, isDisabled, isReadOnly]);
+  const textAreaWrapperStyle = useMemo(
+    () => [
+      styleObj.textAreaWrapper,
+      styleObj.size[size],
+      styleObj.variant[variant],
+      isFocused && styleObj.isFocused.true,
+      error && styleObj.error.true,
+      isDisabled && styleObj.textAreaWrapperDisabled.true,
+      isReadOnly && styleObj.textAreaWrapperReadOnly.true,
+    ],
+    [
+      styleObj.textAreaWrapper,
+      styleObj.size,
+      styleObj.variant,
+      styleObj.isFocused.true,
+      styleObj.error.true,
+      styleObj.textAreaWrapperDisabled.true,
+      styleObj.textAreaWrapperReadOnly.true,
+      size,
+      variant,
+      isFocused,
+      error,
+      isDisabled,
+      isReadOnly,
+    ],
+  );
 
   const textAreaStyle = useMemo(() => {
     const rowCount = Math.min(rows, 10) as keyof typeof styleObj.rows;
@@ -89,7 +115,7 @@ export const TextArea = ({
       setIsFocused(true);
       onFocus?.(e);
     },
-    [onFocus]
+    [onFocus],
   );
 
   const handleBlur = useCallback(
@@ -97,13 +123,16 @@ export const TextArea = ({
       setIsFocused(false);
       onBlur?.(e);
     },
-    [onBlur]
+    [onBlur],
   );
 
   return (
     <View style={containerStyle}>
       {label && (
-        <Label size={labelSize ?? LABEL_SIZE[size]} error={!!error}>
+        <Label
+          size={labelSize ?? LABEL_SIZE[size]}
+          error={!!error}
+        >
           {label}
         </Label>
       )}
@@ -114,7 +143,7 @@ export const TextArea = ({
           style={textAreaStyle}
           multiline
           numberOfLines={rows}
-          textAlignVertical="top"
+          textAlignVertical='top'
           onFocus={handleFocus}
           onBlur={handleBlur}
           placeholderTextColor={theme.colors.mutedForeground}
@@ -131,19 +160,29 @@ export const TextArea = ({
 
       <View style={styleObj.footer}>
         {description && (
-          <Text variant="mutedForeground" size="sm">
+          <Text
+            variant='mutedForeground'
+            size='sm'
+          >
             {description}
           </Text>
         )}
         {error && (
-          <Text variant="destructive" size="sm">
+          <Text
+            variant='destructive'
+            size='sm'
+          >
             {error}
           </Text>
         )}
         {showCharacterCount && maxLength && (
-          <Text 
-            variant={characterCount > maxLength * 0.9 ? "destructive" : "mutedForeground"} 
-            size="sm"
+          <Text
+            variant={
+              characterCount > maxLength * 0.9
+                ? 'destructive'
+                : 'mutedForeground'
+            }
+            size='sm'
             style={styleObj.characterCount}
           >
             {characterCount}/{maxLength}
@@ -154,12 +193,11 @@ export const TextArea = ({
   );
 };
 
-
 const createStyles = (theme: Theme) => {
   const base = StyleSheet.create({
     container: {
       gap: theme.sizes.gap(1),
-      width: "100%",
+      width: '100%',
     },
     textAreaWrapper: {
       borderWidth: 1,
@@ -177,16 +215,16 @@ const createStyles = (theme: Theme) => {
       fontSize: theme.sizes.fonts.base,
       minHeight: 0,
       includeFontPadding: false,
-      textAlignVertical: "top",
+      textAlignVertical: 'top',
     },
     footer: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
       gap: theme.sizes.gap(2),
     },
     characterCount: {
-      marginLeft: "auto",
+      marginLeft: 'auto',
     },
   });
 
@@ -199,7 +237,7 @@ const createStyles = (theme: Theme) => {
   } as const;
 
   const textAreaWrapperDisabled = {
-    true: { 
+    true: {
       backgroundColor: theme.colors.muted,
       borderColor: theme.colors.border,
     },
@@ -212,19 +250,19 @@ const createStyles = (theme: Theme) => {
   } as const;
 
   const size = {
-    sm: { 
+    sm: {
       paddingHorizontal: theme.sizes.padding(2),
       paddingVertical: theme.sizes.padding(1),
     },
-    base: { 
+    base: {
       paddingHorizontal: theme.sizes.padding(3),
       paddingVertical: theme.sizes.padding(2),
     },
-    lg: { 
+    lg: {
       paddingHorizontal: theme.sizes.padding(4),
       paddingVertical: theme.sizes.padding(3),
     },
-    xl: { 
+    xl: {
       paddingHorizontal: theme.sizes.padding(5),
       paddingVertical: theme.sizes.padding(4),
     },
@@ -258,16 +296,16 @@ const createStyles = (theme: Theme) => {
     10: { minHeight: theme.sizes.height(60) },
   } as const;
 
-  return { 
-    ...base, 
-    disabled, 
-    readOnly, 
-    textAreaWrapperDisabled, 
-    textAreaWrapperReadOnly, 
-    size, 
-    variant, 
-    isFocused, 
+  return {
+    ...base,
+    disabled,
+    readOnly,
+    textAreaWrapperDisabled,
+    textAreaWrapperReadOnly,
+    size,
+    variant,
+    isFocused,
     error,
-    rows
+    rows,
   };
 };
