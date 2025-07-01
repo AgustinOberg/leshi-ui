@@ -13,6 +13,7 @@ const componentScreens = [
   { name: "Dialog", href: "/components/Dialog" },
   { name: "Modal", href: "/components/Modal" },
   { name: "Progress", href: "/components/Progress" },
+  { name: "CircleProgress", href: "/components/CircleProgress" },
   { name: "Skeleton", href: "/components/Skeleton" },
   { name: "Surface", href: "/components/Surface" },
   { name: "Switch", href: "/components/Switch" },
