@@ -58,7 +58,8 @@
     "url": "https://github.com/AgustinOberg/leshi-ui/issues"
   },
   "files": [
-    "dist/**/*"
+    "dist/**/*",
+    "README.md"
   ],
   "dependencies": {
     "commander": "^11.1.0",
