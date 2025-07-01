@@ -44,6 +44,10 @@ const App = () => {
         options={{ title: "Progress" }}
       />
       <Stack.Screen
+        name="components/CircleProgress"
+        options={{ title: "Circle Progress" }}
+      />
+      <Stack.Screen
         name="components/Skeleton"
         options={{ title: "Skeleton" }}
       />

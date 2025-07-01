@@ -23,7 +23,7 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false,
-    "types": [],
+    "typeRoots": ["./@types"],
     "baseUrl": "./",
     "paths": {
       "@/*": ["./*"]

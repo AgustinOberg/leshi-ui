@@ -124,6 +124,14 @@
     ],
     "example": "import { Progress } from './components/ui/progress';\n\n<Progress value={60} max={100} />\n<Progress value={progress} variant=\"success\" />"
   },
+  "circle-progress": {
+    "dependencies": [],
+    "externalDeps": ["react-native-svg", "react-native-reanimated"],
+    "setup": [
+      "Install external dependency: bun add react-native-svg react-native-reanimated"
+    ],
+    "example": "import { CircleProgress } from './components/ui/circle-progress';\n\n<CircleProgress size={120} width={12} fill={75} tintColor='#00e0ff' backgroundColor='#3d5875' />"
+  },
   "switch": {
     "dependencies": [],
     "externalDeps": ["react-native-reanimated"],

@@ -7,6 +7,7 @@ export { Checkbox } from './components/ui/checkbox';
 export { Dialog } from './components/ui/dialog';
 export { Modal, ModalProvider } from './components/ui/modal';
 export { Progress } from './components/ui/progress';
+export { CircleProgress, AnimatedCircleProgress } from './components/ui/circle-progress';
 export { Skeleton } from './components/ui/skeleton';
 export { Spinner } from './components/ui/spinner';
 export { Divider } from './components/ui/divider';

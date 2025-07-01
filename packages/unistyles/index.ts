@@ -14,6 +14,7 @@ export { Checkbox } from "./components/ui/checkbox";
 export { Dialog } from "./components/ui/dialog";
 export { Modal, ModalProvider } from "./components/ui/modal";
 export { Progress } from "./components/ui/progress";
+export { CircleProgress, AnimatedCircleProgress } from "./components/ui/circle-progress";
 export { Divider } from "./components/ui/divider";
 export { Surface } from "./components/ui/surface";
 export { Switch } from "./components/ui/switch";
