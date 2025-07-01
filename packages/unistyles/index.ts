@@ -18,6 +18,7 @@ export { Progress } from "./components/ui/progress";
 export { Divider } from "./components/ui/divider";
 export { Surface } from "./components/ui/surface";
 export { Switch } from "./components/ui/switch";
+export { Toggle } from "./components/ui/toggle";
 export { RadioGroup, RadioGroupItem } from "./components/ui/radio";
 export { Text } from "./components/ui/text";
 export { TextArea } from "./components/ui/text-area";

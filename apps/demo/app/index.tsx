@@ -21,6 +21,7 @@ const componentScreens = [
   { name: "Skeleton", href: "/components/Skeleton" },
   { name: "Surface", href: "/components/Surface" },
   { name: "Switch", href: "/components/Switch" },
+  { name: "Toggle", href: "/components/Toggle" },
   { name: "Text", href: "/components/Text" },
   { name: "TextArea", href: "/components/TextArea" },
   { name: "TextInput", href: "/components/TextInput" },
