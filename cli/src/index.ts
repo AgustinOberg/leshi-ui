@@ -24,7 +24,7 @@ const program = new Command();
 
 program
   .name('leshi-ui')
-  .description('A shadcn-inspired CLI for React Native UI components')
+  .description('Professional CLI for React Native UI components')
   .version('1.0.0');
 
 // ASCII Art Banner with cute cat

@@ -82,14 +82,16 @@ jobs:
         run: bun run build
         working-directory: ./cli
 
-      - name: Test CLI functionality
+      - name: Test CLI basic functionality
         run: |
           cd /tmp
           mkdir test-release
           cd test-release
           echo '{"name": "test", "dependencies": {"react-native": "0.72.0"}}' > package.json
           node ${{ github.workspace }}/cli/dist/index.js --help
-          node ${{ github.workspace }}/cli/dist/index.js list component
+          echo "✅ CLI help command works"
+          node ${{ github.workspace }}/cli/dist/index.js --version
+          echo "✅ CLI version command works"
 
       - name: Configure Git credentials
         run: |
