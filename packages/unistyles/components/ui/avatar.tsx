@@ -4,7 +4,7 @@ import {
   useMemo,
   useState,
   type ReactNode,
-} from "react";
+} from 'react';
 import {
   View,
   Image,
@@ -15,12 +15,12 @@ import {
   type NativeSyntheticEvent,
   type ImageLoadEventData,
   type ImageErrorEventData,
-} from "react-native";
-import { StyleSheet } from "react-native-unistyles";
-import { useTheme } from "../../styles/context";
-import { Text } from "./text";
+} from 'react-native';
+import { StyleSheet } from 'react-native-unistyles';
+import { useTheme } from '../../styles/context';
+import { Text } from './text';
 
-export type AvatarSize = "sm" | "md" | "lg" | "xl";
+export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
 
 // TODO: use "w" function here instead of hardcoded pixel values
 const PX: Record<AvatarSize, number> = {
@@ -39,7 +39,7 @@ const AvatarCtx = createContext<Ctx | null>(null);
 
 const useAvatar = () => {
   const ctx = useContext(AvatarCtx);
-  if (!ctx) throw new Error("Avatar primitives must be inside <Avatar>");
+  if (!ctx) throw new Error('Avatar primitives must be inside <Avatar>');
   return ctx;
 };
 
@@ -49,28 +49,31 @@ export interface AvatarProps {
   children: ReactNode;
 }
 
-export const Avatar = ({ size = "md", style, children }: AvatarProps) => {
+export const Avatar = ({ size = 'md', style, children }: AvatarProps) => {
   const dim = PX[size];
   const [hasImage, setHasImage] = useState(false);
 
   const value = useMemo<Ctx>(
     () => ({ dim, hasImage, setHasImage }),
-    [dim, hasImage]
+    [dim, hasImage],
   );
 
   styles.useVariants({ size });
 
   return (
     <AvatarCtx.Provider value={value}>
-      <View data-slot="avatar" style={[styles.container, style]}>
+      <View
+        data-slot='avatar'
+        style={[styles.container, style]}
+      >
         {children}
       </View>
     </AvatarCtx.Provider>
   );
 };
 
-export interface AvatarImageProps extends Omit<ImageProps, "style" | "source"> {
-  source: ImageProps["source"];
+export interface AvatarImageProps extends Omit<ImageProps, 'style' | 'source'> {
+  source: ImageProps['source'];
   style?: StyleProp<ImageStyle>;
   alt?: string;
 }
@@ -78,7 +81,7 @@ export interface AvatarImageProps extends Omit<ImageProps, "style" | "source"> {
 export const AvatarImage = ({
   source,
   style,
-  alt = "avatar",
+  alt = 'avatar',
   onLoad,
   onError,
   ...rest
@@ -103,7 +106,7 @@ export const AvatarImage = ({
       source={source}
       onLoad={handleLoad}
       onError={handleError}
-      resizeMode="cover"
+      resizeMode='cover'
       style={[
         {
           width: dim,
@@ -128,16 +131,16 @@ export const AvatarFallback = ({ children, style }: AvatarFallbackProps) => {
   if (hasImage) return null;
 
   const initials =
-    typeof children === "string" ? children.slice(0, 2).toUpperCase() : null;
+    typeof children === 'string' ? children.slice(0, 2).toUpperCase() : null;
 
   return (
     <View
-      data-slot="avatar-fallback"
+      data-slot='avatar-fallback'
       style={[styles.fallback, { backgroundColor: theme.colors.muted }, style]}
     >
       {initials ? (
         <Text
-          weight="semibold"
+          weight='semibold'
           style={{ fontSize: dim * 0.3, lineHeight: dim }}
         >
           {initials}
@@ -151,9 +154,9 @@ export const AvatarFallback = ({ children, style }: AvatarFallbackProps) => {
 
 const styles = StyleSheet.create((theme) => ({
   container: {
-    overflow: "hidden",
-    alignItems: "center",
-    justifyContent: "center",
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
     aspectRatio: 1,
     borderRadius: theme.radii.full,
     variants: {
@@ -167,8 +170,8 @@ const styles = StyleSheet.create((theme) => ({
   },
   fallback: {
     ...StyleSheet.absoluteFillObject,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: theme.radii.full,
   },
 }));

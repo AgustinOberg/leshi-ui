@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react';
 import {
   Pressable,
   type PressableProps,
@@ -6,20 +6,20 @@ import {
   type ViewStyle,
   ActivityIndicator,
   StyleSheet,
-} from "react-native";
-import { useTheme } from "../../styles/theme";
-import type { Theme } from "../../styles/theme";
-import { Text, type TextVariant } from "./text";
+} from 'react-native';
+import { useTheme } from '../../styles/theme';
+import type { Theme } from '../../styles/theme';
+import { Text, type TextVariant } from './text';
 
 export type ButtonVariant =
-  | "primary"
-  | "destructive"
-  | "outline"
-  | "secondary"
-  | "ghost"
-  | "link";
+  | 'primary'
+  | 'destructive'
+  | 'outline'
+  | 'secondary'
+  | 'ghost'
+  | 'link';
 
-export type ButtonSize = "base" | "sm" | "lg" | "icon";
+export type ButtonSize = 'base' | 'sm' | 'lg' | 'icon';
 
 export interface ButtonProps extends PressableProps {
   variant?: ButtonVariant;
@@ -33,17 +33,17 @@ export interface ButtonProps extends PressableProps {
 }
 
 const TEXT_VARIANT: Record<ButtonVariant, TextVariant> = {
-  primary: "primaryForeground",
-  destructive: "destructiveForeground",
-  ghost: "primary",
-  outline: "primary",
-  secondary: "secondaryForeground",
-  link: "primary",
+  primary: 'primaryForeground',
+  destructive: 'destructiveForeground',
+  ghost: 'primary',
+  outline: 'primary',
+  secondary: 'secondaryForeground',
+  link: 'primary',
 };
 
 export const Button = ({
-  variant = "primary",
-  size = "base",
+  variant = 'primary',
+  size = 'base',
   fullWidth,
   text,
   loading,
@@ -55,12 +55,14 @@ export const Button = ({
 }: ButtonProps) => {
   const theme = useTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
-  
+
   const combinedStyle = useMemo(() => {
     const containerVariant = styles.variant[variant];
     const sizeStyle = styles.size[size];
-    const fullWidthStyle = fullWidth ? styles.fullWidth.true : styles.fullWidth.false;
-    
+    const fullWidthStyle = fullWidth
+      ? styles.fullWidth.true
+      : styles.fullWidth.false;
+
     return (state: { pressed: boolean }) => {
       const styleArray: StyleProp<ViewStyle>[] = [
         styles.container,
@@ -98,7 +100,7 @@ export const Button = ({
 
   return (
     <Pressable
-      accessibilityRole={rest.accessibilityRole ?? "button"}
+      accessibilityRole={rest.accessibilityRole ?? 'button'}
       accessibilityState={{ disabled: isDisabled }}
       style={combinedStyle}
       disabled={isDisabled}
@@ -106,14 +108,17 @@ export const Button = ({
     >
       <>
         {loading && (
-          <ActivityIndicator 
-            size="small" 
-            color={spinnerColor} 
+          <ActivityIndicator
+            size='small'
+            color={spinnerColor}
           />
         )}
         {!loading && prefix && <>{prefix}</>}
         {text && !loading && (
-          <Text weight="medium" variant={textVariant}>
+          <Text
+            weight='medium'
+            variant={textVariant}
+          >
             {text}
           </Text>
         )}
@@ -128,25 +133,25 @@ const createStyles = (theme: Theme) => {
     pressed: { opacity: 0.8 },
     disabled: { opacity: 0.6 },
     container: {
-      alignItems: "center",
-      justifyContent: "center",
-      flexDirection: "row",
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexDirection: 'row',
       gap: theme.sizes.gap(2),
       borderRadius: theme.radii.md,
     },
   });
 
   const fullWidth = {
-    true: { width: "100%" } as const,
-    false: { width: "auto" } as const,
+    true: { width: '100%' } as const,
+    false: { width: 'auto' } as const,
   };
 
   const variant = StyleSheet.create({
-    primary: { 
+    primary: {
       backgroundColor: theme.colors.primary,
       ...theme.shadows.xs,
     },
-    secondary: { 
+    secondary: {
       backgroundColor: theme.colors.secondary,
       ...theme.shadows.xs,
     },
@@ -156,8 +161,8 @@ const createStyles = (theme: Theme) => {
       backgroundColor: theme.colors.background,
       ...theme.shadows.xs,
     },
-    ghost: { 
-      backgroundColor: 'transparent'
+    ghost: {
+      backgroundColor: 'transparent',
     },
     destructive: {
       backgroundColor: theme.colors.destructive,
@@ -200,10 +205,10 @@ const createStyles = (theme: Theme) => {
     },
   });
 
-  return { 
-    ...baseStyles, 
-    variant, 
-    size, 
-    fullWidth 
+  return {
+    ...baseStyles,
+    variant,
+    size,
+    fullWidth,
   };
 };

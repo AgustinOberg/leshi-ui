@@ -1,4 +1,4 @@
-import { useCallback, useState, useMemo } from "react";
+import React, { useCallback, useState, useMemo } from 'react';
 import {
   TextInput as RNTextInput,
   View,
@@ -6,15 +6,15 @@ import {
   type TextInputProps as RNTextInputProps,
   type TextInputFocusEventData,
   StyleSheet,
-} from "react-native";
-import { useTheme } from "../../styles/theme";
-import type { Theme } from "../../styles/theme";
-import { Label } from "./label";
-import { Text, type TextSize } from "./text";
+} from 'react-native';
+import { useTheme } from '../../styles/theme';
+import type { Theme } from '../../styles/theme';
+import { Label } from './label';
+import { Text, type TextSize } from './text';
 
-export type TextInputSize = "sm" | "base" | "lg" | "xl";
-export type TextInputContentSize = "base" | "sm" | "lg" | "xl";
-export type TextInputVariant = "default" | "destructive";
+export type TextInputSize = 'sm' | 'base' | 'lg' | 'xl';
+export type TextInputContentSize = 'base' | 'sm' | 'lg' | 'xl';
+export type TextInputVariant = 'default' | 'destructive';
 
 export interface TextInputProps extends RNTextInputProps {
   error?: string;
@@ -29,10 +29,10 @@ export interface TextInputProps extends RNTextInputProps {
 }
 
 export const LABEL_SIZE: Record<TextInputSize, TextSize> = {
-  sm: "sm",
-  base: "sm",
-  lg: "lg",
-  xl: "xl",
+  sm: 'sm',
+  base: 'sm',
+  lg: 'lg',
+  xl: 'xl',
 };
 
 export const TextInput = ({
@@ -43,10 +43,10 @@ export const TextInput = ({
   onBlur,
   onFocus,
   prefix,
-  size = "base",
-  variant = "default",
+  size = 'base',
+  variant = 'default',
   suffix,
-  textSize = "base",
+  textSize = 'base',
   ...rest
 }: TextInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -58,7 +58,7 @@ export const TextInput = ({
       setIsFocused(true);
       onFocus?.(e);
     },
-    [onFocus]
+    [onFocus],
   );
 
   const handleBlur = useCallback(
@@ -66,37 +66,66 @@ export const TextInput = ({
       setIsFocused(false);
       onBlur?.(e);
     },
-    [onBlur]
+    [onBlur],
   );
 
   const isDisabled = rest.editable === false;
   const isReadOnly = rest.readOnly;
 
-  const containerStyle = useMemo(() => [
-    styleObj.container,
-    isDisabled && styleObj.disabled.true,
-    isReadOnly && styleObj.readOnly.true,
-  ], [styleObj.container, styleObj.disabled.true, styleObj.readOnly.true, isDisabled, isReadOnly]);
+  const containerStyle = useMemo(
+    () => [
+      styleObj.container,
+      isDisabled && styleObj.disabled.true,
+      isReadOnly && styleObj.readOnly.true,
+    ],
+    [
+      styleObj.container,
+      styleObj.disabled.true,
+      styleObj.readOnly.true,
+      isDisabled,
+      isReadOnly,
+    ],
+  );
 
-  const inputWrapperStyle = useMemo(() => [
-    styleObj.inputWrapper,
-    styleObj.size[size],
-    styleObj.variant[variant],
-    isFocused && styleObj.isFocused.true,
-    error && styleObj.error.true,
-    isDisabled && styleObj.inputWrapperDisabled.true,
-    isReadOnly && styleObj.inputWrapperReadOnly.true,
-  ], [styleObj.inputWrapper, styleObj.size, styleObj.variant, styleObj.isFocused.true, styleObj.error.true, styleObj.inputWrapperDisabled.true, styleObj.inputWrapperReadOnly.true, size, variant, isFocused, error, isDisabled, isReadOnly]);
+  const inputWrapperStyle = useMemo(
+    () => [
+      styleObj.inputWrapper,
+      styleObj.size[size],
+      styleObj.variant[variant],
+      isFocused && styleObj.isFocused.true,
+      error && styleObj.error.true,
+      isDisabled && styleObj.inputWrapperDisabled.true,
+      isReadOnly && styleObj.inputWrapperReadOnly.true,
+    ],
+    [
+      styleObj.inputWrapper,
+      styleObj.size,
+      styleObj.variant,
+      styleObj.isFocused.true,
+      styleObj.error.true,
+      styleObj.inputWrapperDisabled.true,
+      styleObj.inputWrapperReadOnly.true,
+      size,
+      variant,
+      isFocused,
+      error,
+      isDisabled,
+      isReadOnly,
+    ],
+  );
 
-  const inputStyle = useMemo(() => [
-    styleObj.input,
-    styleObj.textSize[textSize]
-  ], [styleObj.input, styleObj.textSize, textSize]);
+  const inputStyle = useMemo(
+    () => [styleObj.input, styleObj.textSize[textSize]],
+    [styleObj.input, styleObj.textSize, textSize],
+  );
 
   return (
     <View style={containerStyle}>
       {label && (
-        <Label size={labelSize ?? LABEL_SIZE[size]} error={!!error}>
+        <Label
+          size={labelSize ?? LABEL_SIZE[size]}
+          error={!!error}
+        >
           {label}
         </Label>
       )}
@@ -107,7 +136,7 @@ export const TextInput = ({
         <RNTextInput
           {...rest}
           style={inputStyle}
-          verticalAlign="middle"
+          verticalAlign='middle'
           onFocus={handleFocus}
           onBlur={handleBlur}
           placeholderTextColor={theme.colors.mutedForeground}
@@ -122,12 +151,18 @@ export const TextInput = ({
         {suffix && <View style={styleObj.affix}>{suffix}</View>}
       </View>
       {description && (
-        <Text variant="mutedForeground" size="sm">
+        <Text
+          variant='mutedForeground'
+          size='sm'
+        >
           {description}
         </Text>
       )}
       {error && (
-        <Text variant="destructive" size="sm">
+        <Text
+          variant='destructive'
+          size='sm'
+        >
           {error}
         </Text>
       )}
@@ -135,16 +170,15 @@ export const TextInput = ({
   );
 };
 
-
 const styles = (theme: Theme) => {
   const base = StyleSheet.create({
     container: {
       gap: theme.sizes.gap(1),
-      width: "100%",
+      width: '100%',
     },
     inputWrapper: {
-      flexDirection: "row",
-      alignItems: "center",
+      flexDirection: 'row',
+      alignItems: 'center',
       borderWidth: 1,
       borderColor: theme.colors.border,
       borderRadius: theme.radii.md,
@@ -159,12 +193,12 @@ const styles = (theme: Theme) => {
       minHeight: 0,
       paddingVertical: 0,
       includeFontPadding: false,
-      textAlignVertical: "center",
+      textAlignVertical: 'center',
     },
     affix: {
       minWidth: theme.sizes.height(5),
-      alignItems: "center",
-      justifyContent: "center",
+      alignItems: 'center',
+      justifyContent: 'center',
       gap: theme.sizes.gap(1),
     },
   });
@@ -178,7 +212,7 @@ const styles = (theme: Theme) => {
   } as const;
 
   const inputWrapperDisabled = {
-    true: { 
+    true: {
       backgroundColor: theme.colors.muted,
       borderColor: theme.colors.border,
     },
@@ -219,5 +253,16 @@ const styles = (theme: Theme) => {
     xl: { fontSize: theme.sizes.fonts.xl },
   } as const;
 
-  return { ...base, disabled, readOnly, inputWrapperDisabled, inputWrapperReadOnly, size, variant, isFocused, error, textSize };
+  return {
+    ...base,
+    disabled,
+    readOnly,
+    inputWrapperDisabled,
+    inputWrapperReadOnly,
+    size,
+    variant,
+    isFocused,
+    error,
+    textSize,
+  };
 };

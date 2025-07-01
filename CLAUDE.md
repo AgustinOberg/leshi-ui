@@ -146,7 +146,7 @@ modal: {
   dependencies: ['@gorhom/portal'],           // External npm packages
   registryDependencies: [],                   // Other components
   utilities: ['lib/modal-utils.ts'],          // Utility files
-  providers: ['components/ui/modal-provider.tsx'], // Provider components
+  providers: [], // Provider components (ModalProvider is now part of modal.tsx)
   setup: [
     'Install external dependency: bun add @gorhom/portal',
     'Wrap your app with ModalProvider in _layout.tsx'

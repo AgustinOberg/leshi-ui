@@ -5,6 +5,7 @@ Complete reference for the Leshi UI CLI - your command-line companion for managi
 ## 🚀 Installation & Setup
 
 ### **Global Installation**
+
 ```bash
 # Install globally
 npm install -g leshi-ui
@@ -18,6 +19,7 @@ leshi-ui --help
 ```
 
 ### **npx Usage (No Installation)**
+
 ```bash
 # Use without installing
 npx leshi-ui init
@@ -36,11 +38,13 @@ leshi-ui init [options]
 ```
 
 #### **Options**
+
 - `--unistyles` - Initialize with Unistyles v3 support
 - `--yes, -y` - Skip interactive prompts (use defaults)
 - `--help, -h` - Show help for init command
 
 #### **Examples**
+
 ```bash
 # Interactive setup (recommended)
 leshi-ui init
@@ -56,6 +60,7 @@ leshi-ui init --unistyles --yes
 ```
 
 #### **What It Does**
+
 ```
 ✅ Detects project framework (Expo, React Native CLI, Expo Router)
 ✅ Creates leshi-ui.json configuration file
@@ -76,10 +81,12 @@ leshi-ui add <type> <name> [options]
 ```
 
 #### **Types**
+
 - `component` - Add UI components
 - `theme` - Add theme configurations
 
 #### **Options**
+
 - `--unistyles` - Use Unistyles variant instead of StyleSheet
 - `--overwrite` - Overwrite existing files without prompting
 - `--yes, -y` - Skip confirmation prompts
@@ -89,6 +96,7 @@ leshi-ui add <type> <name> [options]
 #### **Examples**
 
 **Single Component:**
+
 ```bash
 # Add a button component
 leshi-ui add component button
@@ -104,6 +112,7 @@ leshi-ui add component button --yes --silent
 ```
 
 **Multiple Components:**
+
 ```bash
 # Add multiple components
 leshi-ui add component button text input card
@@ -114,17 +123,16 @@ leshi-ui add component
 ```
 
 **Advanced Usage:**
+
 ```bash
 # Add complex component with dependencies
 leshi-ui add component modal
 # Automatically resolves: text → icon → button → modal-utils → modal
 
-# Add component with provider dependencies
-leshi-ui add component toast
-# Installs component + toast-provider + setup instructions
 ```
 
 #### **Dependency Resolution**
+
 The CLI automatically resolves and installs component dependencies:
 
 ```
@@ -153,16 +161,19 @@ leshi-ui list <type> [options]
 ```
 
 #### **Types**
+
 - `component` - List available components
 - `theme` - List available themes
 
 #### **Options**
+
 - `--installed` - Show only installed components
 - `--available` - Show only available (not installed) components
 - `--json` - Output in JSON format
 - `--help, -h` - Show help for list command
 
 #### **Examples**
+
 ```bash
 # List all available components
 leshi-ui list component
@@ -178,14 +189,14 @@ leshi-ui list component --json
 ```
 
 #### **Sample Output**
+
 ```
 Available Components:
 
 🟦 UI Components
 • avatar      Profile picture with fallback support
-• badge       Status indicators and labels  
+• badge       Status indicators and labels
 • button      Interactive button with variants
-• card        Content container with header/footer
 • dialog      Modal dialog with backdrop
 • input       Text input with validation
 • modal       Full-screen modal with animations
@@ -195,7 +206,6 @@ Available Components:
 • switch      Toggle switch with animations
 • tabs        Tabbed navigation
 • text        Typography with semantic variants
-• toast       Notification system
 
 🟨 Status
 ✅ Installed: 3 components
@@ -213,15 +223,18 @@ leshi-ui guide <type> <name> [options]
 ```
 
 #### **Types**
+
 - `component` - Component documentation
 - `theme` - Theme documentation
 
 #### **Options**
+
 - `--examples` - Show additional usage examples
 - `--props` - Show detailed prop documentation
 - `--help, -h` - Show help for guide command
 
 #### **Examples**
+
 ```bash
 # Get component documentation
 leshi-ui guide component button
@@ -237,6 +250,7 @@ leshi-ui guide theme
 ```
 
 #### **Sample Output**
+
 ```
 🔰 Button Component
 
@@ -353,18 +367,21 @@ Modify `leshi-ui.json` to use custom paths:
 ### **Common Error Types**
 
 #### **1. Project Not Initialized**
+
 ```bash
 ❌ Error: Project not initialized
 → Run: leshi-ui init
 ```
 
 #### **2. Component Not Found**
+
 ```bash
 ❌ Error: Component 'nonexistent' not found
 → Run: leshi-ui list component
 ```
 
 #### **3. File Conflicts**
+
 ```bash
 ⚠️ Warning: File already exists: components/ui/button.tsx
 → Use --overwrite to replace
@@ -372,6 +389,7 @@ Modify `leshi-ui.json` to use custom paths:
 ```
 
 #### **4. TypeScript Errors**
+
 ```bash
 ❌ Error: TypeScript compilation failed
 → Check: npx tsc --noEmit
@@ -379,6 +397,7 @@ Modify `leshi-ui.json` to use custom paths:
 ```
 
 #### **5. Network Issues**
+
 ```bash
 ❌ Error: Failed to fetch component registry
 → Check internet connection
@@ -439,7 +458,7 @@ leshi-ui add component button --verbose
 
 # Shows:
 # • File operations
-# • Network requests  
+# • Network requests
 # • Dependency resolution
 # • Import transformations
 # • TypeScript validation steps
@@ -534,17 +553,18 @@ leshi-ui list component  # Shows latest versions
 
 ## 🔗 Quick Reference
 
-| Command | Purpose | Example |
-|---------|---------|----------|
-| `init` | Initialize project | `leshi-ui init` |
-| `add component` | Install components | `leshi-ui add component button` |
-| `list component` | Show components | `leshi-ui list component` |
-| `guide component` | Component docs | `leshi-ui guide component button` |
-| `--help` | Show help | `leshi-ui --help` |
-| `--version` | Show version | `leshi-ui --version` |
+| Command           | Purpose            | Example                           |
+| ----------------- | ------------------ | --------------------------------- |
+| `init`            | Initialize project | `leshi-ui init`                   |
+| `add component`   | Install components | `leshi-ui add component button`   |
+| `list component`  | Show components    | `leshi-ui list component`         |
+| `guide component` | Component docs     | `leshi-ui guide component button` |
+| `--help`          | Show help          | `leshi-ui --help`                 |
+| `--version`       | Show version       | `leshi-ui --version`              |
 
 **Need more help?** Check out:
+
 - [Quick Start Guide](./quick-start.md) - Get started in 5 minutes
-- [Component Guide](./components.md) - Browse available components  
+- [Component Guide](./components.md) - Browse available components
 - [Troubleshooting](./troubleshooting.md) - Common issues and solutions
 - [Development Guide](./development.md) - Contributing to Leshi UI

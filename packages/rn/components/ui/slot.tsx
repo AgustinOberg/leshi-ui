@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   Image as RNImage,
   Pressable as RNPressable,
@@ -12,7 +12,7 @@ import {
   type TextProps as RNTextProps,
   type ViewProps as RNViewProps,
   type StyleProp,
-} from "react-native";
+} from 'react-native';
 
 const Pressable = React.forwardRef<
   React.ElementRef<typeof RNPressable>,
@@ -21,7 +21,7 @@ const Pressable = React.forwardRef<
   const { children, ...pressableSlotProps } = props;
 
   if (!React.isValidElement(children)) {
-    console.warn("Slot.Pressable - Invalid asChild element", children);
+    console.warn('Slot.Pressable - Invalid asChild element', children);
     return null;
   }
 
@@ -31,19 +31,30 @@ const Pressable = React.forwardRef<
   >(isTextChildren(children) ? <></> : children, {
     ...mergeProps(pressableSlotProps, children.props as ComponentProps),
     ref: forwardedRef
-      ? composeRefs(forwardedRef, (children as React.ReactElement & { ref?: React.Ref<React.ElementRef<typeof RNPressable>> }).ref)
-      : (children as React.ReactElement & { ref?: React.Ref<React.ElementRef<typeof RNPressable>> }).ref,
+      ? composeRefs(
+          forwardedRef,
+          (
+            children as React.ReactElement & {
+              ref?: React.Ref<React.ElementRef<typeof RNPressable>>;
+            }
+          ).ref,
+        )
+      : (
+          children as React.ReactElement & {
+            ref?: React.Ref<React.ElementRef<typeof RNPressable>>;
+          }
+        ).ref,
   });
 });
 
-Pressable.displayName = "SlotPressable";
+Pressable.displayName = 'SlotPressable';
 
 const View = React.forwardRef<React.ElementRef<typeof RNView>, RNViewProps>(
   (props, forwardedRef) => {
     const { children, ...viewSlotProps } = props;
 
     if (!React.isValidElement(children)) {
-      console.warn("Slot.View - Invalid asChild element", children);
+      console.warn('Slot.View - Invalid asChild element', children);
       return null;
     }
 
@@ -53,20 +64,31 @@ const View = React.forwardRef<React.ElementRef<typeof RNView>, RNViewProps>(
     >(isTextChildren(children) ? <></> : children, {
       ...mergeProps(viewSlotProps, children.props as ComponentProps),
       ref: forwardedRef
-        ? composeRefs(forwardedRef, (children as React.ReactElement & { ref?: React.Ref<React.ElementRef<typeof RNView>> }).ref)
-        : (children as React.ReactElement & { ref?: React.Ref<React.ElementRef<typeof RNView>> }).ref,
+        ? composeRefs(
+            forwardedRef,
+            (
+              children as React.ReactElement & {
+                ref?: React.Ref<React.ElementRef<typeof RNView>>;
+              }
+            ).ref,
+          )
+        : (
+            children as React.ReactElement & {
+              ref?: React.Ref<React.ElementRef<typeof RNView>>;
+            }
+          ).ref,
     });
-  }
+  },
 );
 
-View.displayName = "SlotView";
+View.displayName = 'SlotView';
 
 const Text = React.forwardRef<React.ElementRef<typeof RNText>, RNTextProps>(
   (props, forwardedRef) => {
     const { children, ...textSlotProps } = props;
 
     if (!React.isValidElement(children)) {
-      console.warn("Slot.Text - Invalid asChild element", children);
+      console.warn('Slot.Text - Invalid asChild element', children);
       return null;
     }
 
@@ -76,13 +98,24 @@ const Text = React.forwardRef<React.ElementRef<typeof RNText>, RNTextProps>(
     >(isTextChildren(children) ? <></> : children, {
       ...mergeProps(textSlotProps, children.props as ComponentProps),
       ref: forwardedRef
-        ? composeRefs(forwardedRef, (children as React.ReactElement & { ref?: React.Ref<React.ElementRef<typeof RNText>> }).ref)
-        : (children as React.ReactElement & { ref?: React.Ref<React.ElementRef<typeof RNText>> }).ref,
+        ? composeRefs(
+            forwardedRef,
+            (
+              children as React.ReactElement & {
+                ref?: React.Ref<React.ElementRef<typeof RNText>>;
+              }
+            ).ref,
+          )
+        : (
+            children as React.ReactElement & {
+              ref?: React.Ref<React.ElementRef<typeof RNText>>;
+            }
+          ).ref,
     });
-  }
+  },
 );
 
-Text.displayName = "SlotText";
+Text.displayName = 'SlotText';
 
 type ImageSlotProps = RNImageProps & {
   children?: React.ReactNode;
@@ -95,7 +128,7 @@ const Image = React.forwardRef<
   const { children, ...imageSlotProps } = props;
 
   if (!React.isValidElement(children)) {
-    console.warn("Slot.Image - Invalid asChild element", children);
+    console.warn('Slot.Image - Invalid asChild element', children);
     return null;
   }
 
@@ -105,19 +138,30 @@ const Image = React.forwardRef<
   >(isTextChildren(children) ? <></> : children, {
     ...mergeProps(imageSlotProps, children.props as ComponentProps),
     ref: forwardedRef
-      ? composeRefs(forwardedRef, (children as React.ReactElement & { ref?: React.Ref<React.ElementRef<typeof RNImage>> }).ref)
-      : (children as React.ReactElement & { ref?: React.Ref<React.ElementRef<typeof RNImage>> }).ref,
+      ? composeRefs(
+          forwardedRef,
+          (
+            children as React.ReactElement & {
+              ref?: React.Ref<React.ElementRef<typeof RNImage>>;
+            }
+          ).ref,
+        )
+      : (
+          children as React.ReactElement & {
+            ref?: React.Ref<React.ElementRef<typeof RNImage>>;
+          }
+        ).ref,
   });
 });
 
-Image.displayName = "SlotImage";
+Image.displayName = 'SlotImage';
 
 export { Image, Pressable, Text, View };
 
 function composeRefs<T>(...refs: (React.Ref<T> | undefined)[]) {
   return (node: T) =>
     refs.forEach((ref) => {
-      if (typeof ref === "function") {
+      if (typeof ref === 'function') {
         ref(node);
       } else if (ref != null) {
         (ref as React.MutableRefObject<T>).current = node;
@@ -144,36 +188,39 @@ function mergeProps(slotProps: ComponentProps, childProps: ComponentProps) {
       } else if (slotPropValue) {
         overrideProps[propName] = slotPropValue;
       }
-    } else if (propName === "style") {
-      overrideProps[propName] = combineStyles(slotPropValue as Style, childPropValue as Style);
-    } else if (propName === "className") {
+    } else if (propName === 'style') {
+      overrideProps[propName] = combineStyles(
+        slotPropValue as Style,
+        childPropValue as Style,
+      );
+    } else if (propName === 'className') {
       overrideProps[propName] = [slotPropValue, childPropValue]
         .filter(Boolean)
-        .join(" ");
+        .join(' ');
     }
   }
 
   return { ...slotProps, ...overrideProps };
 }
 
-type PressableStyle = RNPressableProps["style"];
+type PressableStyle = RNPressableProps['style'];
 type ImageStyle = StyleProp<RNImageStyle>;
 type Style = PressableStyle | ImageStyle;
 
 function combineStyles(slotStyle?: Style, childValue?: Style) {
-  if (typeof slotStyle === "function" && typeof childValue === "function") {
+  if (typeof slotStyle === 'function' && typeof childValue === 'function') {
     return (state: PressableStateCallbackType) => {
       return StyleSheet.flatten([slotStyle(state), childValue(state)]);
     };
   }
-  if (typeof slotStyle === "function") {
+  if (typeof slotStyle === 'function') {
     return (state: PressableStateCallbackType) => {
       return childValue
         ? StyleSheet.flatten([slotStyle(state), childValue])
         : slotStyle(state);
     };
   }
-  if (typeof childValue === "function") {
+  if (typeof childValue === 'function') {
     return (state: PressableStateCallbackType) => {
       return slotStyle
         ? StyleSheet.flatten([slotStyle, childValue(state)])
@@ -187,9 +234,9 @@ function combineStyles(slotStyle?: Style, childValue?: Style) {
 export function isTextChildren(
   children:
     | React.ReactNode
-    | ((state: PressableStateCallbackType) => React.ReactNode)
+    | ((state: PressableStateCallbackType) => React.ReactNode),
 ) {
   return Array.isArray(children)
-    ? children.every((child) => typeof child === "string")
-    : typeof children === "string";
+    ? children.every((child) => typeof child === 'string')
+    : typeof children === 'string';
 }

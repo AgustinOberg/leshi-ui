@@ -12,10 +12,19 @@ export class ComponentRegistryService {
     }
 
     try {
-      // Load component registry from GitHub only
-      const registryData = await GitHubService.getRegistry();
-      this.registryCache = registryData;
-      return registryData;
+      // For development: Try local file first, then fallback to GitHub
+      try {
+        const localPath = new URL('../component-registry.json', import.meta.url).pathname;
+        const localContent = await FileUtils.readFile(localPath);
+        const registryData = JSON.parse(localContent) as ComponentRegistry;
+        this.registryCache = registryData;
+        return registryData;
+      } catch (localError) {
+        // Fallback to GitHub
+        const registryData = await GitHubService.getRegistry();
+        this.registryCache = registryData;
+        return registryData;
+      }
     } catch (error) {
       Logger.error('Failed to load component registry from GitHub');
       Logger.error('Please check your internet connection and try again.');

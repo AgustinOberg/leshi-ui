@@ -119,98 +119,130 @@ async function addComponents(componentNames: string[], options: AddOptions): Pro
   let spinner = ora('Resolving dependencies...').start();
 
   try {
-    // Resolve dependencies
-    const resolvedComponents = await ComponentRegistryService.resolveDependencies(componentNames);
+    // First get all potential dependencies
+    const allResolvedComponents = await ComponentRegistryService.resolveDependencies(componentNames);
+    const requestedComponents = componentNames;
+    const potentialDependencies = allResolvedComponents.filter(comp => !requestedComponents.includes(comp));
     
     spinner.stop();
     
-    // Show what will be installed and ask for confirmation if multiple components or dependencies
-    if (resolvedComponents.length > 1 && !options.yes) {
+    // Determine which components to actually install
+    let componentsToInstall = [...requestedComponents];
+    
+    // Ask about dependencies if there are any and not in silent mode
+    if (potentialDependencies.length > 0 && !options.yes) {
       Logger.break();
-      Logger.info(`${icons.package} The following components will be installed:`);
-      
-      const requestedComponents = componentNames;
-      const additionalDependencies = resolvedComponents.filter(comp => !requestedComponents.includes(comp));
+      Logger.info(`${icons.package} Components to install:`);
       
       // Show requested components
       requestedComponents.forEach(name => {
         Logger.log(`  ${colors.primary('✓')} ${colors.primary(name)} ${colors.dim('(requested)')}`);
       });
       
-      // Show dependencies if any
-      if (additionalDependencies.length > 0) {
-        Logger.log('');
-        Logger.log(`  ${colors.dim('Dependencies:')}`);
-        additionalDependencies.forEach(name => {
-          Logger.log(`  ${colors.dim('•')} ${colors.dim(name)}`);
-        });
-      }
+      // Show potential dependencies
+      Logger.log('');
+      Logger.info(`${icons.info} The following dependencies are available but not required:`);
+      potentialDependencies.forEach(name => {
+        Logger.log(`  ${colors.dim('•')} ${colors.dim(name)}`);
+      });
       
       Logger.break();
-      Logger.log(`${colors.dim('Total:')} ${colors.primary(resolvedComponents.length)} component${resolvedComponents.length === 1 ? '' : 's'}`);
+      Logger.log(`${colors.dim('Note:')} Dependencies will be automatically imported if they exist in your project.`);
       Logger.break();
       
-      // Ask for confirmation
-      const { shouldContinue } = await inquirer.prompt([
+      // Ask if user wants to install dependencies too
+      const { installDependencies } = await inquirer.prompt([
         {
           type: 'confirm',
-          name: 'shouldContinue',
-          message: `${icons.question} Do you want to continue with the installation?`,
-          default: true,
+          name: 'installDependencies',
+          message: `${icons.question} Do you also want to install the dependencies?`,
+          default: false,
         },
       ]);
 
-      if (!shouldContinue) {
-        Logger.info('Installation cancelled.');
-        return;
+      if (installDependencies) {
+        componentsToInstall = allResolvedComponents;
       }
       
+      Logger.break();
+    } else if (options.yes && potentialDependencies.length > 0) {
+      // In silent mode, only install requested components unless they explicitly want dependencies
+      Logger.info(`${icons.info} Installing only requested components. Dependencies will be auto-imported if they exist.`);
       Logger.break();
     }
     
     spinner = ora('Checking for existing files...').start();
     
-    // Check for existing files
+    // Check for existing files and separate them
     const config = await ProjectService.getProjectConfig(cwd);
-    const existingFiles: string[] = [];
+    const existingComponents: string[] = [];
+    const newComponents: string[] = [];
     
-    for (const componentName of resolvedComponents) {
+    for (const componentName of componentsToInstall) {
       const targetPath = FileUtils.join(config.componentsDir, `${componentName}.tsx`);
       if (await FileUtils.exists(targetPath)) {
-        existingFiles.push(componentName);
+        existingComponents.push(componentName);
+      } else {
+        newComponents.push(componentName);
       }
     }
 
-    // Ask for overwrite confirmation if needed
-    if (existingFiles.length > 0 && !options.overwrite && !options.yes) {
-      spinner.stop();
-      
-      Logger.break();
-      Logger.warning(`${icons.warning} The following components already exist:`);
-      existingFiles.forEach(name => {
-        Logger.log(`  • ${colors.warning(name)}`);
-      });
-      
-      Logger.break();
-      const { shouldOverwrite } = await inquirer.prompt([
-        {
-          type: 'confirm',
-          name: 'shouldOverwrite',
-          message: `${icons.question} Do you want to overwrite existing components?`,
-          default: false,
-        },
-      ]);
+    spinner.stop();
 
-      if (!shouldOverwrite) {
-        Logger.info(`${icons.cancel} Installation cancelled.`);
-        return;
+    // Handle existing components
+    let componentsToOverwrite: string[] = [];
+    if (existingComponents.length > 0) {
+      if (options.overwrite) {
+        // Force overwrite mode
+        componentsToOverwrite = existingComponents;
+        Logger.info(`${icons.info} Overwriting ${existingComponents.length} existing component${existingComponents.length === 1 ? '' : 's'}.`);
+      } else if (!options.yes) {
+        // Interactive mode - ask about each existing component
+        Logger.break();
+        Logger.info(`${icons.info} The following components already exist and will be skipped:`);
+        existingComponents.forEach(name => {
+          Logger.log(`  • ${colors.dim(name)} ${colors.dim('(exists)')}`);
+        });
+        
+        if (newComponents.length > 0) {
+          Logger.log('');
+          Logger.info(`${icons.package} New components to install:`);
+          newComponents.forEach(name => {
+            Logger.log(`  • ${colors.primary(name)} ${colors.dim('(new)')}`);
+          });
+        }
+        
+        Logger.break();
+        const { shouldOverwriteExisting } = await inquirer.prompt([
+          {
+            type: 'confirm',
+            name: 'shouldOverwriteExisting',
+            message: `${icons.question} Do you want to overwrite the existing components?`,
+            default: false,
+          },
+        ]);
+
+        if (shouldOverwriteExisting) {
+          componentsToOverwrite = existingComponents;
+        }
+        
+        Logger.break();
+      } else {
+        // Silent mode - skip existing components
+        Logger.info(`${icons.info} Skipping ${existingComponents.length} existing component${existingComponents.length === 1 ? '' : 's'}.`);
       }
-
-      const installSpinner = ora('Installing components...').start();
-      spinner = installSpinner;
-    } else {
-      spinner.text = 'Installing components...';
     }
+
+    // Final list of components to install (new + overwrite)
+    const finalComponentsToInstall = [...newComponents, ...componentsToOverwrite];
+    
+    if (finalComponentsToInstall.length === 0) {
+      Logger.info(`${icons.success} All requested components already exist. Nothing to install.`);
+      return;
+    }
+
+    const installSpinner = ora(`Installing ${finalComponentsToInstall.length} component${finalComponentsToInstall.length === 1 ? '' : 's'}...`).start();
+    spinner = installSpinner;
 
     // Download components from GitHub
     await FileUtils.ensureDir(config.componentsDir);
@@ -218,7 +250,7 @@ async function addComponents(componentNames: string[], options: AddOptions): Pro
     const installedComponents: string[] = [];
     const componentDetails: Array<{ name: string; dependencies: string[]; externalDeps: string[]; utilities?: string[] }> = [];
 
-    for (const componentName of resolvedComponents) {
+    for (const componentName of finalComponentsToInstall) {
       const targetPath = FileUtils.join(config.componentsDir, `${componentName}.tsx`);
       
       const success = await GitHubProjectService.downloadComponent(

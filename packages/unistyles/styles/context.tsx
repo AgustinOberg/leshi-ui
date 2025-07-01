@@ -1,20 +1,20 @@
-import React, { createContext, useContext, useMemo, useState } from "react";
-import { useColorScheme } from "react-native";
-import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
-import { themes } from "./themes";
-import type { ThemeName } from "./themes";
-import type { Theme } from "./theme";
-import { breakpoints } from "./breakpoints";
+import React, { createContext, useContext, useMemo, useState } from 'react';
+import { useColorScheme } from 'react-native';
+import { StyleSheet, UnistylesRuntime } from 'react-native-unistyles';
+import { themes } from './themes';
+import type { ThemeName } from './themes';
+import type { Theme } from './theme';
+import { breakpoints } from './breakpoints';
 
 type AppThemes = typeof themes;
 type AppBreakpoints = typeof breakpoints;
 
-declare module "react-native-unistyles" {
+declare module 'react-native-unistyles' {
   export interface UnistylesThemes extends AppThemes {}
   export interface UnistylesBreakpoints extends AppBreakpoints {}
 }
 
-export type ThemeMode = "manual" | "system";
+export type ThemeMode = 'manual' | 'system';
 
 interface ThemeContextValue {
   theme: Theme;
@@ -28,28 +28,28 @@ const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 const getSystemTheme = (): ThemeName => {
   const scheme = useColorScheme();
-  return scheme === "dark" && "dark" in themes ? "dark" : "light";
+  return scheme === 'dark' && 'dark' in themes ? 'dark' : 'light';
 };
 
 StyleSheet.configure({
   themes,
   breakpoints,
-  settings: { initialTheme: "light" },
+  settings: { initialTheme: 'light' },
 });
 
 export const ThemeProvider: React.FC<{
   children: React.ReactNode;
   defaultTheme?: ThemeName;
   defaultMode?: ThemeMode;
-}> = ({ children, defaultTheme = "light", defaultMode = "manual" }) => {
+}> = ({ children, defaultTheme = 'light', defaultMode = 'manual' }) => {
   const systemTheme = getSystemTheme();
   const [themeName, setThemeName] = useState<ThemeName>(defaultTheme);
   const [mode, setMode] = useState<ThemeMode>(defaultMode);
 
-  const resolvedThemeName = mode === "system" ? systemTheme : themeName;
+  const resolvedThemeName = mode === 'system' ? systemTheme : themeName;
 
   React.useEffect(() => {
-    if (mode === "system") {
+    if (mode === 'system') {
       UnistylesRuntime.setAdaptiveThemes(true);
     } else {
       UnistylesRuntime.setAdaptiveThemes(false);
@@ -65,7 +65,7 @@ export const ThemeProvider: React.FC<{
       mode,
       setMode,
     }),
-    [resolvedThemeName, themeName, mode]
+    [resolvedThemeName, themeName, mode],
   );
 
   return (
@@ -82,10 +82,10 @@ export const useThemeContext = (): ThemeContextValue => {
     theme: themes[systemTheme],
     themeName: systemTheme,
     setThemeName: () =>
-      console.warn("[Theme] No ThemeProvider mounted — ignoring setThemeName"),
-    mode: "system",
+      console.warn('[Theme] No ThemeProvider mounted — ignoring setThemeName'),
+    mode: 'system',
     setMode: () =>
-      console.warn("[Theme] No ThemeProvider mounted — ignoring setMode"),
+      console.warn('[Theme] No ThemeProvider mounted — ignoring setMode'),
   };
 };
 

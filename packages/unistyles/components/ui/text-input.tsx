@@ -1,19 +1,19 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState } from 'react';
 import {
   TextInput as RNTextInput,
   View,
   type NativeSyntheticEvent,
   type TextInputProps as RNTextInputProps,
   type TextInputFocusEventData,
-} from "react-native";
-import { StyleSheet } from "react-native-unistyles";
-import { useTheme } from "../../styles/context";
-import { Label } from "./label";
-import { Text, type TextSize } from "./text";
+} from 'react-native';
+import { StyleSheet } from 'react-native-unistyles';
+import { useTheme } from '../../styles/context';
+import { Label } from './label';
+import { Text, type TextSize } from './text';
 
-export type TextInputSize = "sm" | "base" | "lg" | "xl";
-export type TextInputContentSize = "base" | "sm" | "lg" | "xl";
-export type TextInputVariant = "destructive" | "default";
+export type TextInputSize = 'sm' | 'base' | 'lg' | 'xl';
+export type TextInputContentSize = 'base' | 'sm' | 'lg' | 'xl';
+export type TextInputVariant = 'destructive' | 'default';
 
 export interface TextInputProps extends RNTextInputProps {
   error?: string;
@@ -28,10 +28,10 @@ export interface TextInputProps extends RNTextInputProps {
 }
 
 export const LABEL_SIZE: Record<TextInputSize, TextSize> = {
-  sm: "sm",
-  base: "sm",
-  lg: "lg",
-  xl: "xl",
+  sm: 'sm',
+  base: 'sm',
+  lg: 'lg',
+  xl: 'xl',
 };
 
 export const TextInput = ({
@@ -42,10 +42,10 @@ export const TextInput = ({
   onBlur,
   onFocus,
   prefix,
-  size = "base",
-  variant = "default",
+  size = 'base',
+  variant = 'default',
   suffix,
-  textSize = "base",
+  textSize = 'base',
   ...rest
 }: TextInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -69,7 +69,7 @@ export const TextInput = ({
       setIsFocused(true);
       onFocus?.(e);
     },
-    [onFocus]
+    [onFocus],
   );
 
   const handleBlur = useCallback(
@@ -77,13 +77,16 @@ export const TextInput = ({
       setIsFocused(false);
       onBlur?.(e);
     },
-    [onBlur]
+    [onBlur],
   );
 
   return (
     <View style={styles.container}>
       {label && (
-        <Label size={labelSize ?? LABEL_SIZE[size]} error={!!error}>
+        <Label
+          size={labelSize ?? LABEL_SIZE[size]}
+          error={!!error}
+        >
           {label}
         </Label>
       )}
@@ -94,7 +97,7 @@ export const TextInput = ({
         <RNTextInput
           {...rest}
           style={styles.input}
-          verticalAlign="middle"
+          verticalAlign='middle'
           onFocus={handleFocus}
           onBlur={handleBlur}
           placeholderTextColor={theme.colors.mutedForeground}
@@ -109,12 +112,18 @@ export const TextInput = ({
         {suffix && <View style={styles.affix}>{suffix}</View>}
       </View>
       {description && (
-        <Text variant="mutedForeground" size="sm">
+        <Text
+          variant='mutedForeground'
+          size='sm'
+        >
           {description}
         </Text>
       )}
       {error && (
-        <Text variant="destructive" size="sm">
+        <Text
+          variant='destructive'
+          size='sm'
+        >
           {error}
         </Text>
       )}
@@ -122,11 +131,10 @@ export const TextInput = ({
   );
 };
 
-
 const styles = StyleSheet.create((theme) => ({
   container: {
     gap: theme.sizes.gap(1),
-    width: "100%",
+    width: '100%',
     variants: {
       disabled: {
         true: {
@@ -142,8 +150,8 @@ const styles = StyleSheet.create((theme) => ({
   },
 
   inputWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     borderWidth: 1,
     borderColor: theme.colors.border,
     borderRadius: theme.radii.md,
@@ -195,7 +203,7 @@ const styles = StyleSheet.create((theme) => ({
     minHeight: 0,
     paddingVertical: 0,
     includeFontPadding: false,
-    textAlignVertical: "center",
+    textAlignVertical: 'center',
 
     variants: {
       textSize: {
@@ -209,8 +217,8 @@ const styles = StyleSheet.create((theme) => ({
 
   affix: {
     minWidth: theme.sizes.height(5),
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     gap: theme.sizes.gap(1),
   },
 }));

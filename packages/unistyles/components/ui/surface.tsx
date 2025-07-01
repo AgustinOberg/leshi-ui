@@ -1,11 +1,24 @@
-import { View, type ViewProps } from "react-native";
-import { StyleSheet } from "react-native-unistyles";
+import { View, type ViewProps } from 'react-native';
+import { StyleSheet } from 'react-native-unistyles';
 
-export type SurfaceElevation = "xs" | "md" | "lg" | "xl" | "2xl" | "3xl" | "none";
-export type SurfaceVariant = "filled" | "outlined" | "secondary" | "muted" | "accent" | "default";
+export type SurfaceElevation =
+  | 'xs'
+  | 'md'
+  | 'lg'
+  | 'xl'
+  | '2xl'
+  | '3xl'
+  | 'none';
+export type SurfaceVariant =
+  | 'filled'
+  | 'outlined'
+  | 'secondary'
+  | 'muted'
+  | 'accent'
+  | 'default';
 
-export type SurfacePadding = "none" | "sm" | "base" | "lg" | "xl";
-export type SurfaceRadius = "none" | "sm" | "md" | "lg" | "xl" | "2xl";
+export type SurfacePadding = 'none' | 'sm' | 'base' | 'lg' | 'xl';
+export type SurfaceRadius = 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
 export interface SurfaceProps extends ViewProps {
   elevation?: SurfaceElevation;
@@ -15,11 +28,11 @@ export interface SurfaceProps extends ViewProps {
 }
 export const Surface = ({
   children,
-  elevation = "md",
+  elevation = 'md',
   style,
-  variant = "filled",
+  variant = 'filled',
   padding,
-  radius = "xl",
+  radius = 'xl',
   ...rest
 }: SurfaceProps) => {
   styles.useVariants({
@@ -30,7 +43,10 @@ export const Surface = ({
   });
 
   return (
-    <View style={[styles.container, style]} {...rest}>
+    <View
+      style={[styles.container, style]}
+      {...rest}
+    >
       {children}
     </View>
   );
@@ -40,14 +56,14 @@ const styles = StyleSheet.create((theme) => ({
   container: {
     borderWidth: 1,
     borderColor: theme.colors.border,
-    
+
     variants: {
       variant: {
         filled: {
           backgroundColor: theme.colors.card,
         },
         outlined: {
-          backgroundColor: "transparent",
+          backgroundColor: 'transparent',
         },
         default: {
           backgroundColor: theme.colors.background,
@@ -71,8 +87,8 @@ const styles = StyleSheet.create((theme) => ({
         md: theme.shadows.md,
         lg: theme.shadows.lg,
         xl: theme.shadows.xl,
-        "2xl": theme.shadows["2xl"],
-        "3xl": theme.shadows["3xl"],
+        '2xl': theme.shadows['2xl'],
+        '3xl': theme.shadows['3xl'],
         none: {},
       },
       padding: {
@@ -108,8 +124,8 @@ const styles = StyleSheet.create((theme) => ({
         xl: {
           borderRadius: theme.radii.xl,
         },
-        "2xl": {
-          borderRadius: theme.radii["2xl"],
+        '2xl': {
+          borderRadius: theme.radii['2xl'],
         },
       },
     },

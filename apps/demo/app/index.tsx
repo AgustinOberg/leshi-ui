@@ -1,9 +1,4 @@
-import {
-  ScrollView,
-  View,
-  useWindowDimensions,
-  Platform,
-} from "react-native";
+import { ScrollView, View, useWindowDimensions, Platform } from "react-native";
 import { Button, Surface, Text, useThemeName } from "@leshi/ui-rn";
 import { Link } from "expo-router";
 
@@ -38,12 +33,21 @@ const exampleScreens = [
 export default function Index() {
   const { width } = useWindowDimensions();
   const isWeb = Platform.OS === "web";
-  const columns = isWeb && width > 1024 ? 4 : isWeb && width > 768 ? 3 : isWeb && width > 480 ? 2 : 1;
+  const columns =
+    isWeb && width > 1024
+      ? 4
+      : isWeb && width > 768
+      ? 3
+      : isWeb && width > 480
+      ? 2
+      : 1;
   const buttonWidth = isWeb ? `${100 / columns}%` : "100%";
   const { themeName } = useThemeName();
 
   const renderButtons = (screens: { name: string; href: string }[]) => (
-    <View style={{ flexDirection: "row", flexWrap: "wrap", marginHorizontal: -4 }}>
+    <View
+      style={{ flexDirection: "row", flexWrap: "wrap", marginHorizontal: -4 }}
+    >
       {screens.map((s) => (
         <View key={s.name} style={{ width: buttonWidth as any, padding: 4 }}>
           <Link href={s.href as any} asChild>

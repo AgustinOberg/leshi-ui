@@ -1,24 +1,24 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Pressable,
   type PressableProps,
   type StyleProp,
   type ViewStyle,
   StyleSheet,
-} from "react-native";
+} from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
   Easing,
-} from "react-native-reanimated";
-import { useTheme } from "../../styles/theme";
-import type { Theme } from "../../styles/theme";
+} from 'react-native-reanimated';
+import { useTheme } from '../../styles/theme';
+import type { Theme } from '../../styles/theme';
 
-export type SwitchSize = "sm" | "base" | "lg";
-export type SwitchVariant = "default" | "destructive";
+export type SwitchSize = 'sm' | 'base' | 'lg';
+export type SwitchVariant = 'default' | 'destructive';
 
-export interface SwitchProps extends Omit<PressableProps, "onPress" | "style"> {
+export interface SwitchProps extends Omit<PressableProps, 'onPress' | 'style'> {
   checked?: boolean;
   defaultChecked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
@@ -26,115 +26,132 @@ export interface SwitchProps extends Omit<PressableProps, "onPress" | "style"> {
   variant?: SwitchVariant;
   disabled?: boolean;
   style?: StyleProp<ViewStyle>;
-  "aria-label"?: string;
-  "aria-describedby"?: string;
+  'aria-label'?: string;
+  'aria-describedby'?: string;
   testID?: string;
 }
 
-export const Switch = React.memo<SwitchProps>(({
-  checked: checkedProp,
-  defaultChecked = false,
-  onCheckedChange,
-  size = "base",
-  variant = "default",
-  disabled = false,
-  style,
-  "aria-label": ariaLabel,
-  "aria-describedby": ariaDescribedBy,
-  testID,
-  ...rest
-}) => {
-  const [internalChecked, setInternalChecked] = useState(defaultChecked);
-  const isControlled = checkedProp !== undefined;
-  const checked = isControlled ? checkedProp : internalChecked;
-
-  const theme = useTheme();
-  const sizes = useMemo(() => ({
-    sm: { trackW: 32, trackH: 18, thumbSize: 14, padding: 2 },
-    base: { trackW: 44, trackH: 24, thumbSize: 20, padding: 2 },
-    lg: { trackW: 52, trackH: 30, thumbSize: 26, padding: 2 },
-  }), []);
-
-  const currentSize = sizes[size];
-  const translateDistance = currentSize.trackW - currentSize.thumbSize - currentSize.padding * 2;
-  const tx = useSharedValue(checked ? translateDistance : 0);
-
-  useEffect(() => {
-    tx.value = withTiming(checked ? translateDistance : 0, {
-      duration: 200,
-      easing: Easing.out(Easing.quad),
-    });
-  }, [checked, translateDistance]);
-
-  const thumbAnim = useAnimatedStyle(() => ({
-    transform: [{ translateX: tx.value }],
-  }));
-
-  const styles = useMemo(() => createStyles(theme), [theme]);
-  const state = disabled ? "disabled" : checked ? "checked" : "unchecked";
-
-  const handlePress = useCallback(() => {
-    if (disabled) return;
-    const newChecked = !checked;
-    if (!isControlled) setInternalChecked(newChecked);
-    onCheckedChange?.(newChecked);
-  }, [checked, disabled, isControlled, onCheckedChange]);
-
-  const trackStyle = useMemo(() => [
-    styles.track,
-    styles.size[size],
-    styles.variant[variant],
-    styles.state[state],
+export const Switch = React.memo<SwitchProps>(
+  ({
+    checked: checkedProp,
+    defaultChecked = false,
+    onCheckedChange,
+    size = 'base',
+    variant = 'default',
+    disabled = false,
     style,
-  ], [styles, size, variant, state, style]);
+    'aria-label': ariaLabel,
+    'aria-describedby': ariaDescribedBy,
+    testID,
+    ...rest
+  }) => {
+    const [internalChecked, setInternalChecked] = useState(defaultChecked);
+    const isControlled = checkedProp !== undefined;
+    const checked = isControlled ? checkedProp : internalChecked;
 
-  const thumbStyle = useMemo(() => [
-    styles.thumb,
-    styles.thumbSize[size],
-    styles.thumbVariant[variant],
-    styles.thumbState[state],
-    thumbAnim,
-  ], [styles, size, variant, state, thumbAnim]);
+    const theme = useTheme();
+    const sizes = useMemo(
+      () => ({
+        sm: { trackW: 32, trackH: 18, thumbSize: 14, padding: 2 },
+        base: { trackW: 44, trackH: 24, thumbSize: 20, padding: 2 },
+        lg: { trackW: 52, trackH: 30, thumbSize: 26, padding: 2 },
+      }),
+      [],
+    );
 
-  return (
-    <Pressable
-      accessibilityRole="switch"
-      accessibilityState={{ checked, disabled }}
-      accessibilityValue={{ text: checked ? "on" : "off" }}
-      accessibilityLabel={ariaLabel}
-      accessibilityHint={disabled ? "Switch is disabled" : "Double tap to toggle" }
-      accessible
-      disabled={disabled}
-      onPress={handlePress}
-      testID={testID}
-      data-slot="switch"
-      style={trackStyle}
-      {...rest}
-    >
-      <Animated.View data-slot="switch-thumb" style={thumbStyle} />
-    </Pressable>
-  );
-});
+    const currentSize = sizes[size];
+    const translateDistance =
+      currentSize.trackW - currentSize.thumbSize - currentSize.padding * 2;
+    const tx = useSharedValue(checked ? translateDistance : 0);
 
-Switch.displayName = "Switch";
+    useEffect(() => {
+      tx.value = withTiming(checked ? translateDistance : 0, {
+        duration: 200,
+        easing: Easing.out(Easing.quad),
+      });
+    }, [checked, translateDistance]);
+
+    const thumbAnim = useAnimatedStyle(() => ({
+      transform: [{ translateX: tx.value }],
+    }));
+
+    const styles = useMemo(() => createStyles(theme), [theme]);
+    const state = disabled ? 'disabled' : checked ? 'checked' : 'unchecked';
+
+    const handlePress = useCallback(() => {
+      if (disabled) return;
+      const newChecked = !checked;
+      if (!isControlled) setInternalChecked(newChecked);
+      onCheckedChange?.(newChecked);
+    }, [checked, disabled, isControlled, onCheckedChange]);
+
+    const trackStyle = useMemo(
+      () => [
+        styles.track,
+        styles.size[size],
+        styles.variant[variant],
+        styles.state[state],
+        style,
+      ],
+      [styles, size, variant, state, style],
+    );
+
+    const thumbStyle = useMemo(
+      () => [
+        styles.thumb,
+        styles.thumbSize[size],
+        styles.thumbVariant[variant],
+        styles.thumbState[state],
+        thumbAnim,
+      ],
+      [styles, size, variant, state, thumbAnim],
+    );
+
+    return (
+      <Pressable
+        accessibilityRole='switch'
+        accessibilityState={{ checked, disabled }}
+        accessibilityValue={{ text: checked ? 'on' : 'off' }}
+        accessibilityLabel={ariaLabel}
+        accessibilityHint={
+          disabled ? 'Switch is disabled' : 'Double tap to toggle'
+        }
+        accessible
+        disabled={disabled}
+        onPress={handlePress}
+        testID={testID}
+        data-slot='switch'
+        style={trackStyle}
+        {...rest}
+      >
+        <Animated.View
+          data-slot='switch-thumb'
+          style={thumbStyle}
+        />
+      </Pressable>
+    );
+  },
+);
+
+Switch.displayName = 'Switch';
 
 const createStyles = (theme: Theme) => {
   const track = StyleSheet.create({
     track: {
-      flexDirection: "row",
-      alignItems: "center", 
-      justifyContent: "flex-start",
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'flex-start',
       borderRadius: theme.radii.full,
       borderWidth: 1,
-      borderColor: "transparent",
-      position: "relative",
-      padding: 2, 
+      borderColor: 'transparent',
+      position: 'relative',
+      padding: 2,
     },
   });
 
   const thumb = StyleSheet.create({
     thumb: {
-      position: "relative", 
+      position: 'relative',
       borderRadius: theme.radii.full,
       ...theme.shadows.xs,
     },

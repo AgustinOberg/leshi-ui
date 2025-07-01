@@ -117,7 +117,7 @@ Flexible modal component with animations and portal integration.
 **Usage:**
 ```typescript
 import { Modal } from './components/ui/modal';
-import { ModalProvider } from './components/ui/modal-provider';
+import { ModalProvider } from './components/ui/modal';
 
 // Wrap app with ModalProvider
 <ModalProvider>
