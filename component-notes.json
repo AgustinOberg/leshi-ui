@@ -1,0 +1,141 @@
+{
+  "button": {
+    "dependencies": ["text"],
+    "externalDeps": [],
+    "setup": [
+      "Install dependencies: leshi-ui add component text"
+    ],
+    "example": "import { Button } from './components/ui/button';\n\n<Button variant=\"primary\" size=\"base\" text=\"Click me\" />\n<Button variant=\"outline\" size=\"sm\" text=\"Small\" />\n<Button variant=\"destructive\" loading={true} text=\"Loading\" />"
+  },
+  "modal": {
+    "dependencies": [],
+    "externalDeps": ["@gorhom/portal"],
+    "utilities": ["lib/modal-utils.ts"],
+    "setup": [
+      "Install external dependency: bun add @gorhom/portal",
+      "Wrap your app with ModalProvider in _layout.tsx"
+    ],
+    "setupCode": "import { ModalProvider } from './components/ui/modal';\n\nexport default function Layout() {\n  return (\n    <ModalProvider>\n      <YourApp />\n    </ModalProvider>\n  );\n}",
+    "example": "import { Modal } from './components/ui/modal';\n\n<Modal.Root open={open} onOpenChange={setOpen}>\n  <Modal.Trigger>\n    <Button text=\"Open Modal\" />\n  </Modal.Trigger>\n  <Modal.Content>\n    <Text>Modal content goes here</Text>\n  </Modal.Content>\n</Modal.Root>"
+  },
+  "dialog": {
+    "dependencies": ["modal", "text", "icon", "slot"],
+    "externalDeps": ["@gorhom/portal"],
+    "setup": [
+      "Install external dependency: bun add @gorhom/portal",
+      "Install components: leshi-ui add component modal text icon slot",
+      "Wrap your app with ModalProvider in _layout.tsx"
+    ],
+    "setupCode": "import { ModalProvider } from './components/ui/modal';\n\nexport default function Layout() {\n  return (\n    <ModalProvider>\n      <YourApp />\n    </ModalProvider>\n  );\n}",
+    "example": "import { Dialog } from './components/ui/dialog';\n\n<Dialog.Root open={open} onOpenChange={setOpen}>\n  <Dialog.Trigger>\n    <Button text=\"Open Dialog\" />\n  </Dialog.Trigger>\n  <Dialog.Content>\n    <Dialog.Header>\n      <Dialog.Title>Dialog Title</Dialog.Title>\n    </Dialog.Header>\n    <Text>Dialog content...</Text>\n    <Dialog.Footer>\n      <Button variant=\"outline\" text=\"Cancel\" />\n      <Button text=\"Confirm\" />\n    </Dialog.Footer>\n  </Dialog.Content>\n</Dialog.Root>"
+  },
+  "alert-dialog": {
+    "dependencies": ["modal", "text", "button", "slot"],
+    "externalDeps": ["@gorhom/portal"],
+    "setup": [
+      "Install external dependency: bun add @gorhom/portal",
+      "Install components: leshi-ui add component modal text button slot",
+      "Wrap your app with ModalProvider in _layout.tsx"
+    ],
+    "setupCode": "import { ModalProvider } from './components/ui/modal';\n\nexport default function Layout() {\n  return (\n    <ModalProvider>\n      <YourApp />\n    </ModalProvider>\n  );\n}",
+    "example": "import { AlertDialog } from './components/ui/alert-dialog';\n\n<AlertDialog.Root open={open} onOpenChange={setOpen}>\n  <AlertDialog.Trigger>\n    <Button variant=\"destructive\" text=\"Delete\" />\n  </AlertDialog.Trigger>\n  <AlertDialog.Content>\n    <AlertDialog.Header>\n      <AlertDialog.Title>Are you sure?</AlertDialog.Title>\n      <AlertDialog.Description>\n        This action cannot be undone.\n      </AlertDialog.Description>\n    </AlertDialog.Header>\n    <AlertDialog.Footer>\n      <AlertDialog.Cancel>\n        <Button variant=\"outline\" text=\"Cancel\" />\n      </AlertDialog.Cancel>\n      <AlertDialog.Action>\n        <Button variant=\"destructive\" text=\"Delete\" />\n      </AlertDialog.Action>\n    </AlertDialog.Footer>\n  </AlertDialog.Content>\n</AlertDialog.Root>"
+  },
+  "text": {
+    "dependencies": [],
+    "externalDeps": [],
+    "setup": [],
+    "example": "import { Text } from './components/ui/text';\n\n<Text variant=\"heading\">Heading</Text>\n<Text variant=\"body\">Body text</Text>\n<Text variant=\"caption\" size=\"sm\">Small caption</Text>\n<Text weight=\"bold\">Bold text</Text>"
+  },
+  "text-input": {
+    "dependencies": ["label", "text"],
+    "externalDeps": [],
+    "setup": [
+      "Install dependencies: leshi-ui add component label text"
+    ],
+    "example": "import { TextInput } from './components/ui/text-input';\n\n<TextInput\n  label=\"Email\"\n  placeholder=\"Enter your email\"\n  value={email}\n  onChangeText={setEmail}\n/>\n<TextInput\n  variant=\"outline\"\n  size=\"lg\"\n  state=\"error\"\n  helperText=\"Invalid email\"\n/>"
+  },
+  "text-area": {
+    "dependencies": ["label", "text"],
+    "externalDeps": [],
+    "setup": [
+      "Install dependencies: leshi-ui add component label text"
+    ],
+    "example": "import { TextArea } from './components/ui/text-area';\n\n<TextArea\n  label=\"Description\"\n  placeholder=\"Enter description...\"\n  value={description}\n  onChangeText={setDescription}\n  rows={4}\n/>"
+  },
+  "surface": {
+    "dependencies": [],
+    "externalDeps": [],
+    "setup": [],
+    "example": "import { Surface } from './components/ui/surface';\n\n<Surface variant=\"default\" padding=\"md\">\n  <Text>Default surface</Text>\n</Surface>\n<Surface variant=\"accent\" elevation=\"lg\" radius=\"lg\">\n  <Text>Elevated accent surface</Text>\n</Surface>"
+  },
+  "checkbox": {
+    "dependencies": ["icon"],
+    "externalDeps": [],
+    "setup": [
+      "Install dependencies: leshi-ui add component icon"
+    ],
+    "example": "import { Checkbox } from './components/ui/checkbox';\n\n<Checkbox\n  checked={checked}\n  onCheckedChange={setChecked}\n  label=\"Accept terms\"\n/>"
+  },
+  "icon": {
+    "dependencies": ["text"],
+    "externalDeps": [],
+    "setup": [
+      "Install dependencies: leshi-ui add component text"
+    ],
+    "example": "import { Icon } from './components/ui/icon';\n\n<Icon name=\"check\" size={20} />\n<Icon name=\"arrow-left\" color=\"primary\" />"
+  },
+  "avatar": {
+    "dependencies": ["text"],
+    "externalDeps": [],
+    "setup": [
+      "Install dependencies: leshi-ui add component text"
+    ],
+    "example": "import { Avatar } from './components/ui/avatar';\n\n<Avatar source={{ uri: 'https://...' }} size=\"lg\" />\n<Avatar fallback=\"JD\" size=\"sm\" />"
+  },
+  "badge": {
+    "dependencies": ["text"],
+    "externalDeps": [],
+    "setup": [
+      "Install dependencies: leshi-ui add component text"
+    ],
+    "example": "import { Badge } from './components/ui/badge';\n\n<Badge variant=\"default\">New</Badge>\n<Badge variant=\"secondary\">Beta</Badge>\n<Badge variant=\"destructive\">Error</Badge>"
+  },
+  "label": {
+    "dependencies": ["text"],
+    "externalDeps": [],
+    "setup": [
+      "Install dependencies: leshi-ui add component text"
+    ],
+    "example": "import { Label } from './components/ui/label';\n\n<Label>Email Address</Label>\n<Label required>Password *</Label>"
+  },
+  "skeleton": {
+    "dependencies": [],
+    "externalDeps": ["react-native-reanimated"],
+    "setup": [
+      "Install external dependency: bun add react-native-reanimated"
+    ],
+    "example": "import { Skeleton } from './components/ui/skeleton';\n\n<Skeleton height={20} width={200} />\n<Skeleton height={40} width=\"100%\" variant=\"rounded\" />"
+  },
+  "progress": {
+    "dependencies": [],
+    "externalDeps": ["react-native-reanimated"],
+    "setup": [
+      "Install external dependency: bun add react-native-reanimated"
+    ],
+    "example": "import { Progress } from './components/ui/progress';\n\n<Progress value={60} max={100} />\n<Progress value={progress} variant=\"success\" />"
+  },
+  "switch": {
+    "dependencies": [],
+    "externalDeps": ["react-native-reanimated"],
+    "setup": [
+      "Install external dependency: bun add react-native-reanimated"
+    ],
+    "example": "import { Switch } from './components/ui/switch';\n\n<Switch\n  checked={enabled}\n  onCheckedChange={setEnabled}\n  label=\"Enable notifications\"\n/>"
+  },
+  "slot": {
+    "dependencies": [],
+    "externalDeps": [],
+    "setup": [],
+    "example": "import { Slot } from './components/ui/slot';\n\n<Slot>\n  <Button text=\"Slotted button\" />\n</Slot>"
+  }
+}
