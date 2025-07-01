@@ -11,5 +11,6 @@
   },
   "scripts": {
     "release": "node release.js"
-  }
+  },
+  "version": "0.0.1"
 }
