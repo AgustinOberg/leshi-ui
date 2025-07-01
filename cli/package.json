@@ -1,6 +1,6 @@
 {
   "name": "leshi-ui",
-  "version": "0.0.16-beta.4",
+  "version": "0.0.16",
   "description": "Modern CLI for building and managing React Native UI components with copy-paste simplicity, custom theming, and open source design system support",
   "main": "dist/index.js",
   "bin": {
