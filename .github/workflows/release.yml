@@ -1,0 +1,148 @@
+name: Manual Release to NPM
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to deploy from"
+        required: true
+        default: "main"
+        type: string
+      version:
+        description: "Version number (e.g., 1.0.0, 1.0.0-beta.1)"
+        required: true
+        type: string
+      tag:
+        description: "NPM tag to publish as"
+        required: true
+        default: "latest"
+        type: choice
+        options:
+          - latest
+          - beta
+          - next
+          - dev
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Release to NPM
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Setup Node.js (for npm publish)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Validate version format
+        run: |
+          if [[ ! "${{ inputs.version }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.-]+)?$ ]]; then
+            echo "❌ Invalid version format. Use semantic versioning (e.g., 1.0.0, 1.0.0-beta.1)"
+            exit 1
+          fi
+          echo "✅ Version format is valid: ${{ inputs.version }}"
+
+      - name: Install CLI dependencies
+        run: bun install
+        working-directory: ./cli
+
+      - name: Run tests before release
+        run: bun test
+        working-directory: ./cli
+
+      - name: Run TypeScript check
+        run: bunx tsc --noEmit
+        working-directory: ./cli
+
+      # - name: Run linting
+      #   run: bun run lint
+      #   working-directory: ./cli
+
+      - name: Update package.json version
+        run: |
+          npm version ${{ inputs.version }} --no-git-tag-version
+        working-directory: ./cli
+
+      - name: Build CLI
+        run: bun run build
+        working-directory: ./cli
+
+      - name: Test CLI functionality
+        run: |
+          cd /tmp
+          mkdir test-release
+          cd test-release
+          echo '{"name": "test", "dependencies": {"react-native": "0.72.0"}}' > package.json
+          node ${{ github.workspace }}/cli/dist/index.js --help
+          node ${{ github.workspace }}/cli/dist/index.js list component
+
+      - name: Configure Git credentials
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+
+      - name: Commit version bump
+        run: |
+          git add cli/package.json
+          git commit -m "chore: bump version to ${{ inputs.version }}" || echo "No changes to commit"
+
+      - name: Create and push tag
+        run: |
+          git tag "v${{ inputs.version }}"
+          git push origin ${{ inputs.branch }}
+          git push origin "v${{ inputs.version }}"
+
+      - name: Publish to NPM
+        run: npm publish --tag ${{ inputs.tag }}
+        working-directory: ./cli
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: "v${{ inputs.version }}"
+          release_name: "leshi-ui v${{ inputs.version }}"
+          body: |
+            ## leshi-ui v${{ inputs.version }}
+
+            Released from branch: `${{ inputs.branch }}`
+
+            ### Installation
+            ```bash
+            npx leshi-ui@${{ inputs.tag }} init
+            npx leshi-ui@${{ inputs.tag }} add component button
+            ```
+
+            ### Changes
+            - Version bump to ${{ inputs.version }}
+            - Components downloaded from GitHub @ v${{ inputs.version }}
+
+            🚀 **Version pinning**: This CLI version will always download components from the exact GitHub tag `v${{ inputs.version }}`, ensuring consistency.
+          draft: false
+          prerelease: ${{ contains(inputs.version, '-') }}
+
+      - name: Success notification
+        run: |
+          echo "🎉 Successfully released leshi-ui@${{ inputs.version }}"
+          echo "📦 NPM: https://www.npmjs.com/package/leshi-ui"
+          echo "🏷️ Tag: v${{ inputs.version }}"
+          echo "🚀 Install with: npx leshi-ui@${{ inputs.tag }}"
