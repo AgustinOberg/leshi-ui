@@ -3,7 +3,7 @@
     "dependencies": ["text"],
     "externalDeps": [],
     "setup": ["Install dependencies: leshi-ui add component text"],
-    "example": "import { Button } from './components/ui/button';\n\n// Variants\n<Button variant=\"primary\" text=\"Primary\" />\n<Button variant=\"secondary\" text=\"Secondary\" />\n<Button variant=\"outline\" text=\"Outline\" />\n<Button variant=\"ghost\" text=\"Ghost\" />\n<Button variant=\"destructive\" text=\"Destructive\" />\n\n// Sizes\n<Button size=\"sm\" text=\"Small\" />\n<Button size=\"base\" text=\"Base\" />\n<Button size=\"lg\" text=\"Large\" />\n\n// States\n<Button loading={true} text=\"Loading...\" />\n<Button disabled={true} text=\"Disabled\" />\n\n// Custom onPress\n<Button \n  text=\"Click me\" \n  onPress={() => console.log('Button pressed!')} \n/>\n\n// With icon (if icon component is available)\n<Button \n  text=\"With Icon\" \n  leftIcon=\"check\" \n  variant=\"primary\" \n/>",
+    "example": "import { Button } from './components/ui/button';\n\n// Variants\n<Button variant=\"primary\" text=\"Primary\" />\n<Button variant=\"secondary\" text=\"Secondary\" />\n<Button variant=\"outline\" text=\"Outline\" />\n<Button variant=\"ghost\" text=\"Ghost\" />\n<Button variant=\"destructive\" text=\"Destructive\" />\n\n// Sizes\n<Button size=\"sm\" text=\"Small\" />\n<Button size=\"base\" text=\"Base\" />\n<Button size=\"lg\" text=\"Large\" />\n\n// States\n<Button loading={true} text=\"Loading...\" />\n<Button disabled={true} text=\"Disabled\" />\n\n// Custom onPress\n<Button \n  text=\"Click me\" \n  onPress={() => console.log('Button pressed!')} \n/>\n\n// With prefix/suffix icons\n<Button \n  text=\"With Prefix\" \n  prefix={<Icon name=\"check\" />} \n  variant=\"primary\" \n/>\n<Button \n  text=\"With Suffix\" \n  suffix={<Icon name=\"arrow-right\" />} \n  variant=\"primary\" \n/>",
     "api": {
       "description": "A versatile button component with multiple variants, sizes, and states. Supports loading states and custom content.",
       "extends": {
@@ -318,7 +318,7 @@
     "dependencies": ["label", "text"],
     "externalDeps": [],
     "setup": ["Install dependencies: leshi-ui add component label text"],
-    "example": "import { TextInput } from './components/ui/text-input';\nimport { useState } from 'react';\n\nfunction Example() {\n  const [email, setEmail] = useState('');\n  const [password, setPassword] = useState('');\n\n  return (\n    <>\n      {/* Basic usage */}\n      <TextInput\n        label=\"Email\"\n        placeholder=\"Enter your email\"\n        value={email}\n        onChangeText={setEmail}\n      />\n\n      {/* Variants */}\n      <TextInput variant=\"outline\" placeholder=\"Outline variant\" />\n      <TextInput variant=\"filled\" placeholder=\"Filled variant\" />\n\n      {/* Sizes */}\n      <TextInput size=\"sm\" placeholder=\"Small\" />\n      <TextInput size=\"base\" placeholder=\"Base\" />\n      <TextInput size=\"lg\" placeholder=\"Large\" />\n\n      {/* States */}\n      <TextInput\n        state=\"error\"\n        helperText=\"This field is required\"\n        placeholder=\"Error state\"\n      />\n      <TextInput\n        state=\"success\"\n        helperText=\"Email is valid\"\n        placeholder=\"Success state\"\n      />\n\n      {/* Secure input */}\n      <TextInput\n        label=\"Password\"\n        secureTextEntry\n        value={password}\n        onChangeText={setPassword}\n      />\n\n      {/* Required field */}\n      <TextInput\n        label=\"Required Field\"\n        required\n        placeholder=\"This field is required\"\n      />\n    </>\n  );\n}",
+    "example": "import { TextInput } from './components/ui/text-input';\nimport { Icon } from './components/ui/icon';\nimport { useState } from 'react';\n\nfunction Example() {\n  const [email, setEmail] = useState('');\n  const [password, setPassword] = useState('');\n\n  return (\n    <>\n      {/* Basic usage */}\n      <TextInput\n        label=\"Email\"\n        placeholder=\"Enter your email\"\n        value={email}\n        onChangeText={setEmail}\n      />\n\n      {/* Variants */}\n      <TextInput variant=\"default\" placeholder=\"Default variant\" />\n      <TextInput variant=\"destructive\" placeholder=\"Destructive variant\" />\n\n      {/* Sizes */}\n      <TextInput size=\"sm\" placeholder=\"Small\" />\n      <TextInput size=\"base\" placeholder=\"Base\" />\n      <TextInput size=\"lg\" placeholder=\"Large\" />\n      <TextInput size=\"xl\" placeholder=\"Extra large\" />\n\n      {/* Error state */}\n      <TextInput\n        error=\"This field is required\"\n        placeholder=\"Error state\"\n      />\n\n      {/* With description */}\n      <TextInput\n        description=\"This is a helpful description\"\n        placeholder=\"With description\"\n      />\n\n      {/* With prefix/suffix */}\n      <TextInput\n        prefix={<Icon name=\"mail\" />}\n        placeholder=\"Email with icon\"\n      />\n      <TextInput\n        suffix={<Icon name=\"eye\" />}\n        placeholder=\"Password with eye icon\"\n      />\n\n      {/* Secure input */}\n      <TextInput\n        label=\"Password\"\n        secureTextEntry\n        value={password}\n        onChangeText={setPassword}\n      />\n\n      {/* Disabled */}\n      <TextInput\n        label=\"Disabled Field\"\n        editable={false}\n        placeholder=\"This field is disabled\"\n      />\n    </>\n  );\n}",
     "api": {
       "description": "A styled text input component with label, helper text, and validation states. Supports various sizes and styling variants.",
       "extends": {
@@ -333,47 +333,51 @@
         },
         {
           "name": "variant",
-          "type": "InputVariant",
+          "type": "TextInputVariant",
           "description": "Input styling variant",
-          "default": "outline"
+          "default": "default"
         },
         {
           "name": "size",
-          "type": "InputSize",
+          "type": "TextInputSize",
           "description": "Input size",
           "default": "base"
         },
         {
-          "name": "state",
-          "type": "InputState",
-          "description": "Input validation state",
-          "default": "default"
-        },
-        {
-          "name": "helperText",
+          "name": "error",
           "type": "string",
-          "description": "Helper or error text below input"
+          "description": "Error message to display below input"
         },
         {
-          "name": "required",
-          "type": "boolean",
-          "description": "Whether the field is required"
-        },
-        {
-          "name": "leftIcon",
+          "name": "description",
           "type": "string",
-          "description": "Icon name to show on the left"
+          "description": "Helper text to display below input"
         },
         {
-          "name": "rightIcon",
-          "type": "string",
-          "description": "Icon name to show on the right"
+          "name": "prefix",
+          "type": "ReactNode",
+          "description": "Element to display before the input"
+        },
+        {
+          "name": "suffix",
+          "type": "ReactNode",
+          "description": "Element to display after the input"
+        },
+        {
+          "name": "labelSize",
+          "type": "TextSize",
+          "description": "Size of the label text"
+        },
+        {
+          "name": "textSize",
+          "type": "TextInputContentSize",
+          "description": "Size of the input text",
+          "default": "base"
         }
       ],
       "variants": {
-        "variant": ["outline", "filled"],
-        "size": ["sm", "base", "lg"],
-        "state": ["default", "error", "success"]
+        "variant": ["default", "destructive"],
+        "size": ["sm", "base", "lg", "xl"]
       }
     }
   },
@@ -381,7 +385,7 @@
     "dependencies": ["label", "text"],
     "externalDeps": [],
     "setup": ["Install dependencies: leshi-ui add component label text"],
-    "example": "import { TextArea } from './components/ui/text-area';\nimport { useState } from 'react';\n\nfunction Example() {\n  const [description, setDescription] = useState('');\n  const [feedback, setFeedback] = useState('');\n\n  return (\n    <>\n      {/* Basic usage */}\n      <TextArea\n        label=\"Description\"\n        placeholder=\"Enter description...\"\n        value={description}\n        onChangeText={setDescription}\n        rows={4}\n      />\n\n      {/* Different row counts */}\n      <TextArea rows={2} placeholder=\"2 rows\" />\n      <TextArea rows={6} placeholder=\"6 rows\" />\n      <TextArea rows={8} placeholder=\"8 rows\" />\n\n      {/* Variants */}\n      <TextArea variant=\"outline\" placeholder=\"Outline variant\" />\n      <TextArea variant=\"filled\" placeholder=\"Filled variant\" />\n\n      {/* States */}\n      <TextArea\n        state=\"error\"\n        helperText=\"Message is too short\"\n        placeholder=\"Error state\"\n      />\n      <TextArea\n        state=\"success\"\n        helperText=\"Perfect length\"\n        placeholder=\"Success state\"\n      />\n\n      {/* Character limit */}\n      <TextArea\n        label=\"Feedback\"\n        value={feedback}\n        onChangeText={setFeedback}\n        maxLength={500}\n        helperText={`${feedback.length}/500 characters`}\n        rows={4}\n      />\n\n      {/* Required field */}\n      <TextArea\n        label=\"Required Message\"\n        required\n        placeholder=\"This field is required\"\n        rows={3}\n      />\n    </>\n  );\n}",
+    "example": "import { TextArea } from './components/ui/text-area';\nimport { useState } from 'react';\n\nfunction Example() {\n  const [description, setDescription] = useState('');\n  const [feedback, setFeedback] = useState('');\n\n  return (\n    <>\n      {/* Basic usage */}\n      <TextArea\n        label=\"Description\"\n        placeholder=\"Enter description...\"\n        value={description}\n        onChangeText={setDescription}\n        rows={4}\n      />\n\n      {/* Different row counts */}\n      <TextArea rows={2} placeholder=\"2 rows\" />\n      <TextArea rows={6} placeholder=\"6 rows\" />\n      <TextArea rows={8} placeholder=\"8 rows\" />\n\n      {/* Variants */}\n      <TextArea variant=\"default\" placeholder=\"Default variant\" />\n      <TextArea variant=\"destructive\" placeholder=\"Destructive variant\" />\n\n      {/* Sizes */}\n      <TextArea size=\"sm\" placeholder=\"Small\" />\n      <TextArea size=\"base\" placeholder=\"Base\" />\n      <TextArea size=\"lg\" placeholder=\"Large\" />\n      <TextArea size=\"xl\" placeholder=\"Extra large\" />\n\n      {/* Error state */}\n      <TextArea\n        error=\"Message is too short\"\n        placeholder=\"Error state\"\n      />\n\n      {/* With description */}\n      <TextArea\n        description=\"Provide detailed feedback\"\n        placeholder=\"With description\"\n      />\n\n      {/* Character limit with count */}\n      <TextArea\n        label=\"Feedback\"\n        value={feedback}\n        onChangeText={setFeedback}\n        maxLength={500}\n        showCharacterCount\n        rows={4}\n      />\n\n      {/* Disabled */}\n      <TextArea\n        label=\"Disabled Message\"\n        editable={false}\n        placeholder=\"This field is disabled\"\n        rows={3}\n      />\n    </>\n  );\n}",
     "api": {
       "description": "A multi-line text input component with configurable rows, label, and validation states. Perfect for longer text content.",
       "extends": {
@@ -402,30 +406,47 @@
         },
         {
           "name": "variant",
-          "type": "InputVariant",
+          "type": "TextAreaVariant",
           "description": "TextArea styling variant",
-          "default": "outline"
-        },
-        {
-          "name": "state",
-          "type": "InputState",
-          "description": "TextArea validation state",
           "default": "default"
         },
         {
-          "name": "helperText",
-          "type": "string",
-          "description": "Helper or error text below textarea"
+          "name": "size",
+          "type": "TextAreaSize",
+          "description": "TextArea size",
+          "default": "base"
         },
         {
-          "name": "required",
+          "name": "error",
+          "type": "string",
+          "description": "Error message to display below textarea"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "description": "Helper text to display below textarea"
+        },
+        {
+          "name": "labelSize",
+          "type": "TextSize",
+          "description": "Size of the label text"
+        },
+        {
+          "name": "resize",
+          "type": "TextAreaResize",
+          "description": "Resize behavior",
+          "default": "none"
+        },
+        {
+          "name": "showCharacterCount",
           "type": "boolean",
-          "description": "Whether the field is required"
+          "description": "Whether to show character count when maxLength is set"
         }
       ],
       "variants": {
-        "variant": ["outline", "filled"],
-        "state": ["default", "error", "success"]
+        "variant": ["default", "destructive"],
+        "size": ["sm", "base", "lg", "xl"],
+        "resize": ["none", "vertical", "horizontal", "both"]
       }
     }
   },
@@ -433,7 +454,7 @@
     "dependencies": [],
     "externalDeps": [],
     "setup": [],
-    "example": "import { Surface } from './components/ui/surface';\nimport { Text } from './components/ui/text';\n\n// Variants\n<Surface variant=\"default\">\n  <Text>Default surface</Text>\n</Surface>\n<Surface variant=\"accent\">\n  <Text>Accent surface</Text>\n</Surface>\n<Surface variant=\"muted\">\n  <Text>Muted surface</Text>\n</Surface>\n\n// Elevation levels\n<Surface elevation=\"none\">No shadow</Surface>\n<Surface elevation=\"sm\">Small shadow</Surface>\n<Surface elevation=\"md\">Medium shadow</Surface>\n<Surface elevation=\"lg\">Large shadow</Surface>\n<Surface elevation=\"xl\">Extra large shadow</Surface>\n\n// Border radius\n<Surface radius=\"none\">No radius</Surface>\n<Surface radius=\"sm\">Small radius</Surface>\n<Surface radius=\"md\">Medium radius</Surface>\n<Surface radius=\"lg\">Large radius</Surface>\n<Surface radius=\"full\">Fully rounded</Surface>\n\n// Padding options\n<Surface padding=\"none\">No padding</Surface>\n<Surface padding=\"sm\">Small padding</Surface>\n<Surface padding=\"md\">Medium padding</Surface>\n<Surface padding=\"lg\">Large padding</Surface>\n<Surface padding=\"xl\">Extra large padding</Surface>\n\n// Combined usage for cards\n<Surface \n  variant=\"default\" \n  elevation=\"md\" \n  radius=\"lg\" \n  padding=\"lg\"\n>\n  <Text variant=\"heading\" size=\"lg\">Card Title</Text>\n  <Text>Card content with elevated surface</Text>\n</Surface>",
+    "example": "import { Surface } from './components/ui/surface';\nimport { Text } from './components/ui/text';\n\n// Variants\n<Surface variant=\"filled\">\n  <Text>Filled surface</Text>\n</Surface>\n<Surface variant=\"outlined\">\n  <Text>Outlined surface</Text>\n</Surface>\n<Surface variant=\"default\">\n  <Text>Default surface</Text>\n</Surface>\n<Surface variant=\"secondary\">\n  <Text>Secondary surface</Text>\n</Surface>\n<Surface variant=\"muted\">\n  <Text>Muted surface</Text>\n</Surface>\n<Surface variant=\"accent\">\n  <Text>Accent surface</Text>\n</Surface>\n\n// Elevation levels\n<Surface elevation=\"none\">No shadow</Surface>\n<Surface elevation=\"sm\">Small shadow</Surface>\n<Surface elevation=\"md\">Medium shadow</Surface>\n<Surface elevation=\"lg\">Large shadow</Surface>\n<Surface elevation=\"xl\">Extra large shadow</Surface>\n\n// Border radius\n<Surface radius=\"none\">No radius</Surface>\n<Surface radius=\"sm\">Small radius</Surface>\n<Surface radius=\"md\">Medium radius</Surface>\n<Surface radius=\"lg\">Large radius</Surface>\n<Surface radius=\"full\">Fully rounded</Surface>\n\n// Padding options\n<Surface padding=\"none\">No padding</Surface>\n<Surface padding=\"sm\">Small padding</Surface>\n<Surface padding=\"md\">Medium padding</Surface>\n<Surface padding=\"lg\">Large padding</Surface>\n<Surface padding=\"xl\">Extra large padding</Surface>\n\n// Combined usage for cards\n<Surface \n  variant=\"default\" \n  elevation=\"md\" \n  radius=\"lg\" \n  padding=\"lg\"\n>\n  <Text variant=\"heading\" size=\"lg\">Card Title</Text>\n  <Text>Card content with elevated surface</Text>\n</Surface>",
     "api": {
       "description": "A styled container component with background variants, elevation, border radius, and padding options. Perfect for cards and elevated content.",
       "extends": {
@@ -473,7 +494,14 @@
         }
       ],
       "variants": {
-        "variant": ["default", "accent", "muted"],
+        "variant": [
+          "filled",
+          "outlined",
+          "default",
+          "secondary",
+          "muted",
+          "accent"
+        ],
         "elevation": ["none", "sm", "md", "lg", "xl"],
         "radius": ["none", "sm", "md", "lg", "full"],
         "padding": ["none", "sm", "md", "lg", "xl"]
@@ -484,7 +512,7 @@
     "dependencies": ["icon"],
     "externalDeps": [],
     "setup": ["Install dependencies: leshi-ui add component icon"],
-    "example": "import { Checkbox } from './components/ui/checkbox';\n\n<Checkbox\n  checked={checked}\n  onCheckedChange={setChecked}\n  label=\"Accept terms\"\n/>",
+    "example": "import { Checkbox } from './components/ui/checkbox';\nimport { Label } from './components/ui/label';\nimport { View } from 'react-native';\nimport { useState } from 'react';\n\nfunction Example() {\n  const [checked, setChecked] = useState(false);\n  const [terms, setTerms] = useState(false);\n  const [newsletter, setNewsletter] = useState(false);\n\n  return (\n    <>\n      {/* Basic usage */}\n      <Checkbox\n        checked={checked}\n        onCheckedChange={setChecked}\n      />\n\n      {/* With label (separate component) */}\n      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>\n        <Checkbox\n          checked={terms}\n          onCheckedChange={setTerms}\n        />\n        <Label>Accept terms and conditions</Label>\n      </View>\n\n      {/* Sizes */}\n      <Checkbox size=\"sm\" checked={true} />\n      <Checkbox size=\"base\" checked={true} />\n      <Checkbox size=\"lg\" checked={true} />\n\n      {/* Variants */}\n      <Checkbox variant=\"default\" checked={true} />\n      <Checkbox variant=\"destructive\" checked={true} />\n\n      {/* Disabled */}\n      <Checkbox disabled checked={false} />\n      <Checkbox disabled checked={true} />\n\n      {/* Indeterminate state */}\n      <Checkbox indeterminate={true} />\n    </>\n  );\n}",
     "api": {
       "description": "A checkbox component with label support and customizable styling. Supports controlled and uncontrolled modes.",
       "extends": {
@@ -498,14 +526,26 @@
           "description": "Whether the checkbox is checked"
         },
         {
+          "name": "defaultChecked",
+          "type": "boolean",
+          "description": "Default checked state for uncontrolled component"
+        },
+        {
           "name": "onCheckedChange",
           "type": "(checked: boolean) => void",
           "description": "Callback when checkbox state changes"
         },
         {
-          "name": "label",
-          "type": "string",
-          "description": "Checkbox label text"
+          "name": "size",
+          "type": "CheckboxSize",
+          "description": "Checkbox size",
+          "default": "base"
+        },
+        {
+          "name": "variant",
+          "type": "CheckboxVariant",
+          "description": "Checkbox visual variant",
+          "default": "default"
         },
         {
           "name": "disabled",
@@ -513,14 +553,14 @@
           "description": "Whether the checkbox is disabled"
         },
         {
-          "name": "size",
-          "type": "CheckboxSize",
-          "description": "Checkbox size",
-          "default": "base"
+          "name": "indeterminate",
+          "type": "boolean",
+          "description": "Whether the checkbox is in an indeterminate state"
         }
       ],
       "variants": {
-        "size": ["sm", "base", "lg"]
+        "size": ["sm", "base", "lg"],
+        "variant": ["default", "destructive"]
       }
     }
   },
@@ -528,7 +568,7 @@
     "dependencies": ["text"],
     "externalDeps": [],
     "setup": ["Install dependencies: leshi-ui add component text"],
-    "example": "import { Icon } from './components/ui/icon';\n\n<Icon name=\"check\" size={20} />\n<Icon name=\"arrow-left\" color=\"primary\" />",
+    "example": "import { Icon } from './components/ui/icon';\n\n// Available icons\n<Icon name=\"checkbox\" size={20} />\n<Icon name=\"x\" size={16} />\n<Icon name=\"minus\" size={18} />\n\n// With custom color\n<Icon name=\"checkbox\" color=\"green\" size={24} />\n<Icon name=\"x\" color=\"red\" size={20} />\n\n// Different sizes\n<Icon name=\"checkbox\" size={12} />  // Small\n<Icon name=\"checkbox\" size={16} />  // Medium\n<Icon name=\"checkbox\" size={24} />  // Large",
     "api": {
       "description": "An icon component with theme-aware colors and sizing. Uses a predefined icon set with semantic color variants.",
       "extends": {
@@ -539,24 +579,22 @@
         {
           "name": "name",
           "type": "IconName",
-          "description": "Icon name from the icon set",
+          "description": "Icon name from the available set",
           "required": true
         },
         {
           "name": "size",
           "type": "number",
-          "description": "Icon size in pixels",
-          "default": "20"
+          "description": "Icon size in pixels"
         },
         {
           "name": "color",
-          "type": "IconColor",
-          "description": "Icon color variant",
-          "default": "foreground"
+          "type": "string",
+          "description": "Icon color (any valid color string)"
         }
       ],
       "variants": {
-        "color": ["foreground", "primary", "secondary", "destructive", "muted"]
+        "name": ["checkbox", "x", "minus"]
       }
     }
   },
@@ -564,7 +602,7 @@
     "dependencies": ["text"],
     "externalDeps": [],
     "setup": ["Install dependencies: leshi-ui add component text"],
-    "example": "import { Avatar } from './components/ui/avatar';\n\n<Avatar source={{ uri: 'https://...' }} size=\"lg\" />\n<Avatar fallback=\"JD\" size=\"sm\" />",
+    "example": "import { Avatar } from './components/ui/avatar';\n\n// With image source\n<Avatar source={{ uri: 'https://github.com/github.png' }} size=\"lg\" />\n\n// With fallback text\n<Avatar fallback=\"JD\" size=\"md\" />\n\n// Different sizes\n<Avatar fallback=\"A\" size=\"sm\" />\n<Avatar fallback=\"B\" size=\"md\" />\n<Avatar fallback=\"C\" size=\"lg\" />\n<Avatar fallback=\"D\" size=\"xl\" />\n\n// Image with fallback\n<Avatar \n  source={{ uri: 'https://example.com/avatar.jpg' }}\n  fallback=\"U\"\n  size=\"lg\"\n/>",
     "api": {
       "description": "A user avatar component that displays an image with fallback text. Supports various sizes and automatic fallback handling.",
       "extends": {
@@ -586,11 +624,11 @@
           "name": "size",
           "type": "AvatarSize",
           "description": "Avatar size",
-          "default": "base"
+          "default": "md"
         }
       ],
       "variants": {
-        "size": ["sm", "base", "lg", "xl"]
+        "size": ["sm", "md", "lg", "xl"]
       }
     }
   },
@@ -635,7 +673,7 @@
     "dependencies": ["text"],
     "externalDeps": [],
     "setup": ["Install dependencies: leshi-ui add component text"],
-    "example": "import { Label } from './components/ui/label';\n\n<Label>Email Address</Label>\n<Label required>Password *</Label>",
+    "example": "import { Label } from './components/ui/label';\n\n// Basic usage\n<Label>Email Address</Label>\n<Label>Password</Label>\n\n// With error state\n<Label error>This field has an error</Label>\n\n// Disabled state\n<Label disabled>Disabled label</Label>\n\n// Custom styling\n<Label style={{ fontSize: 16, fontWeight: 'bold' }}>\n  Custom Label\n</Label>",
     "api": {
       "description": "A form label component with required field indicator support. Used to label form inputs and controls.",
       "extends": {
@@ -644,9 +682,14 @@
       },
       "props": [
         {
-          "name": "required",
+          "name": "error",
           "type": "boolean",
-          "description": "Whether to show required indicator (*)"
+          "description": "Whether the label is in error state"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "description": "Whether the label is disabled"
         },
         {
           "name": "children",
@@ -662,7 +705,7 @@
     "dependencies": [],
     "externalDeps": ["react-native-reanimated"],
     "setup": ["Install external dependency: bun add react-native-reanimated"],
-    "example": "import { Skeleton } from './components/ui/skeleton';\n\n<Skeleton height={20} width={200} />\n<Skeleton height={40} width=\"100%\" variant=\"rounded\" />",
+    "example": "import { Skeleton } from './components/ui/skeleton';\n\n// Basic usage\n<Skeleton height={20} width={200} />\n<Skeleton height={40} width=\"100%\" />\n\n// Different dimensions\n<Skeleton height={16} width={120} />  // Small text\n<Skeleton height={24} width={180} />  // Medium text\n<Skeleton height={32} width={240} />  // Large text\n\n// Custom border radius\n<Skeleton height={60} width={60} borderRadius={30} />  // Circle\n<Skeleton height={100} width={150} borderRadius={8} />  // Rounded card\n\n// Without animation\n<Skeleton height={20} width={100} animated={false} />\n\n// Full width examples\n<Skeleton height={44} width=\"100%\" borderRadius={6} />  // Button skeleton\n<Skeleton height={200} width=\"100%\" borderRadius={12} /> // Image skeleton",
     "api": {
       "description": "An animated skeleton loading placeholder with shimmer effect. Perfect for showing loading states while content loads.",
       "extends": {
@@ -674,24 +717,27 @@
           "name": "width",
           "type": "DimensionValue",
           "description": "Skeleton width",
-          "required": true
+          "default": "100%"
         },
         {
           "name": "height",
           "type": "DimensionValue",
           "description": "Skeleton height",
-          "required": true
+          "default": "20"
         },
         {
-          "name": "variant",
-          "type": "SkeletonVariant",
-          "description": "Skeleton shape variant",
-          "default": "rectangular"
+          "name": "borderRadius",
+          "type": "number",
+          "description": "Custom border radius"
+        },
+        {
+          "name": "animated",
+          "type": "boolean",
+          "description": "Whether to show shimmer animation",
+          "default": "true"
         }
       ],
-      "variants": {
-        "variant": ["rectangular", "rounded", "circular"]
-      }
+      "variants": {}
     }
   },
   "progress": {
@@ -741,7 +787,7 @@
     "dependencies": [],
     "externalDeps": ["react-native-reanimated"],
     "setup": ["Install external dependency: bun add react-native-reanimated"],
-    "example": "import { Switch } from './components/ui/switch';\n\n<Switch\n  checked={enabled}\n  onCheckedChange={setEnabled}\n  label=\"Enable notifications\"\n/>",
+    "example": "import { Switch } from './components/ui/switch';\nimport { Label } from './components/ui/label';\nimport { View } from 'react-native';\nimport { useState } from 'react';\n\nfunction Example() {\n  const [enabled, setEnabled] = useState(false);\n  const [notifications, setNotifications] = useState(true);\n\n  return (\n    <>\n      {/* Basic usage */}\n      <Switch\n        checked={enabled}\n        onCheckedChange={setEnabled}\n      />\n\n      {/* With label (separate component) */}\n      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>\n        <Switch\n          checked={notifications}\n          onCheckedChange={setNotifications}\n        />\n        <Label>Enable notifications</Label>\n      </View>\n\n      {/* Sizes */}\n      <Switch size=\"sm\" checked={true} />\n      <Switch size=\"base\" checked={true} />\n      <Switch size=\"lg\" checked={true} />\n\n      {/* Variants */}\n      <Switch variant=\"default\" checked={true} />\n      <Switch variant=\"destructive\" checked={true} />\n\n      {/* Disabled */}\n      <Switch disabled checked={false} />\n      <Switch disabled checked={true} />\n    </>\n  );\n}",
     "api": {
       "description": "An animated toggle switch component with smooth transitions. Supports controlled and uncontrolled modes with optional labels.",
       "extends": {
@@ -755,29 +801,36 @@
           "description": "Whether the switch is checked"
         },
         {
+          "name": "defaultChecked",
+          "type": "boolean",
+          "description": "Default checked state for uncontrolled component"
+        },
+        {
           "name": "onCheckedChange",
           "type": "(checked: boolean) => void",
           "description": "Callback when switch state changes"
-        },
-        {
-          "name": "label",
-          "type": "string",
-          "description": "Switch label text"
-        },
-        {
-          "name": "disabled",
-          "type": "boolean",
-          "description": "Whether the switch is disabled"
         },
         {
           "name": "size",
           "type": "SwitchSize",
           "description": "Switch size",
           "default": "base"
+        },
+        {
+          "name": "variant",
+          "type": "SwitchVariant",
+          "description": "Switch visual variant",
+          "default": "default"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "description": "Whether the switch is disabled"
         }
       ],
       "variants": {
-        "size": ["sm", "base", "lg"]
+        "size": ["sm", "base", "lg"],
+        "variant": ["default", "destructive"]
       }
     }
   },
@@ -803,7 +856,7 @@
     "dependencies": [],
     "externalDeps": [],
     "setup": [],
-    "example": "import { Divider } from './components/ui/divider';\n\n<Divider />\n<Divider orientation=\"vertical\" />\n<Divider variant=\"dashed\" />",
+    "example": "import { Divider } from './components/ui/divider';\n\n// Basic horizontal divider\n<Divider />\n\n// Vertical divider\n<Divider orientation=\"vertical\" />\n\n// Custom styling\n<Divider style={{ backgroundColor: 'red', height: 2 }} />\n<Divider \n  orientation=\"vertical\" \n  style={{ width: 2, backgroundColor: 'blue' }} \n/>",
     "api": {
       "description": "A visual separator component for dividing content sections. Supports horizontal and vertical orientations with styling variants.",
       "extends": {
@@ -816,17 +869,10 @@
           "type": "DividerOrientation",
           "description": "Divider orientation",
           "default": "horizontal"
-        },
-        {
-          "name": "variant",
-          "type": "DividerVariant",
-          "description": "Divider style variant",
-          "default": "solid"
         }
       ],
       "variants": {
-        "orientation": ["horizontal", "vertical"],
-        "variant": ["solid", "dashed"]
+        "orientation": ["horizontal", "vertical"]
       }
     }
   },
@@ -870,9 +916,9 @@
   },
   "spinner": {
     "dependencies": [],
-    "externalDeps": ["react-native-reanimated"],
-    "setup": ["Install external dependency: bun add react-native-reanimated"],
-    "example": "import { Spinner } from './components/ui/spinner';\n\n<Spinner size=\"sm\" />\n<Spinner size=\"lg\" color=\"primary\" />",
+    "externalDeps": [],
+    "setup": [],
+    "example": "import { Spinner } from './components/ui/spinner';\n\n// Basic usage\n<Spinner />\n\n// Different sizes\n<Spinner size=\"small\" />\n<Spinner size=\"large\" />\n<Spinner size={30} />  // Custom size\n\n// With custom color\n<Spinner color=\"blue\" />\n<Spinner color=\"red\" size=\"large\" />\n\n// Loading states\n<Spinner size=\"small\" color=\"gray\" />  // Small loading\n<Spinner size={40} color=\"green\" />   // Custom loading",
     "api": {
       "description": "An animated loading spinner component with smooth rotation animation and customizable size and color options.",
       "extends": {
@@ -882,20 +928,18 @@
       "props": [
         {
           "name": "size",
-          "type": "SpinnerSize",
-          "description": "Spinner size",
-          "default": "base"
+          "type": "'large' | 'small' | number",
+          "description": "Spinner size - predefined or custom number",
+          "default": "large"
         },
         {
           "name": "color",
-          "type": "SpinnerColor",
-          "description": "Spinner color variant",
-          "default": "primary"
+          "type": "string",
+          "description": "Spinner color (any valid color string)"
         }
       ],
       "variants": {
-        "size": ["sm", "base", "lg", "xl"],
-        "color": ["primary", "secondary", "muted"]
+        "size": ["large", "small"]
       }
     }
   }
