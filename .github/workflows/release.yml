@@ -82,6 +82,9 @@ jobs:
         run: bun run build
         working-directory: ./cli
 
+      - name: Copy README for NPM
+        run: cp README.md cli/README.md
+
       - name: Test CLI basic functionality
         run: |
           cd /tmp

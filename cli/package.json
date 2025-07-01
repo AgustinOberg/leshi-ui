@@ -23,7 +23,7 @@
     "pre-commit": "node scripts/pre-commit.js",
     "release": "node scripts/release.js",
     "lint": "eslint src --ext .ts",
-    "prepublishOnly": "bun run build"
+    "prepublishOnly": "bun run build && cp ../README.md ./README.md"
   },
   "keywords": [
     "react-native",
@@ -59,7 +59,7 @@
   },
   "files": [
     "dist/**/*",
-    "../README.md"
+    "README.md"
   ],
   "dependencies": {
     "commander": "^11.1.0",
