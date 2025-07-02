@@ -1,6 +1,6 @@
 {
   "button": {
-    "dependencies": ["text"],
+    "dependencies": ["text", "spinner"],
     "externalDeps": [],
     "setup": ["Install dependencies: leshi-ui add component text"],
     "example": "import { Button } from './components/ui/button';\n\n// Variants\n<Button variant=\"primary\" text=\"Primary\" />\n<Button variant=\"secondary\" text=\"Secondary\" />\n<Button variant=\"outline\" text=\"Outline\" />\n<Button variant=\"ghost\" text=\"Ghost\" />\n<Button variant=\"destructive\" text=\"Destructive\" />\n\n// Sizes\n<Button size=\"sm\" text=\"Small\" />\n<Button size=\"base\" text=\"Base\" />\n<Button size=\"lg\" text=\"Large\" />\n\n// States\n<Button loading={true} text=\"Loading...\" />\n<Button disabled={true} text=\"Disabled\" />\n\n// Custom onPress\n<Button \n  text=\"Click me\" \n  onPress={() => console.log('Button pressed!')} \n/>\n\n// With prefix/suffix icons\n<Button \n  text=\"With Prefix\" \n  prefix={<Icon name=\"check\" />} \n  variant=\"primary\" \n/>\n<Button \n  text=\"With Suffix\" \n  suffix={<Icon name=\"arrow-right\" />} \n  variant=\"primary\" \n/>",
@@ -916,11 +916,11 @@
   },
   "spinner": {
     "dependencies": [],
-    "externalDeps": [],
-    "setup": [],
-    "example": "import { Spinner } from './components/ui/spinner';\n\n// Basic usage\n<Spinner />\n\n// Different sizes\n<Spinner size=\"small\" />\n<Spinner size=\"large\" />\n<Spinner size={30} />  // Custom size\n\n// With custom color\n<Spinner color=\"blue\" />\n<Spinner color=\"red\" size=\"large\" />\n\n// Loading states\n<Spinner size=\"small\" color=\"gray\" />  // Small loading\n<Spinner size={40} color=\"green\" />   // Custom loading",
+    "externalDeps": ["react-native-reanimated"],
+    "setup": ["Install external dependency: bun add react-native-reanimated"],
+    "example": "import { Spinner } from './components/ui/spinner';\n\n// Basic usage\n<Spinner />\n\n// Different sizes\n<Spinner size=\"xs\" />\n<Spinner size=\"sm\" />\n<Spinner size=\"base\" />\n<Spinner size=\"lg\" />\n<Spinner size=\"xl\" />\n\n// Variants\n<Spinner variant=\"default\" />\n<Spinner variant=\"primary\" />\n<Spinner variant=\"secondary\" />\n<Spinner variant=\"destructive\" />\n<Spinner variant=\"muted\" />\n\n// Custom properties\n<Spinner color=\"#ff6b6b\" />\n<Spinner strokeWidth={3} />\n<Spinner duration={1200} />\n\n// Combined usage\n<Spinner \n  size=\"lg\" \n  variant=\"primary\" \n  strokeWidth={3}\n  duration={600}\n/>",
     "api": {
-      "description": "An animated loading spinner component with smooth rotation animation and customizable size and color options.",
+      "description": "A smooth animated loading spinner built with Reanimated. Features shadcn-inspired variants, multiple sizes, and customizable animation properties.",
       "extends": {
         "name": "ViewProps",
         "description": "All React Native View props (style, onLayout, etc.)"
@@ -928,18 +928,36 @@
       "props": [
         {
           "name": "size",
-          "type": "'large' | 'small' | number",
-          "description": "Spinner size - predefined or custom number",
-          "default": "large"
+          "type": "SpinnerSize",
+          "description": "Spinner size variant",
+          "default": "base"
+        },
+        {
+          "name": "variant",
+          "type": "SpinnerVariant",
+          "description": "Spinner color variant",
+          "default": "default"
         },
         {
           "name": "color",
           "type": "string",
-          "description": "Spinner color (any valid color string)"
+          "description": "Custom spinner color (overrides variant)"
+        },
+        {
+          "name": "strokeWidth",
+          "type": "number",
+          "description": "Spinner border width (overrides size default)"
+        },
+        {
+          "name": "duration",
+          "type": "number",
+          "description": "Animation duration in milliseconds",
+          "default": "800"
         }
       ],
       "variants": {
-        "size": ["large", "small"]
+        "size": ["xs", "sm", "base", "lg", "xl"],
+        "variant": ["default", "primary", "secondary", "destructive", "muted"]
       }
     }
   }
