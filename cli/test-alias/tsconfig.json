@@ -1,6 +1,6 @@
 {
-  "baseUrl": ".",
   "compilerOptions": {
+    "baseUrl": ".",
     "paths": {
       "@/lib/utils/*": [
         "./lib/utils/*"
@@ -32,7 +32,6 @@
       "@/components/ui": [
         "./components/ui"
       ]
-    },
-    "baseUrl": "."
+    }
   }
 }

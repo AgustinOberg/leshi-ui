@@ -5,6 +5,15 @@ import { Logger } from '../utils/logger.js';
 
 export class ImportTransformer {
   /**
+   * Extract quote character from import statement
+   */
+  private static getQuoteChar(match: string): string {
+    if (match.includes('"')) return '"';
+    if (match.includes('`')) return '`';
+    return "'";
+  }
+
+  /**
    * Transform imports in a file to use the configured aliases
    */
   static async transformImports(
@@ -21,32 +30,38 @@ export class ImportTransformer {
       // Transform style imports: ../styles/* -> @/styles/* (from lib directory)
       // This handles all ../styles/ imports including theme
       transformedCode = transformedCode.replace(
-        /from\s+['"`]\.\.\/styles\/([^'"]+)['"`]/g,
-        (match, path) => `from '${config.aliases.styles}/${path}'`
+        /from\s+(['"`])\.\.\/styles\/([^'"]+)\1/g,
+        (match, quote, path) => `from ${quote}${config.aliases.styles}/${path}${quote}`
       );
 
       // Transform theme imports: ../../styles/theme -> @/styles/theme (from nested directories)
       transformedCode = transformedCode.replace(
-        /from\s+['"`]\.\.\/\.\.\/styles\/theme['"`]/g,
-        `from '${config.aliases.styles}/theme'`
+        /from\s+(['"`])\.\.\/\.\.\/styles\/theme\1/g,
+        (match, quote) => `from ${quote}${config.aliases.styles}/theme${quote}`
       );
 
       // Transform style imports: ../../styles/* -> @/styles/* (from nested directories)
       transformedCode = transformedCode.replace(
-        /from\s+['"`]\.\.\/\.\.\/styles\/([^'"]+)['"`]/g,
-        (match, path) => `from '${config.aliases.styles}/${path}'`
+        /from\s+(['"`])\.\.\/\.\.\/styles\/([^'"]+)\1/g,
+        (match, quote, path) => `from ${quote}${config.aliases.styles}/${path}${quote}`
       );
 
       // Transform utility imports: ../lib/* -> @/lib/*
       transformedCode = transformedCode.replace(
-        /from\s+['"`]\.\.\/lib\/([^'"]+)['"`]/g,
-        (match, path) => `from '${config.aliases.lib}/${path}'`
+        /from\s+(['"`])\.\.\/lib\/([^'"]+)\1/g,
+        (match, quote, path) => `from ${quote}${config.aliases.lib}/${path}${quote}`
+      );
+
+      // Transform utility imports: ../../lib/* -> @/lib/* (from nested directories)
+      transformedCode = transformedCode.replace(
+        /from\s+(['"`])\.\.\/\.\.\/lib\/([^'"]+)\1/g,
+        (match, quote, path) => `from ${quote}${config.aliases.lib}/${path}${quote}`
       );
 
       // Transform component imports: ../components/* -> @/components/*
       transformedCode = transformedCode.replace(
-        /from\s+['"`]\.\.\/components\/([^'"]+)['"`]/g,
-        (match, path) => `from '${config.aliases.components}/${path}'`
+        /from\s+(['"`])\.\.\/components\/([^'"]+)\1/g,
+        (match, quote, path) => `from ${quote}${config.aliases.components}/${path}${quote}`
       );
 
       // Generic regex-based transformation for any remaining patterns
@@ -176,26 +191,26 @@ export class ImportTransformer {
 
     // Transform theme imports: ../../styles/theme -> @/styles/theme
     transformedCode = transformedCode.replace(
-      /from\s+['"`]\.\.\/\.\.\/styles\/theme['"`]/g,
-      `from '${config.aliases.styles}/theme'`
+      /from\s+(['"`])\.\.\/\.\.\/styles\/theme\1/g,
+      (match, quote) => `from ${quote}${config.aliases.styles}/theme${quote}`
     );
 
     // Transform theme type imports: ../../styles/theme -> @/styles/theme  
     transformedCode = transformedCode.replace(
-      /from\s+['"`]\.\.\/\.\.\/styles\/([^'"]+)['"`]/g,
-      (match, path) => `from '${config.aliases.styles}/${path}'`
+      /from\s+(['"`])\.\.\/\.\.\/styles\/([^'"]+)\1/g,
+      (match, quote, path) => `from ${quote}${config.aliases.styles}/${path}${quote}`
     );
 
     // Transform component imports: ./text -> @/components/ui/text
     transformedCode = transformedCode.replace(
-      /from\s+['"`]\.\/([^'"]+)['"`]/g,
-      (match, componentPath) => `from '${config.aliases.ui}/${componentPath}'`
+      /from\s+(['"`])\.\/([^'"]+)\1/g,
+      (match, quote, componentPath) => `from ${quote}${config.aliases.ui}/${componentPath}${quote}`
     );
 
     // Transform utility imports: ../../lib/utils -> @/lib/utils
     transformedCode = transformedCode.replace(
-      /from\s+['"`]\.\.\/\.\.\/lib\/([^'"]+)['"`]/g,
-      (match, utilPath) => `from '${config.aliases.lib}/${utilPath}'`
+      /from\s+(['"`])\.\.\/\.\.\/lib\/([^'"]+)\1/g,
+      (match, quote, utilPath) => `from ${quote}${config.aliases.lib}/${utilPath}${quote}`
     );
 
     // Return the transformed code with aliases intact
