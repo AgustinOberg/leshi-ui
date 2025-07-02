@@ -14,6 +14,7 @@ const componentScreens = [
   { name: "Modal", href: "/components/Modal" },
   { name: "Progress", href: "/components/Progress" },
   { name: "Skeleton", href: "/components/Skeleton" },
+  { name: "Spinner", href: "/components/Spinner" },
   { name: "Surface", href: "/components/Surface" },
   { name: "Switch", href: "/components/Switch" },
   { name: "Text", href: "/components/Text" },
