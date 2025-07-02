@@ -1,14 +1,41 @@
-import { Framework, ProjectConfig } from '../types/index.js';
+import { Framework, ProjectConfig, LeshiConfig } from '../types/index.js';
 import { FileUtils } from '../utils/file-utils.js';
+import { ConfigService } from './config-service.js';
 
 export class ProjectService {
   static async getProjectConfig(cwd: string): Promise<ProjectConfig> {
+    // Try to read existing config first
+    const config = await ConfigService.readConfig(cwd);
+    
+    if (config) {
+      return {
+        framework: config.framework,
+        componentsDir: FileUtils.join(cwd, config.dirs.ui),
+        stylesDir: FileUtils.join(cwd, config.dirs.styles),
+        libDir: FileUtils.join(cwd, config.dirs.lib),
+        aliases: config.aliases,
+      };
+    }
+
+    // Fallback to defaults
     return {
       framework: 'rn', // Default framework
       componentsDir: FileUtils.join(cwd, 'components', 'ui'),
       stylesDir: FileUtils.join(cwd, 'styles'),
       libDir: FileUtils.join(cwd, 'lib'),
     };
+  }
+
+  static async getOrCreateConfig(cwd: string, framework?: Framework): Promise<LeshiConfig> {
+    const existingConfig = await ConfigService.readConfig(cwd);
+    
+    if (existingConfig) {
+      return existingConfig;
+    }
+
+    // Create default config if none exists
+    const defaultConfig = ConfigService.getDefaultConfig(framework || 'rn');
+    return defaultConfig;
   }
 
   static async isReactNativeProject(cwd: string): Promise<boolean> {

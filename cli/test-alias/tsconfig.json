@@ -1,0 +1,38 @@
+{
+  "baseUrl": ".",
+  "compilerOptions": {
+    "paths": {
+      "@/lib/utils/*": [
+        "./lib/utils/*"
+      ],
+      "@/lib/utils": [
+        "./lib/utils"
+      ],
+      "@/components/*": [
+        "./components/*"
+      ],
+      "@/components": [
+        "./components"
+      ],
+      "@/lib/*": [
+        "./lib/*"
+      ],
+      "@/lib": [
+        "./lib"
+      ],
+      "@/styles/*": [
+        "./styles/*"
+      ],
+      "@/styles": [
+        "./styles"
+      ],
+      "@/components/ui/*": [
+        "./components/ui/*"
+      ],
+      "@/components/ui": [
+        "./components/ui"
+      ]
+    },
+    "baseUrl": "."
+  }
+}

@@ -32,11 +32,33 @@ export interface ComponentInfo {
   api?: ComponentApi;
 }
 
+export interface AliasConfig {
+  utils: string;
+  components: string;
+  lib: string;
+  styles: string;
+  ui: string;
+}
+
+export interface LeshiConfig {
+  $schema?: string;
+  framework: Framework;
+  aliases: AliasConfig;
+  tsx: boolean;
+  dirs: {
+    components: string;
+    lib: string;
+    styles: string;
+    ui: string;
+  };
+}
+
 export interface ProjectConfig {
   framework: Framework;
   componentsDir: string;
   stylesDir: string;
   libDir: string;
+  aliases?: AliasConfig;
 }
 
 export interface ComponentRegistry {
