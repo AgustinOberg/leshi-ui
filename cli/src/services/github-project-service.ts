@@ -1,6 +1,7 @@
-import { Framework, ProjectConfig } from '../types/index.js';
+import { Framework, ProjectConfig, LeshiConfig } from '../types/index.js';
 import { FileUtils } from '../utils/file-utils.js';
 import { GitHubService } from './github-service.js';
+import { ImportTransformer } from './import-transformer.js';
 import { Logger } from '../utils/logger.js';
 
 export class GitHubProjectService {
@@ -70,6 +71,47 @@ export class GitHubProjectService {
   }
 
   /**
+   * Download and save a component from GitHub with import transformation
+   */
+  static async downloadComponentWithAliases(
+    framework: Framework, 
+    componentName: string, 
+    targetPath: string, 
+    config: LeshiConfig,
+    overwrite: boolean = false
+  ): Promise<boolean> {
+    try {
+      // Check if file exists and handle overwrite
+      if (await FileUtils.exists(targetPath) && !overwrite) {
+        Logger.warning(`Component '${componentName}' already exists. Use --overwrite to replace it.`);
+        return false;
+      }
+
+      // Download component content from GitHub
+      let componentContent = await GitHubService.downloadComponent(framework, componentName);
+      
+      // Transform imports to use configured aliases
+      componentContent = await ImportTransformer.transformComponentImports(
+        componentContent,
+        componentName,
+        targetPath,
+        config
+      );
+      
+      // Ensure directory exists
+      await FileUtils.ensureDir(FileUtils.dirname(targetPath));
+      
+      // Write component file
+      await FileUtils.writeFile(targetPath, componentContent);
+      
+      return true;
+    } catch (error) {
+      Logger.error(`Failed to download component '${componentName}': ${error instanceof Error ? error.message : 'Unknown error'}`);
+      return false;
+    }
+  }
+
+  /**
    * Download and save a utility file from GitHub
    */
   static async downloadUtility(
@@ -86,6 +128,45 @@ export class GitHubProjectService {
 
       // Download utility content from GitHub
       const utilityContent = await GitHubService.downloadUtility(framework, utilityPath);
+      
+      // Ensure directory exists
+      await FileUtils.ensureDir(FileUtils.dirname(targetPath));
+      
+      // Write utility file
+      await FileUtils.writeFile(targetPath, utilityContent);
+      
+      return true;
+    } catch (error) {
+      Logger.error(`Failed to download utility '${utilityPath}': ${error instanceof Error ? error.message : 'Unknown error'}`);
+      return false;
+    }
+  }
+
+  /**
+   * Download and save a utility file from GitHub with import transformation
+   */
+  static async downloadUtilityWithAliases(
+    framework: Framework, 
+    utilityPath: string, 
+    targetPath: string, 
+    config: LeshiConfig,
+    overwrite: boolean = false
+  ): Promise<boolean> {
+    try {
+      // Check if file exists and handle overwrite
+      if (await FileUtils.exists(targetPath) && !overwrite) {
+        return false;
+      }
+
+      // Download utility content from GitHub
+      let utilityContent = await GitHubService.downloadUtility(framework, utilityPath);
+      
+      // Transform imports to use configured aliases
+      utilityContent = await ImportTransformer.transformImports(
+        utilityContent,
+        targetPath,
+        config
+      );
       
       // Ensure directory exists
       await FileUtils.ensureDir(FileUtils.dirname(targetPath));

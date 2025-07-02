@@ -1,0 +1,18 @@
+{
+  "$schema": "https://leshi-ui.com/schema.json",
+  "framework": "rn",
+  "aliases": {
+    "utils": "@/lib/utils",
+    "components": "@/components",
+    "lib": "@/lib",
+    "styles": "@/styles",
+    "ui": "@/components/ui"
+  },
+  "tsx": true,
+  "dirs": {
+    "components": "components",
+    "lib": "lib",
+    "styles": "styles",
+    "ui": "components/ui"
+  }
+}
