@@ -1,10 +1,12 @@
 import { Command } from 'commander';
 import inquirer from 'inquirer';
 import ora from 'ora';
-import { Framework } from '../types/index.js';
+import { Framework, LeshiConfig } from '../types/index.js';
 import { Logger } from '../utils/logger.js';
 import { FileUtils } from '../utils/file-utils.js';
 import { ProjectService } from '../services/project-service.js';
+import { ConfigService } from '../services/config-service.js';
+import { ImportTransformer } from '../services/import-transformer.js';
 import { ComponentRegistryService } from '../services/component-registry.js';
 import { GitHubProjectService } from '../services/github-project-service.js';
 import { GitHubService } from '../services/github-service.js';
@@ -250,15 +252,32 @@ async function addComponents(componentNames: string[], options: AddOptions): Pro
     const installedComponents: string[] = [];
     const componentDetails: Array<{ name: string; dependencies: string[]; externalDeps: string[]; utilities?: string[] }> = [];
 
+    // Check if we have a config for alias transformation
+    const leshiConfig = await ConfigService.readConfig(cwd);
+    
     for (const componentName of finalComponentsToInstall) {
       const targetPath = FileUtils.join(config.componentsDir, `${componentName}.tsx`);
       
-      const success = await GitHubProjectService.downloadComponent(
-        framework, 
-        componentName, 
-        targetPath, 
-        options.overwrite || false
-      );
+      let success: boolean;
+      
+      if (leshiConfig) {
+        // Use enhanced download with alias transformation
+        success = await GitHubProjectService.downloadComponentWithAliases(
+          framework, 
+          componentName, 
+          targetPath, 
+          leshiConfig,
+          options.overwrite || false
+        );
+      } else {
+        // Fallback to regular download
+        success = await GitHubProjectService.downloadComponent(
+          framework, 
+          componentName, 
+          targetPath, 
+          options.overwrite || false
+        );
+      }
       
       if (success) {
         installedComponents.push(componentName);
@@ -282,12 +301,24 @@ async function addComponents(componentNames: string[], options: AddOptions): Pro
         for (const utilityFile of detail.utilities) {
           const targetPath = FileUtils.join(config.libDir, FileUtils.basename(utilityFile));
           
-          await GitHubProjectService.downloadUtility(
-            framework, 
-            utilityFile, 
-            targetPath, 
-            options.overwrite || false
-          );
+          if (leshiConfig) {
+            // Use enhanced download with alias transformation
+            await GitHubProjectService.downloadUtilityWithAliases(
+              framework, 
+              utilityFile, 
+              targetPath, 
+              leshiConfig,
+              options.overwrite || false
+            );
+          } else {
+            // Fallback to regular download
+            await GitHubProjectService.downloadUtility(
+              framework, 
+              utilityFile, 
+              targetPath, 
+              options.overwrite || false
+            );
+          }
         }
       }
     }
@@ -295,13 +326,25 @@ async function addComponents(componentNames: string[], options: AddOptions): Pro
     spinner.succeed(`Successfully added ${installedComponents.length} component${installedComponents.length === 1 ? '' : 's'}!`);
     
     Logger.break();
-    Logger.success('Components installed successfully!');
+    if (leshiConfig) {
+      Logger.success('Components installed with configured aliases!');
+    } else {
+      Logger.success('Components installed successfully!');
+    }
     Logger.break();
     
     Logger.log(`${icons.package} Installed components:`);
     installedComponents.forEach(name => {
       Logger.log(`  • ${colors.primary(name)}`);
     });
+    
+    if (leshiConfig) {
+      Logger.break();
+      Logger.log(`${icons.gear} Import aliases applied:`);
+      Object.entries(leshiConfig.aliases).forEach(([key, value]) => {
+        Logger.log(`  • ${colors.primary(value)} - ${colors.dim(key)}`);
+      });
+    }
     
     // Show setup instructions for external dependencies
     const externalDeps = new Set<string>();
