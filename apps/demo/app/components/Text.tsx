@@ -1,3 +1,15 @@
+<<<<<<< HEAD
+import { ScrollView } from "react-native";
+import { Text } from "@leshi/ui-rn";
+
+const sizes: any[] = ["xs", "sm", "base", "lg", "xl", "2xl", "3xl"];
+const variants: any[] = [
+  "foreground",
+  "primary",
+  "primaryForeground",
+  "secondary",
+  "secondaryForeground",
+=======
 import { ScrollView, View } from "react-native";
 import { Text, Surface } from "@leshi/ui-rn";
 
@@ -8,10 +20,13 @@ const colorVariants = [
   "primaryForeground",
   "secondary",
   "secondaryForeground", 
+>>>>>>> feature/import-alias
   "destructive",
   "destructiveForeground",
   "mutedForeground",
 ];
+<<<<<<< HEAD
+=======
 const displaySizes = ["xs", "sm", "base", "lg", "xl", "2xl", "3xl"];
 const largeSizes = ["4xl", "5xl", "6xl"];
 const extremeSizes = ["7xl", "8xl", "9xl"];
@@ -25,10 +40,35 @@ const Section = ({ title, children }: { title: string; children: React.ReactNode
     {children}
   </View>
 );
+>>>>>>> feature/import-alias
 
 export default function TextScreen() {
   return (
     <ScrollView contentContainerStyle={{ padding: 16 }}>
+<<<<<<< HEAD
+      <Text weight="bold" size="xl" style={{ marginBottom: 4 }}>
+        Text
+      </Text>
+      <Text style={{ marginBottom: 12 }}>
+        Typography component for displaying text.
+      </Text>
+      <Text weight="bold" size="lg" style={{ marginBottom: 8 }}>
+        Variants
+      </Text>
+      {variants.map((v) => (
+        <Text key={v} variant={v} style={{ marginBottom: 8 }}>
+          {v}
+        </Text>
+      ))}
+      <Text weight="bold" size="lg" style={{ marginVertical: 12 }}>
+        Sizes
+      </Text>
+      {sizes.map((s) => (
+        <Text key={s} size={s} style={{ marginBottom: 8 }}>
+          Size {s}
+        </Text>
+      ))}
+=======
       <Text variant="heading" size="2xl" style={{ marginBottom: 8 }}>
         Text Component
       </Text>
@@ -232,6 +272,7 @@ export default function TextScreen() {
           </View>
         </Surface>
       </Section>
+>>>>>>> feature/import-alias
     </ScrollView>
   );
 }

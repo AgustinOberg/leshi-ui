@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+import { ScrollView } from "react-native";
+import { Surface, Text } from "@leshi/ui-rn";
+
+const elevations: any[] = ["none", "xs", "md", "xl", "2xl", "3xl"];
+const variants: any[] = ["filled", "outlined"];
+=======
 import { ScrollView, View, Alert } from "react-native";
 import { Surface, Text, Button, TextInput, Avatar } from "@leshi/ui-rn";
 
@@ -14,10 +21,39 @@ const Section = ({ title, children }: { title: string; children: React.ReactNode
     {children}
   </View>
 );
+>>>>>>> feature/import-alias
 
 export default function SurfaceScreen() {
   return (
     <ScrollView contentContainerStyle={{ padding: 16 }}>
+<<<<<<< HEAD
+      <Text weight="bold" size="xl" style={{ marginBottom: 4 }}>
+        Surface
+      </Text>
+      <Text style={{ marginBottom: 12 }}>
+        Container that applies elevation and background.
+      </Text>
+      <Text weight="bold" size="lg" style={{ marginBottom: 8 }}>
+        Variants
+      </Text>
+      {variants.map((v) => (
+        <Surface key={v} variant={v} style={{ padding: 8, marginBottom: 12 }}>
+          <Text>{v}</Text>
+        </Surface>
+      ))}
+      <Text weight="bold" size="lg" style={{ marginVertical: 12 }}>
+        Elevation
+      </Text>
+      {elevations.map((e) => (
+        <Surface
+          key={e}
+          elevation={e}
+          style={{ padding: 8, marginBottom: 12 }}
+        >
+          <Text>{e}</Text>
+        </Surface>
+      ))}
+=======
       <Text variant="heading" size="2xl" style={{ marginBottom: 8 }}>
         Surface Component
       </Text>
@@ -290,6 +326,7 @@ export default function SurfaceScreen() {
           </View>
         </View>
       </Section>
+>>>>>>> feature/import-alias
     </ScrollView>
   );
 }

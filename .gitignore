@@ -173,6 +173,8 @@ dist
 
 # Finder (MacOS) folder config
 .DS_Store
+<<<<<<< HEAD
+=======
 
 # CLI Test projects - ignore generated files
 cli/test-projects/*/components/
@@ -202,3 +204,4 @@ cli/test-cli-integration/react-native-unistyles/.expo/
 
 # Temporary test directories
 temp-test/
+>>>>>>> feature/import-alias
