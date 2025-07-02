@@ -3,6 +3,7 @@ import { Button, Surface, Text, useThemeName } from "@leshi/ui-rn";
 import { Link } from "expo-router";
 
 const componentScreens = [
+  { name: "Accordion", href: "/components/Accordion" },
   { name: "AlertDialog", href: "/components/AlertDialog" },
   { name: "Avatar", href: "/components/Avatar" },
   { name: "Badge", href: "/components/Badge" },
@@ -14,6 +15,7 @@ const componentScreens = [
   { name: "Modal", href: "/components/Modal" },
   { name: "Progress", href: "/components/Progress" },
   { name: "Skeleton", href: "/components/Skeleton" },
+  { name: "Spinner", href: "/components/Spinner" },
   { name: "Surface", href: "/components/Surface" },
   { name: "Switch", href: "/components/Switch" },
   { name: "Text", href: "/components/Text" },

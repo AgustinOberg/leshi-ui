@@ -1,6 +1,6 @@
 {
   "button": {
-    "dependencies": ["text"],
+    "dependencies": ["text", "spinner"],
     "externalDeps": [],
     "setup": ["Install dependencies: leshi-ui add component text"],
     "example": "import { Button } from './components/ui/button';\n\n// Variants\n<Button variant=\"primary\" text=\"Primary\" />\n<Button variant=\"secondary\" text=\"Secondary\" />\n<Button variant=\"outline\" text=\"Outline\" />\n<Button variant=\"ghost\" text=\"Ghost\" />\n<Button variant=\"destructive\" text=\"Destructive\" />\n\n// Sizes\n<Button size=\"sm\" text=\"Small\" />\n<Button size=\"base\" text=\"Base\" />\n<Button size=\"lg\" text=\"Large\" />\n\n// States\n<Button loading={true} text=\"Loading...\" />\n<Button disabled={true} text=\"Disabled\" />\n\n// Custom onPress\n<Button \n  text=\"Click me\" \n  onPress={() => console.log('Button pressed!')} \n/>\n\n// With prefix/suffix icons\n<Button \n  text=\"With Prefix\" \n  prefix={<Icon name=\"check\" />} \n  variant=\"primary\" \n/>\n<Button \n  text=\"With Suffix\" \n  suffix={<Icon name=\"arrow-right\" />} \n  variant=\"primary\" \n/>",
@@ -916,11 +916,11 @@
   },
   "spinner": {
     "dependencies": [],
-    "externalDeps": [],
-    "setup": [],
-    "example": "import { Spinner } from './components/ui/spinner';\n\n// Basic usage\n<Spinner />\n\n// Different sizes\n<Spinner size=\"small\" />\n<Spinner size=\"large\" />\n<Spinner size={30} />  // Custom size\n\n// With custom color\n<Spinner color=\"blue\" />\n<Spinner color=\"red\" size=\"large\" />\n\n// Loading states\n<Spinner size=\"small\" color=\"gray\" />  // Small loading\n<Spinner size={40} color=\"green\" />   // Custom loading",
+    "externalDeps": ["react-native-reanimated"],
+    "setup": ["Install external dependency: bun add react-native-reanimated"],
+    "example": "import { Spinner } from './components/ui/spinner';\n\n// Basic usage\n<Spinner />\n\n// Different sizes\n<Spinner size=\"xs\" />\n<Spinner size=\"sm\" />\n<Spinner size=\"base\" />\n<Spinner size=\"lg\" />\n<Spinner size=\"xl\" />\n\n// Variants\n<Spinner variant=\"default\" />\n<Spinner variant=\"primary\" />\n<Spinner variant=\"secondary\" />\n<Spinner variant=\"destructive\" />\n<Spinner variant=\"muted\" />\n\n// Custom properties\n<Spinner color=\"#ff6b6b\" />\n<Spinner strokeWidth={3} />\n<Spinner duration={1200} />\n\n// Combined usage\n<Spinner \n  size=\"lg\" \n  variant=\"primary\" \n  strokeWidth={3}\n  duration={600}\n/>",
     "api": {
-      "description": "An animated loading spinner component with smooth rotation animation and customizable size and color options.",
+      "description": "A smooth animated loading spinner built with Reanimated. Features shadcn-inspired variants, multiple sizes, and customizable animation properties.",
       "extends": {
         "name": "ViewProps",
         "description": "All React Native View props (style, onLayout, etc.)"
@@ -928,18 +928,116 @@
       "props": [
         {
           "name": "size",
-          "type": "'large' | 'small' | number",
-          "description": "Spinner size - predefined or custom number",
-          "default": "large"
+          "type": "SpinnerSize",
+          "description": "Spinner size variant",
+          "default": "base"
+        },
+        {
+          "name": "variant",
+          "type": "SpinnerVariant",
+          "description": "Spinner color variant",
+          "default": "default"
         },
         {
           "name": "color",
           "type": "string",
-          "description": "Spinner color (any valid color string)"
+          "description": "Custom spinner color (overrides variant)"
+        },
+        {
+          "name": "strokeWidth",
+          "type": "number",
+          "description": "Spinner border width (overrides size default)"
+        },
+        {
+          "name": "duration",
+          "type": "number",
+          "description": "Animation duration in milliseconds",
+          "default": "800"
         }
       ],
       "variants": {
-        "size": ["large", "small"]
+        "size": ["xs", "sm", "base", "lg", "xl"],
+        "variant": ["default", "primary", "secondary", "destructive", "muted"]
+      }
+    }
+  },
+  "accordion": {
+    "dependencies": ["text", "icon"],
+    "externalDeps": ["react-native-reanimated"],
+    "setup": ["Install external dependency: bun add react-native-reanimated", "Install components: leshi-ui add component text icon"],
+    "example": "import { Accordion } from './components/ui/accordion';\n\n// Basic single accordion\n<Accordion.Root type=\"single\" defaultValue=\"item-1\">\n  <Accordion.Item value=\"item-1\">\n    <Accordion.Trigger>What is React Native?</Accordion.Trigger>\n    <Accordion.Content>\n      React Native is a framework for building mobile apps.\n    </Accordion.Content>\n  </Accordion.Item>\n  <Accordion.Item value=\"item-2\">\n    <Accordion.Trigger>How does it work?</Accordion.Trigger>\n    <Accordion.Content>\n      It uses native components instead of web components.\n    </Accordion.Content>\n  </Accordion.Item>\n</Accordion.Root>\n\n// Multiple items can be open\n<Accordion.Root type=\"multiple\" defaultValue={[\"faq-1\", \"faq-2\"]}>\n  <Accordion.Item value=\"faq-1\">\n    <Accordion.Trigger>Pricing</Accordion.Trigger>\n    <Accordion.Content>\n      Our pricing starts at $10/month.\n    </Accordion.Content>\n  </Accordion.Item>\n</Accordion.Root>\n\n// Different variants\n<Accordion.Root variant=\"bordered\">\n<Accordion.Root variant=\"separated\">\n\n// Controlled state\nconst [value, setValue] = useState('item-1');\n<Accordion.Root \n  type=\"single\" \n  value={value} \n  onValueChange={setValue}\n>\n\n// Custom trigger content\n<Accordion.Trigger showIcon={false}>\n  <Text variant=\"heading\">Custom Trigger</Text>\n</Accordion.Trigger>\n\n// Disabled items\n<Accordion.Item value=\"disabled\" disabled>\n  <Accordion.Trigger>Disabled Item</Accordion.Trigger>\n  <Accordion.Content>This content won't show</Accordion.Content>\n</Accordion.Item>",
+    "api": {
+      "description": "A collapsible content component with smooth animations. Perfect for FAQs, settings panels, and content organization. Built with Reanimated for 60fps performance.",
+      "props": [
+        {
+          "name": "type",
+          "type": "'single' | 'multiple'",
+          "description": "Whether one or multiple items can be open",
+          "default": "single",
+          "component": "Root"
+        },
+        {
+          "name": "variant",
+          "type": "'default' | 'bordered' | 'separated'",
+          "description": "Visual style variant",
+          "default": "default",
+          "component": "Root"
+        },
+        {
+          "name": "defaultValue",
+          "type": "string | string[]",
+          "description": "Initial open item(s)",
+          "component": "Root"
+        },
+        {
+          "name": "value",
+          "type": "string | string[]",
+          "description": "Controlled open item(s)",
+          "component": "Root"
+        },
+        {
+          "name": "onValueChange",
+          "type": "(value: string | string[]) => void",
+          "description": "Callback when open items change",
+          "component": "Root"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "description": "Disable all accordion interactions",
+          "component": "Root"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "description": "Unique identifier for this item",
+          "required": true,
+          "component": "Item"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "description": "Disable this specific item",
+          "component": "Item"
+        },
+        {
+          "name": "showIcon",
+          "type": "boolean",
+          "description": "Show chevron icon",
+          "default": "true",
+          "component": "Trigger"
+        },
+        {
+          "name": "iconPosition",
+          "type": "'left' | 'right'",
+          "description": "Icon position",
+          "default": "right",
+          "component": "Trigger"
+        }
+      ],
+      "variants": {
+        "type": ["single", "multiple"],
+        "variant": ["default", "bordered", "separated"]
       }
     }
   }
