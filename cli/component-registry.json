@@ -960,5 +960,85 @@
         "variant": ["default", "primary", "secondary", "destructive", "muted"]
       }
     }
+  },
+  "accordion": {
+    "dependencies": ["text", "icon"],
+    "externalDeps": ["react-native-reanimated"],
+    "setup": ["Install external dependency: bun add react-native-reanimated", "Install components: leshi-ui add component text icon"],
+    "example": "import { Accordion } from './components/ui/accordion';\n\n// Basic single accordion\n<Accordion.Root type=\"single\" defaultValue=\"item-1\">\n  <Accordion.Item value=\"item-1\">\n    <Accordion.Trigger>What is React Native?</Accordion.Trigger>\n    <Accordion.Content>\n      React Native is a framework for building mobile apps.\n    </Accordion.Content>\n  </Accordion.Item>\n  <Accordion.Item value=\"item-2\">\n    <Accordion.Trigger>How does it work?</Accordion.Trigger>\n    <Accordion.Content>\n      It uses native components instead of web components.\n    </Accordion.Content>\n  </Accordion.Item>\n</Accordion.Root>\n\n// Multiple items can be open\n<Accordion.Root type=\"multiple\" defaultValue={[\"faq-1\", \"faq-2\"]}>\n  <Accordion.Item value=\"faq-1\">\n    <Accordion.Trigger>Pricing</Accordion.Trigger>\n    <Accordion.Content>\n      Our pricing starts at $10/month.\n    </Accordion.Content>\n  </Accordion.Item>\n</Accordion.Root>\n\n// Different variants\n<Accordion.Root variant=\"bordered\">\n<Accordion.Root variant=\"separated\">\n\n// Controlled state\nconst [value, setValue] = useState('item-1');\n<Accordion.Root \n  type=\"single\" \n  value={value} \n  onValueChange={setValue}\n>\n\n// Custom trigger content\n<Accordion.Trigger showIcon={false}>\n  <Text variant=\"heading\">Custom Trigger</Text>\n</Accordion.Trigger>\n\n// Disabled items\n<Accordion.Item value=\"disabled\" disabled>\n  <Accordion.Trigger>Disabled Item</Accordion.Trigger>\n  <Accordion.Content>This content won't show</Accordion.Content>\n</Accordion.Item>",
+    "api": {
+      "description": "A collapsible content component with smooth animations. Perfect for FAQs, settings panels, and content organization. Built with Reanimated for 60fps performance.",
+      "props": [
+        {
+          "name": "type",
+          "type": "'single' | 'multiple'",
+          "description": "Whether one or multiple items can be open",
+          "default": "single",
+          "component": "Root"
+        },
+        {
+          "name": "variant",
+          "type": "'default' | 'bordered' | 'separated'",
+          "description": "Visual style variant",
+          "default": "default",
+          "component": "Root"
+        },
+        {
+          "name": "defaultValue",
+          "type": "string | string[]",
+          "description": "Initial open item(s)",
+          "component": "Root"
+        },
+        {
+          "name": "value",
+          "type": "string | string[]",
+          "description": "Controlled open item(s)",
+          "component": "Root"
+        },
+        {
+          "name": "onValueChange",
+          "type": "(value: string | string[]) => void",
+          "description": "Callback when open items change",
+          "component": "Root"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "description": "Disable all accordion interactions",
+          "component": "Root"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "description": "Unique identifier for this item",
+          "required": true,
+          "component": "Item"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "description": "Disable this specific item",
+          "component": "Item"
+        },
+        {
+          "name": "showIcon",
+          "type": "boolean",
+          "description": "Show chevron icon",
+          "default": "true",
+          "component": "Trigger"
+        },
+        {
+          "name": "iconPosition",
+          "type": "'left' | 'right'",
+          "description": "Icon position",
+          "default": "right",
+          "component": "Trigger"
+        }
+      ],
+      "variants": {
+        "type": ["single", "multiple"],
+        "variant": ["default", "bordered", "separated"]
+      }
+    }
   }
 }

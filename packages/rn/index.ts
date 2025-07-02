@@ -1,4 +1,5 @@
 // Theme
+export { Accordion } from './components/ui/accordion';
 export { AlertDialog } from './components/ui/alert-dialog';
 export { Avatar, AvatarFallback, AvatarImage } from './components/ui/avatar';
 export { Badge } from './components/ui/badge';

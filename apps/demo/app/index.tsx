@@ -3,6 +3,7 @@ import { Button, Surface, Text, useThemeName } from "@leshi/ui-rn";
 import { Link } from "expo-router";
 
 const componentScreens = [
+  { name: "Accordion", href: "/components/Accordion" },
   { name: "AlertDialog", href: "/components/AlertDialog" },
   { name: "Avatar", href: "/components/Avatar" },
   { name: "Badge", href: "/components/Badge" },
