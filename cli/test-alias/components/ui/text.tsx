@@ -87,10 +87,12 @@ export const Text = ({
 };
 
 const createStyles = (theme: Theme) => {
+  // Helper function to calculate lineHeight for each fontSize
+  const calculateLineHeight = (fontSize: number) => Math.round(fontSize * 1.2);
+
   const baseStyles = StyleSheet.create({
     text: {
       includeFontPadding: false,
-      lineHeight: theme.sizes.fonts.base * 1.2,
       textAlignVertical: 'center',
     },
   });
@@ -149,10 +151,12 @@ const createStyles = (theme: Theme) => {
     caption: {
       color: theme.colors.mutedForeground,
       fontSize: theme.sizes.fonts.sm,
+      lineHeight: calculateLineHeight(theme.sizes.fonts.sm),
     },
     overline: {
       color: theme.colors.mutedForeground,
       fontSize: theme.sizes.fonts.xs,
+      lineHeight: calculateLineHeight(theme.sizes.fonts.xs),
       textTransform: 'uppercase' as const,
       letterSpacing: 1,
     },
@@ -166,20 +170,60 @@ const createStyles = (theme: Theme) => {
     foreground: { color: theme.colors.foreground },
   });
 
+  // Each size gets its own fontSize AND lineHeight calculated proportionally
   const size = StyleSheet.create({
-    xs: { fontSize: theme.sizes.fonts.xs },
-    sm: { fontSize: theme.sizes.fonts.sm },
-    base: { fontSize: theme.sizes.fonts.base },
-    lg: { fontSize: theme.sizes.fonts.lg },
-    xl: { fontSize: theme.sizes.fonts.xl },
-    '2xl': { fontSize: theme.sizes.fonts['2xl'] },
-    '3xl': { fontSize: theme.sizes.fonts['3xl'] },
-    '4xl': { fontSize: theme.sizes.fonts['4xl'] },
-    '5xl': { fontSize: theme.sizes.fonts['5xl'] },
-    '6xl': { fontSize: theme.sizes.fonts['6xl'] },
-    '7xl': { fontSize: theme.sizes.fonts['7xl'] },
-    '8xl': { fontSize: theme.sizes.fonts['8xl'] },
-    '9xl': { fontSize: theme.sizes.fonts['9xl'] },
+    xs: { 
+      fontSize: theme.sizes.fonts.xs, 
+      lineHeight: calculateLineHeight(theme.sizes.fonts.xs) 
+    },
+    sm: { 
+      fontSize: theme.sizes.fonts.sm, 
+      lineHeight: calculateLineHeight(theme.sizes.fonts.sm) 
+    },
+    base: { 
+      fontSize: theme.sizes.fonts.base, 
+      lineHeight: calculateLineHeight(theme.sizes.fonts.base) 
+    },
+    lg: { 
+      fontSize: theme.sizes.fonts.lg, 
+      lineHeight: calculateLineHeight(theme.sizes.fonts.lg) 
+    },
+    xl: { 
+      fontSize: theme.sizes.fonts.xl, 
+      lineHeight: calculateLineHeight(theme.sizes.fonts.xl) 
+    },
+    '2xl': { 
+      fontSize: theme.sizes.fonts['2xl'], 
+      lineHeight: calculateLineHeight(theme.sizes.fonts['2xl']) 
+    },
+    '3xl': { 
+      fontSize: theme.sizes.fonts['3xl'], 
+      lineHeight: calculateLineHeight(theme.sizes.fonts['3xl']) 
+    },
+    '4xl': { 
+      fontSize: theme.sizes.fonts['4xl'], 
+      lineHeight: calculateLineHeight(theme.sizes.fonts['4xl']) 
+    },
+    '5xl': { 
+      fontSize: theme.sizes.fonts['5xl'], 
+      lineHeight: calculateLineHeight(theme.sizes.fonts['5xl']) 
+    },
+    '6xl': { 
+      fontSize: theme.sizes.fonts['6xl'], 
+      lineHeight: calculateLineHeight(theme.sizes.fonts['6xl']) 
+    },
+    '7xl': { 
+      fontSize: theme.sizes.fonts['7xl'], 
+      lineHeight: calculateLineHeight(theme.sizes.fonts['7xl']) 
+    },
+    '8xl': { 
+      fontSize: theme.sizes.fonts['8xl'], 
+      lineHeight: calculateLineHeight(theme.sizes.fonts['8xl']) 
+    },
+    '9xl': { 
+      fontSize: theme.sizes.fonts['9xl'], 
+      lineHeight: calculateLineHeight(theme.sizes.fonts['9xl']) 
+    },
   });
 
   return { text: baseStyles.text, weight, color, size };
