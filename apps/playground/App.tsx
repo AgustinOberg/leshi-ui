@@ -119,7 +119,11 @@ function App() {
           onCheckedChange={() => setChecked(!checked)}
         />
       </View>
+<<<<<<< HEAD
       <Text weight="black">Esto es un texto </Text>
+=======
+      <Text weight="black">This is sample text</Text>
+>>>>>>> feature/import-alias
       <Text weight="bold" size="lg">
         Avatar
       </Text>
@@ -187,7 +191,11 @@ function App() {
             <AlertDialog.Action
               text="Yes, delete"
               onPress={() => {
+<<<<<<< HEAD
                 /* tu lógica */
+=======
+                /* your logic */
+>>>>>>> feature/import-alias
               }}
             />
           </AlertDialog.Footer>
@@ -205,7 +213,11 @@ function App() {
             <Dialog.Description>Make changes and save them.</Dialog.Description>
           </Dialog.Header>
 
+<<<<<<< HEAD
           {/* …contenido form… */}
+=======
+          {/* form content */}
+>>>>>>> feature/import-alias
 
           <Dialog.Footer orientation="row">
             <Dialog.Close asChild>

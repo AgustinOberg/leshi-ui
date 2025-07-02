@@ -1,38 +1,16 @@
 {
-  "name": "leshi-ui",
-  "module": "index.ts",
-  "type": "module",
+  "name": "leshi-ui-workspace",
+  "private": true,
   "workspaces": [
     "packages/*",
     "apps/*"
   ],
   "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
+    "@types/bun": "latest",
     "typescript": "^5.0.0"
   },
-  "dependencies": {
-    "chalk": "^5.3.0",
-    "commander": "^11.0.0",
-    "fs-extra": "11.1.1"
-  },
-  "version": "1.1.6",
-  "description": "Leshi CLI for UI utilities",
-  "license": "MIT",
-  "bin": {
-    "leshi-ui": "./bin/cli.js"
-  },
-  "files": [
-    "bin",
-    "packages",
-    "component-notes.json",
-    "README.md",
-    "USAGE.md",
-    "LICENSE"
-  ],
   "scripts": {
-    "test": "node tests/run-tests.js",
-    "release": "bunx npm publish"
-  }
+    "release": "node release.js"
+  },
+  "version": "0.0.1"
 }

@@ -1,0 +1,248 @@
+name: Leshi UI CI
+
+on:
+  push:
+    branches: [main, development]
+  pull_request:
+    branches: [main, development]
+
+env:
+  # Disable telemetry for faster builds
+  NEXT_TELEMETRY_DISABLED: 1
+  CI: true
+
+jobs:
+  # Job 1: Quality Checks (fastest feedback)
+  quality:
+    name: Code Quality & TypeScript
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: "npm"
+          cache-dependency-path: cli/package-lock.json
+
+      - name: Install CLI dependencies
+        working-directory: ./cli
+        run: npm ci --prefer-offline
+
+      - name: Build CLI
+        working-directory: ./cli
+        run: npm run build
+
+      - name: Run TypeScript validation
+        working-directory: ./cli
+        run: npm run test:typescript
+
+      - name: Run ESLint
+        working-directory: ./cli
+        run: npm run lint
+
+  # Job 2: Unit Tests
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: quality
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+          cache-dependency-path: cli/package-lock.json
+
+      - name: Setup Bun (for test runner)
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install CLI dependencies
+        working-directory: ./cli
+        run: npm ci --prefer-offline
+
+      - name: Build CLI
+        working-directory: ./cli
+        run: npm run build
+
+      - name: Run unit tests
+        working-directory: ./cli
+        run: npm test
+
+      - name: Upload coverage reports
+        if: matrix.node-version == '20.x'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports
+          path: cli/coverage/
+          retention-days: 7
+
+  # Job 3: E2E Integration Tests (local packages)
+  e2e-local:
+    name: E2E Tests (Local Packages)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: [quality, unit-tests]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: "npm"
+          cache-dependency-path: cli/package-lock.json
+
+      - name: Setup Bun (for fast package installation)
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install CLI dependencies
+        working-directory: ./cli
+        run: npm ci --prefer-offline
+
+      - name: Build CLI
+        working-directory: ./cli
+        run: npm run build
+
+      - name: Install test project dependencies (StyleSheet)
+        working-directory: ./cli/test-cli-integration/react-native-stylesheet
+        run: bun install --frozen-lockfile
+
+      - name: Install test project dependencies (Unistyles)
+        working-directory: ./cli/test-cli-integration/react-native-unistyles
+        run: bun install --frozen-lockfile
+
+      - name: Setup Unistyles prebuild
+        working-directory: ./cli/test-cli-integration/react-native-unistyles
+        run: bunx expo prebuild --bun
+
+      - name: Run E2E tests with local packages (StyleSheet)
+        working-directory: ./cli
+        run: npm run test:e2e
+
+      - name: Run E2E tests with local packages (Unistyles)
+        working-directory: ./cli
+        run: npm run test:e2e-unistyles
+
+      - name: Upload test artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-test-results
+          path: |
+            cli/test-cli-integration/react-native-stylesheet/components/
+            cli/test-cli-integration/react-native-stylesheet/styles/
+            cli/test-cli-integration/react-native-stylesheet/lib/
+            cli/test-cli-integration/react-native-unistyles/components/
+            cli/test-cli-integration/react-native-unistyles/styles/
+            cli/test-cli-integration/react-native-unistyles/lib/
+          retention-days: 7
+
+  # Job 4: E2E GitHub Tests (optional, only on main)
+  e2e-github:
+    name: E2E Tests (GitHub Integration)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: e2e-local
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: "npm"
+          cache-dependency-path: cli/package-lock.json
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install CLI dependencies
+        working-directory: ./cli
+        run: npm ci --prefer-offline
+
+      - name: Build CLI
+        working-directory: ./cli
+        run: npm run build
+
+      - name: Install test project dependencies (StyleSheet)
+        working-directory: ./cli/test-cli-integration/react-native-stylesheet
+        run: bun install --frozen-lockfile
+
+      - name: Install test project dependencies (Unistyles)
+        working-directory: ./cli/test-cli-integration/react-native-unistyles
+        run: bun install --frozen-lockfile
+
+      - name: Setup Unistyles prebuild
+        working-directory: ./cli/test-cli-integration/react-native-unistyles
+        run: bunx expo prebuild --bun
+
+      - name: Run E2E tests with GitHub
+        working-directory: ./cli
+        run: npm run test:e2e-github
+        continue-on-error: true # Don't fail CI if GitHub has issues
+
+  # Job 5: Deployment readiness check
+  deployment-ready:
+    name: Deployment Ready
+    runs-on: ubuntu-latest
+    needs: [quality, unit-tests, e2e-local]
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: "npm"
+          cache-dependency-path: cli/package-lock.json
+
+      - name: Install CLI dependencies
+        working-directory: ./cli
+        run: npm ci --prefer-offline
+
+      - name: Build CLI for production
+        working-directory: ./cli
+        run: npm run build
+
+      - name: Verify package can be published
+        working-directory: ./cli
+        run: npm pack --dry-run
+
+      - name: Check package size
+        working-directory: ./cli
+        run: |
+          PACKAGE_SIZE=$(npm pack --dry-run --json | jq '.[0].size')
+          echo "Package size: $PACKAGE_SIZE bytes"
+          if [ $PACKAGE_SIZE -gt 1048576 ]; then  # 1MB limit
+            echo "❌ Package size too large: $PACKAGE_SIZE bytes (max: 1MB)"
+            exit 1
+          fi
+          echo "✅ Package size OK: $PACKAGE_SIZE bytes"

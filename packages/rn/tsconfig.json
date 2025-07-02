@@ -23,6 +23,10 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false,
+<<<<<<< HEAD
+=======
+    "types": [],
+>>>>>>> feature/import-alias
     "baseUrl": "./",
     "paths": {
       "@/*": ["./*"]

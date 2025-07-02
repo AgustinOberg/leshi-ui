@@ -21,7 +21,11 @@ export default function RegistrationExample() {
       <TextInput placeholder="Password" secureTextEntry style={{ marginBottom: 12 }} />
       <TextInput placeholder="Confirm Password" secureTextEntry style={{ marginBottom: 12 }} />
       <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 12 }}>
+<<<<<<< HEAD
         <Switch size="md" checked={terms} onCheckedChange={setTerms} />
+=======
+        <Switch size="base" checked={terms} onCheckedChange={setTerms} />
+>>>>>>> feature/import-alias
         <Text style={{ marginLeft: 8 }}>Accept Terms</Text>
       </View>
       <Button text="Register" />

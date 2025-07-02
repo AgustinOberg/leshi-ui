@@ -1,0 +1,73 @@
+name: Tests and TypeScript Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Test and TypeScript Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      # CLI Tests and TypeScript
+      - name: Install CLI dependencies
+        run: bun install
+        working-directory: ./cli
+
+      - name: Run CLI TypeScript check
+        run: bunx tsc --noEmit
+        working-directory: ./cli
+
+      - name: Run CLI tests
+        run: bun test
+        working-directory: ./cli
+
+      #- name: Run CLI linting
+      #  run: bun run lint
+      #  working-directory: ./cli
+
+      # Note: RN and Unistyles packages are copy-paste components
+      # They don't need npm dependencies and are validated when copied to user projects
+
+      # Build CLI to ensure it compiles
+      - name: Build CLI
+        run: bun run build
+        working-directory: ./cli
+
+      # Test CLI functionality
+      - name: Test CLI commands
+        run: |
+          cd /tmp
+          mkdir test-cli
+          cd test-cli
+          echo '{"name": "test", "dependencies": {"react-native": "0.72.0"}}' > package.json
+          node ${{ github.workspace }}/cli/dist/index.js --help
+          node ${{ github.workspace }}/cli/dist/index.js list component
+      
+      # E2E Integration Test
+      - name: Install E2E test project dependencies (StyleSheet)
+        run: bun install
+        working-directory: ./cli/test-cli-integration/react-native-stylesheet
+      
+      - name: Install E2E test project dependencies (Unistyles)
+        run: bun install
+        working-directory: ./cli/test-cli-integration/react-native-unistyles
+      
+      - name: Run E2E Integration Test (StyleSheet)
+        run: bun run test:e2e
+        working-directory: ./cli
+        
+      - name: Run E2E Integration Test (Unistyles)
+        run: bun run test:e2e-unistyles
+        working-directory: ./cli

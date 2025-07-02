@@ -173,3 +173,35 @@ dist
 
 # Finder (MacOS) folder config
 .DS_Store
+<<<<<<< HEAD
+=======
+
+# CLI Test projects - ignore generated files
+cli/test-projects/*/components/
+cli/test-projects/*/styles/
+cli/test-projects/*/lib/
+cli/test-projects/*/index.ts
+cli/test-projects/*/leshi-ui.json
+
+# CLI Integration test projects - ignore generated files but keep base projects
+cli/test-cli-integration/react-native-stylesheet/components/
+cli/test-cli-integration/react-native-stylesheet/styles/
+cli/test-cli-integration/react-native-stylesheet/lib/
+cli/test-cli-integration/react-native-stylesheet/leshi-ui.json
+cli/test-cli-integration/react-native-stylesheet/node_modules/
+cli/test-cli-integration/react-native-stylesheet/bun.lockb
+
+cli/test-cli-integration/react-native-unistyles/components/
+cli/test-cli-integration/react-native-unistyles/styles/
+cli/test-cli-integration/react-native-unistyles/lib/
+cli/test-cli-integration/react-native-unistyles/leshi-ui.json
+cli/test-cli-integration/react-native-unistyles/android/
+cli/test-cli-integration/react-native-unistyles/ios/
+cli/test-cli-integration/react-native-unistyles/node_modules/
+cli/test-cli-integration/react-native-unistyles/bun.lockb
+cli/test-cli-integration/react-native-unistyles/index.ts
+cli/test-cli-integration/react-native-unistyles/.expo/
+
+# Temporary test directories
+temp-test/
+>>>>>>> feature/import-alias
