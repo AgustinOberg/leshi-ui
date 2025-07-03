@@ -21,7 +21,7 @@ const Pressable = React.forwardRef<
   const { children, ...pressableSlotProps } = props;
 
   if (!React.isValidElement(children)) {
-    console.warn('Slot.Pressable - Invalid asChild element', children);
+    // Invalid element passed to Slot.Pressable - returning null
     return null;
   }
 
@@ -54,7 +54,7 @@ const View = React.forwardRef<React.ElementRef<typeof RNView>, RNViewProps>(
     const { children, ...viewSlotProps } = props;
 
     if (!React.isValidElement(children)) {
-      console.warn('Slot.View - Invalid asChild element', children);
+      // Invalid element passed to Slot.View - returning null
       return null;
     }
 
@@ -88,7 +88,7 @@ const Text = React.forwardRef<React.ElementRef<typeof RNText>, RNTextProps>(
     const { children, ...textSlotProps } = props;
 
     if (!React.isValidElement(children)) {
-      console.warn('Slot.Text - Invalid asChild element', children);
+      // Invalid element passed to Slot.Text - returning null
       return null;
     }
 
@@ -128,7 +128,7 @@ const Image = React.forwardRef<
   const { children, ...imageSlotProps } = props;
 
   if (!React.isValidElement(children)) {
-    console.warn('Slot.Image - Invalid asChild element', children);
+    // Invalid element passed to Slot.Image - returning null
     return null;
   }
 

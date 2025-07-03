@@ -338,7 +338,7 @@ function AlertDialogAction({
           setOpen(false);
         }
       } catch (error) {
-        console.error('AlertDialog.Action error:', error);
+        // Handle errors silently in production - errors are caught and UI remains functional
       } finally {
         setLoading(false);
       }
@@ -416,7 +416,7 @@ function AlertDialogCancel({
           setOpen(false);
         }
       } catch (error) {
-        console.error('AlertDialog.Cancel error:', error);
+        // Handle errors silently in production - errors are caught and UI remains functional
       }
     },
     [onPress, closeOnPress, setOpen, isDisabled],

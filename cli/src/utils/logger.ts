@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { colors, icons } from './colors.js';
 
 export class Logger {

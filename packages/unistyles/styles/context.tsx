@@ -81,11 +81,13 @@ export const useThemeContext = (): ThemeContextValue => {
   return {
     theme: themes[systemTheme],
     themeName: systemTheme,
-    setThemeName: () =>
-      console.warn('[Theme] No ThemeProvider mounted — ignoring setThemeName'),
+    setThemeName: () => {
+      // No-op: ThemeProvider not mounted, theme changes ignored
+    },
     mode: 'system',
-    setMode: () =>
-      console.warn('[Theme] No ThemeProvider mounted — ignoring setMode'),
+    setMode: () => {
+      // No-op: ThemeProvider not mounted, mode changes ignored
+    },
   };
 };
 
