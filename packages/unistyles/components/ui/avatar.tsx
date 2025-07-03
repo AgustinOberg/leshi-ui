@@ -22,16 +22,8 @@ import { Text } from './text';
 
 export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
 
-// TODO: use "w" function here instead of hardcoded pixel values
-const PX: Record<AvatarSize, number> = {
-  sm: 24,
-  md: 32,
-  lg: 40,
-  xl: 64,
-};
-
 interface Ctx {
-  dim: number;
+  size: AvatarSize;
   hasImage: boolean;
   setHasImage: (v: boolean) => void;
 }
@@ -50,12 +42,11 @@ export interface AvatarProps {
 }
 
 export const Avatar = ({ size = 'md', style, children }: AvatarProps) => {
-  const dim = PX[size];
   const [hasImage, setHasImage] = useState(false);
 
   const value = useMemo<Ctx>(
-    () => ({ dim, hasImage, setHasImage }),
-    [dim, hasImage],
+    () => ({ size, hasImage, setHasImage }),
+    [size, hasImage],
   );
 
   styles.useVariants({ size });
@@ -86,7 +77,17 @@ export const AvatarImage = ({
   onError,
   ...rest
 }: AvatarImageProps) => {
-  const { dim, setHasImage } = useAvatar();
+  const { size, setHasImage } = useAvatar();
+  const theme = useTheme();
+  
+  // Use theme helper functions for consistent sizing
+  const sizeMap = {
+    sm: theme.sizes.width(6),
+    md: theme.sizes.width(8), 
+    lg: theme.sizes.width(10),
+    xl: theme.sizes.width(16),
+  };
+  const dim = sizeMap[size];
 
   const handleLoad = (e: NativeSyntheticEvent<ImageLoadEventData>) => {
     setHasImage(true);
@@ -125,10 +126,19 @@ export interface AvatarFallbackProps {
 }
 
 export const AvatarFallback = ({ children, style }: AvatarFallbackProps) => {
-  const { dim, hasImage } = useAvatar();
+  const { size, hasImage } = useAvatar();
   const theme = useTheme();
 
   if (hasImage) return null;
+
+  // Use theme helper functions for consistent sizing
+  const sizeMap = {
+    sm: theme.sizes.width(6),
+    md: theme.sizes.width(8), 
+    lg: theme.sizes.width(10),
+    xl: theme.sizes.width(16),
+  };
+  const dim = sizeMap[size];
 
   const initials =
     typeof children === 'string' ? children.slice(0, 2).toUpperCase() : null;

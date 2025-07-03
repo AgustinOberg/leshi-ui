@@ -2,6 +2,7 @@ import { Command } from 'commander';
 import { ComponentRegistryService } from '../services/component-registry.js';
 import { Logger } from '../utils/logger.js';
 import { colors, icons } from '../utils/colors.js';
+import { getComponentDescription } from '../utils/component-descriptions.js';
 
 export function createGuideCommand(): Command {
   return new Command('guide')
@@ -171,29 +172,3 @@ export const MyComponent = () => {
   Logger.tip(`List available themes: ${colors.primary('npx leshi-ui@latest list theme')}`);
 }
 
-function getComponentDescription(componentName: string): string {
-  const descriptions: Record<string, string> = {
-    'button': 'A versatile button component with multiple variants (primary, secondary, outline, ghost, destructive) and sizes (sm, base, lg). Supports loading states and custom styling.',
-    'text': 'A typography component with semantic variants (heading, body, caption) and font weights. Provides consistent text rendering across platforms.',
-    'modal': 'A flexible modal component with smooth animations and backdrop support. Requires @gorhom/portal for proper rendering.',
-    'dialog': 'A dialog component built on top of the modal system. Includes header, content, and footer sections with pre-styled layouts.',
-    'alert-dialog': 'A confirmation dialog for destructive actions. Features clear action and cancel buttons with appropriate styling.',
-    'surface': 'A container component with elevation, padding, and border radius options. Perfect for cards and elevated content.',
-    'text-input': 'A text input component with label, validation states (error, success), and helper text support.',
-    'text-area': 'A multi-line text input with configurable rows and the same features as text-input.',
-    'checkbox': 'A custom-styled checkbox component with label support and smooth animations.',
-    'switch': 'An animated toggle switch component with smooth transitions and customizable styling.',
-    'progress': 'An animated progress bar component with different variants and smooth value transitions.',
-    'skeleton': 'A loading skeleton component with pulse animations for placeholder content.',
-    'avatar': 'An avatar component with image source, fallback text, and multiple size options.',
-    'badge': 'A small status indicator with different variants (default, secondary, destructive) and sizes.',
-    'divider': 'A visual separator component for organizing content sections.',
-    'icon': 'A customizable icon component with theming support and size variants.',
-    'label': 'A form label component with required indicator and consistent styling.',
-    'radio': 'Radio button components for single-choice selections with group management.',
-    'slot': 'A utility component for component composition and flexible layouts.',
-    'spinner': 'A loading spinner component with different sizes and smooth animations.',
-  };
-
-  return descriptions[componentName] || 'A UI component for React Native applications.';
-}

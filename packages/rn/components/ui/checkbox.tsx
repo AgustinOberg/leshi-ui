@@ -88,7 +88,7 @@ export const Checkbox = React.memo<CheckboxProps>(
 
     // Handle press events
     const handlePress = useCallback(
-      (event: any) => {
+      (event: Parameters<NonNullable<PressableProps['onPress']>>[0]) => {
         if (disabled) return;
 
         const newChecked = !checked;

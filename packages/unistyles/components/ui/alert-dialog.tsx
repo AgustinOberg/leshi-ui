@@ -23,7 +23,7 @@ import { Pressable as SlotPressable } from './slot';
 import { useTheme } from '../../styles/context';
 
 /*──────────────────── Types */
-export type AlertDialogVariant = 'destructive' | 'warning' | 'default';
+export type AlertDialogVariant = 'default' | 'destructive' | 'warning';
 
 /*──────────────────── Context */
 interface AlertDialogContextValue {

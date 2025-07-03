@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -19,7 +19,7 @@ export interface SpinnerProps {
   color?: string;
   strokeWidth?: number;
   duration?: number;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
 }
 
 const SIZE_MAP: Record<SpinnerSize, number> = {

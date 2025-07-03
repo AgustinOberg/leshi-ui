@@ -1,6 +1,7 @@
 import { Framework, ProjectConfig, LeshiConfig } from '../types/index.js';
 import { FileUtils } from '../utils/file-utils.js';
 import { ConfigService } from './config-service.js';
+import { parseJsonWithSchemaOrFallback, packageJsonSchema } from '../utils/validation-schemas.js';
 
 export class ProjectService {
   static async getProjectConfig(cwd: string): Promise<ProjectConfig> {
@@ -46,7 +47,13 @@ export class ProjectService {
     }
 
     try {
-      const packageJson = await FileUtils.readJson<any>(packageJsonPath);
+      const packageJsonContent = await FileUtils.readFile(packageJsonPath);
+      const packageJson = parseJsonWithSchemaOrFallback(
+        packageJsonContent, 
+        packageJsonSchema, 
+        { name: '', version: '', dependencies: {}, devDependencies: {} }
+      );
+      
       const dependencies = {
         ...packageJson.dependencies,
         ...packageJson.devDependencies,

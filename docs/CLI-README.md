@@ -17,6 +17,9 @@ A powerful, professional CLI for React Native UI components. Built with TypeScri
 
 No installation required! Use directly with any package manager:
 
+**Requirements:**
+- Node.js 18.0.0 or higher (required for native fetch API support)
+
 ```bash
 # npm
 npx leshi-ui@latest <command>

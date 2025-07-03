@@ -4,10 +4,11 @@ import {
   type PressableProps,
   type StyleProp,
   type ViewStyle,
-  ActivityIndicator,
 } from 'react-native';
 import { StyleSheet } from 'react-native-unistyles';
+import { useTheme } from '../../styles/context';
 import { Text, type TextVariant } from './text';
+import { Spinner } from './spinner';
 
 export type ButtonVariant =
   | 'primary'
@@ -51,6 +52,8 @@ export const Button = ({
   style,
   ...rest
 }: ButtonProps) => {
+  const theme = useTheme();
+  
   styles.useVariants({
     variant: variant,
     size: size,
@@ -59,11 +62,17 @@ export const Button = ({
 
   const isDisabled = disabled || loading;
 
-  const spinnerColor = useMemo(() => {
+  const spinnerVariant = useMemo(() => {
     if (variant === 'ghost' || variant === 'outline' || variant === 'link') {
-      return 'primary'; // This will be resolved by the theme
+      return 'primary';
     }
-    return 'primaryForeground';
+    if (variant === 'destructive') {
+      return 'destructive';
+    }
+    if (variant === 'secondary') {
+      return 'secondary';
+    }
+    return 'default';
   }, [variant]);
 
   const textVariant = useMemo(() => TEXT_VARIANT[variant], [variant]);
@@ -83,9 +92,13 @@ export const Button = ({
     >
       <>
         {loading && (
-          <ActivityIndicator
-            size='small'
-            color={spinnerColor}
+          <Spinner
+            size='sm'
+            variant={spinnerVariant}
+            color={variant === 'ghost' || variant === 'outline' || variant === 'link' ? 
+              theme.colors.primary : 
+              theme.colors.primaryForeground
+            }
           />
         )}
         {!loading && prefix && <>{prefix}</>}

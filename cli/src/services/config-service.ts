@@ -1,6 +1,7 @@
 import { Framework, LeshiConfig, AliasConfig } from '../types/index.js';
 import { FileUtils } from '../utils/file-utils.js';
 import { Logger } from '../utils/logger.js';
+import { parseJsonWithSchema, leshiConfigSchema, tsConfigSchema } from '../utils/validation-schemas.js';
 
 export class ConfigService {
   private static readonly CONFIG_FILE = 'leshi-ui.json';
@@ -23,7 +24,8 @@ export class ConfigService {
     }
 
     try {
-      return await FileUtils.readJson<LeshiConfig>(configPath);
+      const configContent = await FileUtils.readFile(configPath);
+      return parseJsonWithSchema(configContent, leshiConfigSchema);
     } catch (error) {
       Logger.error(`Failed to read config file: ${error instanceof Error ? error.message : 'Unknown error'}`);
       return null;
@@ -150,7 +152,8 @@ export class ConfigService {
     }
 
     try {
-      const tsConfig = await FileUtils.readJson<any>(configPath);
+      const tsConfigContent = await FileUtils.readFile(configPath);
+      const tsConfig = parseJsonWithSchema(tsConfigContent, tsConfigSchema);
       
       if (!tsConfig.compilerOptions) {
         tsConfig.compilerOptions = {};

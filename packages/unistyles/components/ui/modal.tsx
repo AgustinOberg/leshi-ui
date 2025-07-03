@@ -248,7 +248,7 @@ export const Modal: React.FC<ModalProps> = ({
   ]);
 
   const getContentStyle = useCallback(() => {
-    const baseStyle = [stylesheet.content, sizeConfig, style];
+    const baseStyle = [styles.content, sizeConfig, style];
 
     switch (animationType) {
       case 'fade':
@@ -290,10 +290,10 @@ export const Modal: React.FC<ModalProps> = ({
           backgroundColor='transparent'
         />
       )}
-      <View style={stylesheet.container}>
+      <View style={styles.container}>
         <Animated.View
           style={[
-            stylesheet.backdrop,
+            styles.backdrop,
             {
               backgroundColor: backdropColor ?? backdropConfig.color,
               opacity: backdropOpacityAnim,
@@ -301,25 +301,24 @@ export const Modal: React.FC<ModalProps> = ({
           ]}
         />
         <Pressable
-          style={stylesheet.overlay}
+          style={styles.overlay}
           onPress={handleBackdropPress}
           accessibilityRole='button'
           accessibilityLabel='Close modal'
         >
-          <Pressable
+          <Animated.View
             style={getContentStyle()}
-            onPress={(e) => e.stopPropagation()}
             {...rest}
           >
             {children}
-          </Pressable>
+          </Animated.View>
         </Pressable>
       </View>
     </Portal>
   );
 };
 
-const stylesheet = StyleSheet.create((theme) => ({
+const styles = StyleSheet.create((theme) => ({
   container: {
     position: 'absolute',
     top: 0,

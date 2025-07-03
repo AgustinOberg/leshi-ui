@@ -3,6 +3,7 @@ import { FileUtils } from '../utils/file-utils.js';
 import { GitHubService } from './github-service.js';
 import { ImportTransformer } from './import-transformer.js';
 import { Logger } from '../utils/logger.js';
+import { parseJsonWithSchemaOrFallback, packageJsonSchema } from '../utils/validation-schemas.js';
 
 export class GitHubProjectService {
   static async getProjectConfig(cwd: string): Promise<ProjectConfig> {
@@ -22,7 +23,13 @@ export class GitHubProjectService {
     }
 
     try {
-      const packageJson = await FileUtils.readJson<any>(packageJsonPath);
+      const packageJsonContent = await FileUtils.readFile(packageJsonPath);
+      const packageJson = parseJsonWithSchemaOrFallback(
+        packageJsonContent, 
+        packageJsonSchema, 
+        { name: '', version: '', dependencies: {}, devDependencies: {} }
+      );
+      
       const dependencies = {
         ...packageJson.dependencies,
         ...packageJson.devDependencies,

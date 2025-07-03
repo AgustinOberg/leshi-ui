@@ -1,7 +1,40 @@
 {
-  "extends": "expo/tsconfig.base",
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/lib/utils/*": [
+        "./lib/utils/*"
+      ],
+      "@/lib/utils": [
+        "./lib/utils"
+      ],
+      "@/components/*": [
+        "./components/*"
+      ],
+      "@/components": [
+        "./components"
+      ],
+      "@/lib/*": [
+        "./lib/*"
+      ],
+      "@/lib": [
+        "./lib"
+      ],
+      "@/styles/*": [
+        "./styles/*"
+      ],
+      "@/styles": [
+        "./styles"
+      ],
+      "@/components/ui/*": [
+        "./components/ui/*"
+      ],
+      "@/components/ui": [
+        "./components/ui"
+      ]
+    },
     "strict": true,
     "types": []
-  }
+  },
+  "extends": "expo/tsconfig.base"
 }

@@ -12,10 +12,10 @@ export type SurfaceElevation =
 export type SurfaceVariant =
   | 'filled'
   | 'outlined'
+  | 'default'
   | 'secondary'
   | 'muted'
-  | 'accent'
-  | 'default';
+  | 'accent';
 
 export type SurfacePadding = 'none' | 'sm' | 'base' | 'lg' | 'xl';
 export type SurfaceRadius = 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';

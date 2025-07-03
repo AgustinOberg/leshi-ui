@@ -2,6 +2,8 @@ import { ComponentRegistry, ComponentInfo } from '../types/index.js';
 import { FileUtils } from '../utils/file-utils.js';
 import { Logger } from '../utils/logger.js';
 import { GitHubService } from './github-service.js';
+import { getComponentShortDescription } from '../utils/component-descriptions.js';
+import { parseJsonWithSchema, componentRegistrySchema } from '../utils/validation-schemas.js';
 
 export class ComponentRegistryService {
   private static registryCache: ComponentRegistry | null = null;
@@ -16,7 +18,7 @@ export class ComponentRegistryService {
       try {
         const localPath = new URL('../component-registry.json', import.meta.url).pathname;
         const localContent = await FileUtils.readFile(localPath);
-        const registryData = JSON.parse(localContent) as ComponentRegistry;
+        const registryData = parseJsonWithSchema(localContent, componentRegistrySchema);
         this.registryCache = registryData;
         return registryData;
       } catch (localError) {
@@ -89,36 +91,10 @@ export class ComponentRegistryService {
     
     return Object.entries(registry).map(([name, info]) => ({
       name,
-      description: this.getComponentDescription(name),
+      description: getComponentShortDescription(name),
       dependencies: info.dependencies.join(', ') || 'None',
       externalDeps: info.externalDeps.length > 0,
     }));
   }
 
-  private static getComponentDescription(name: string): string {
-    const descriptions: Record<string, string> = {
-      'button': 'UI component with variants and sizes',
-      'text': 'Typography component with semantic variants',
-      'modal': 'Flexible modal with animations',
-      'dialog': 'Dialog built on modal',
-      'alert-dialog': 'Confirmation dialogs',
-      'surface': 'Surface with elevation and variants',
-      'text-input': 'Input with validation states',
-      'text-area': 'Multi-line text input',
-      'checkbox': 'Custom styled checkbox',
-      'switch': 'Animated switch component',
-      'progress': 'Progress bar with animations',
-      'skeleton': 'Loading skeleton with animations',
-      'avatar': 'Avatar with fallback support',
-      'badge': 'Status and label badges',
-      'divider': 'Visual separator component',
-      'icon': 'Icon component with theming',
-      'label': 'Form labels with styling',
-      'radio': 'Radio group and items',
-      'slot': 'Component composition utility',
-      'spinner': 'Loading spinner with animations',
-    };
-
-    return descriptions[name] || 'UI component';
-  }
 }

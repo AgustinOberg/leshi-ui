@@ -85,17 +85,17 @@ export const Checkbox = React.memo<CheckboxProps>(
       return checked ? 'checked' : 'unchecked';
     }, [checked, indeterminate]);
 
-    // Setup Unistyles variants
+    // Setup Unistyles variants  
     styles.useVariants({
-      size: size as any,
-      variant: variant as any,
-      state: state as any,
+      size,
+      variant: variant === 'destructive' ? 'destructive' : undefined,
+      state,
       disabled: disabled,
     });
 
     // Handle press events
     const handlePress = useCallback(
-      (event: any) => {
+      (event: Parameters<NonNullable<PressableProps['onPress']>>[0]) => {
         if (disabled) return;
 
         const newChecked = !checked;
@@ -273,16 +273,16 @@ const styles = StyleSheet.create((theme) => ({
     // Compound variants for destructive variant
     compoundVariants: [
       {
-        variant: 'destructive',
-        state: 'checked',
+        variant: 'destructive' as const,
+        state: 'checked' as const,
         styles: {
           backgroundColor: theme.colors.destructive,
           borderColor: theme.colors.destructive,
         },
       },
       {
-        variant: 'destructive',
-        state: 'indeterminate',
+        variant: 'destructive' as const,
+        state: 'indeterminate' as const,
         styles: {
           backgroundColor: theme.colors.destructive,
           borderColor: theme.colors.destructive,

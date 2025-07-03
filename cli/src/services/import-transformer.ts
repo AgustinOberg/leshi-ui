@@ -64,34 +64,6 @@ export class ImportTransformer {
         (match, quote, path) => `from ${quote}${config.aliases.components}/${path}${quote}`
       );
 
-      // Generic regex-based transformation for any remaining patterns
-      // Skip this for alias-based systems - we want to keep aliases, not convert them back
-      // const importRegex = /from\s+['"`]([^'"`]+)['"`]/g;
-      // 
-      // transformedCode = transformedCode.replace(importRegex, (match, importPath) => {
-      //   const transformedPath = ImportTransformer.transformImportPath(importPath, targetFilePath, config);
-      //   return match.replace(importPath, transformedPath);
-      // });
-
-      // Skip require and dynamic import transformations for alias-based systems
-      // We want to keep aliases, not convert them to relative paths
-      // 
-      // // Regex to match require statements: require('path')
-      // const requireRegex = /require\s*\(\s*['"`]([^'"`]+)['"`]\s*\)/g;
-      // 
-      // transformedCode = transformedCode.replace(requireRegex, (match, importPath) => {
-      //   const transformedPath = ImportTransformer.transformImportPath(importPath, targetFilePath, config);
-      //   return match.replace(importPath, transformedPath);
-      // });
-
-      // // Regex to match dynamic imports: import('path')
-      // const dynamicImportRegex = /import\s*\(\s*['"`]([^'"`]+)['"`]\s*\)/g;
-      // 
-      // transformedCode = transformedCode.replace(dynamicImportRegex, (match, importPath) => {
-      //   const transformedPath = ImportTransformer.transformImportPath(importPath, targetFilePath, config);
-      //   return match.replace(importPath, transformedPath);
-      // });
-
       return transformedCode;
     } catch (error) {
       Logger.warning(`Failed to transform imports: ${error instanceof Error ? error.message : 'Unknown error'}`);
