@@ -91,7 +91,7 @@ export const Button = ({
       {...rest}
     >
       <>
-        {loading && (
+        {loading ? (
           <Spinner
             size='sm'
             variant={spinnerVariant}
@@ -100,9 +100,10 @@ export const Button = ({
               theme.colors.primaryForeground
             }
           />
+        ) : (
+          prefix && <>{prefix}</>
         )}
-        {!loading && prefix && <>{prefix}</>}
-        {text && !loading && (
+        {text && (
           <Text
             weight='medium'
             variant={textVariant}
@@ -110,7 +111,7 @@ export const Button = ({
             {text}
           </Text>
         )}
-        {!loading && suffix && <>{suffix}</>}
+        {suffix && <>{suffix}</>}
       </>
     </Pressable>
   );
