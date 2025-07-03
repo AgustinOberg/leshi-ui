@@ -917,6 +917,7 @@
   "spinner": {
     "dependencies": [],
     "externalDeps": ["react-native-reanimated"],
+    "utilities": ["lib/color-utils.ts"],
     "setup": ["Install external dependency: bun add react-native-reanimated"],
     "example": "import { Spinner } from './components/ui/spinner';\n\n// Basic usage\n<Spinner />\n\n// Different sizes\n<Spinner size=\"xs\" />\n<Spinner size=\"sm\" />\n<Spinner size=\"base\" />\n<Spinner size=\"lg\" />\n<Spinner size=\"xl\" />\n\n// Variants\n<Spinner variant=\"default\" />\n<Spinner variant=\"primary\" />\n<Spinner variant=\"secondary\" />\n<Spinner variant=\"destructive\" />\n<Spinner variant=\"muted\" />\n\n// Custom properties\n<Spinner color=\"#ff6b6b\" />\n<Spinner strokeWidth={3} />\n<Spinner duration={1200} />\n\n// Combined usage\n<Spinner \n  size=\"lg\" \n  variant=\"primary\" \n  strokeWidth={3}\n  duration={600}\n/>",
     "api": {

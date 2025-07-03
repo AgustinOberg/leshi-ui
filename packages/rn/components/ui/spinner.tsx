@@ -9,6 +9,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useTheme } from '../../styles/theme';
 import type { Theme } from '../../styles/theme';
+import { withThemeOpacity } from '../../lib/color-utils';
 
 export type SpinnerSize = 'xs' | 'sm' | 'base' | 'lg' | 'xl';
 export type SpinnerVariant = 'default' | 'primary' | 'secondary' | 'destructive' | 'muted';
@@ -70,24 +71,10 @@ export const Spinner = ({
     }
   }, [color, variant, theme]);
 
-  // Create transparent version of the color for inactive borders
+  // Create transparent version of the color for inactive borders using theme-aware approach
   const transparentColor = useMemo(() => {
-    // Default transparent colors that work well
-    const transparentColors = {
-      primary: 'rgba(59, 130, 246, 0.1)',
-      secondary: 'rgba(156, 163, 175, 0.1)', 
-      destructive: 'rgba(239, 68, 68, 0.1)',
-      muted: 'rgba(107, 114, 128, 0.1)',
-      default: 'rgba(0, 0, 0, 0.1)'
-    };
-
-    if (color) {
-      // For custom colors, use a generic transparent approach
-      return 'rgba(0, 0, 0, 0.1)';
-    }
-    
-    return transparentColors[variant];
-  }, [color, variant]);
+    return withThemeOpacity(spinnerColor, 'subtle');
+  }, [spinnerColor]);
 
   const animatedStyle = useAnimatedStyle(() => {
     return {

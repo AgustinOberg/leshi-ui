@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useMemo, useState } from 'react';
 import { type ColorSchemeName, useColorScheme } from 'react-native';
 import { themes } from './themes';
+import { type Theme } from './theme.d';
 
 export type ThemeName = keyof typeof themes;
-export type Theme = (typeof themes)[ThemeName];
 export type ThemeMode = 'manual' | 'system';
 
 interface ThemeContextValue {
