@@ -130,7 +130,16 @@
     "setup": [
       "Install external dependency: bun add react-native-reanimated"
     ],
-    "example": "import { Switch } from './components/ui/switch';\n\n<Switch\n  checked={enabled}\n  onCheckedChange={setEnabled}\n  label=\"Enable notifications\"\n/>"
+    "example": "import { Switch } from './components/ui/switch';\n\n<Switch\n  checked={enabled}\n  onCheckedChange={setEnabled}\n  label=\\"Enable notifications\\"\n/>"
+  },
+  "tabs": {
+    "dependencies": ["text"],
+    "externalDeps": ["react-native-reanimated"],
+    "setup": [
+      "Install external dependency: bun add react-native-reanimated",
+      "Install dependency: leshi-ui add component text"
+    ],
+    "example": "import { Tabs } from './components/ui/tabs';\n\n<Tabs.Root defaultValue=\\"home\\">\n  <Tabs.List>\n    <Tabs.Trigger value=\\"home\\">Home</Tabs.Trigger>\n    <Tabs.Trigger value=\\"settings\\">Settings</Tabs.Trigger>\n  </Tabs.List>\n  <Tabs.Content value=\\"home\\">Home content</Tabs.Content>\n  <Tabs.Content value=\\"settings\\">Settings content</Tabs.Content>\n</Tabs.Root>"
   },
   "slot": {
     "dependencies": [],

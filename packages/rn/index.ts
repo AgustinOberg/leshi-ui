@@ -13,6 +13,7 @@ export { Divider } from './components/ui/divider';
 export { Surface } from './components/ui/surface';
 export { Switch } from './components/ui/switch';
 export { RadioGroup, RadioGroupItem } from './components/ui/radio';
+export { Tabs } from './components/ui/tabs';
 export { Text } from './components/ui/text';
 export { TextArea } from './components/ui/text-area';
 export { TextInput } from './components/ui/text-input';
