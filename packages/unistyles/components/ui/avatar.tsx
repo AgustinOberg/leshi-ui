@@ -16,8 +16,7 @@ import {
   type ImageLoadEventData,
   type ImageErrorEventData,
 } from 'react-native';
-import { StyleSheet } from 'react-native-unistyles';
-import { useTheme } from '../../styles/context';
+import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 import { Text } from './text';
 
 export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
@@ -78,7 +77,7 @@ export const AvatarImage = ({
   ...rest
 }: AvatarImageProps) => {
   const { size, setHasImage } = useAvatar();
-  const theme = useTheme();
+  const { theme } = useUnistyles();
   
   // Use theme helper functions for consistent sizing
   const sizeMap = {
@@ -127,7 +126,7 @@ export interface AvatarFallbackProps {
 
 export const AvatarFallback = ({ children, style }: AvatarFallbackProps) => {
   const { size, hasImage } = useAvatar();
-  const theme = useTheme();
+  const { theme } = useUnistyles();
 
   if (hasImage) return null;
 

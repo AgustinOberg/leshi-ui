@@ -5,8 +5,7 @@ import {
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
-import { StyleSheet } from 'react-native-unistyles';
-import { useTheme } from '../../styles/context';
+import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 import { Text, type TextVariant } from './text';
 import { Spinner } from './spinner';
 
@@ -52,13 +51,13 @@ export const Button = ({
   style,
   ...rest
 }: ButtonProps) => {
-  const theme = useTheme();
-  
   styles.useVariants({
     variant: variant,
     size: size,
     fullWidth: fullWidth,
   });
+
+  const { theme } = useUnistyles();
 
   const isDisabled = disabled || loading;
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
-import { StyleSheet } from 'react-native-unistyles';
+import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -8,7 +8,6 @@ import Animated, {
   withTiming,
   Easing,
 } from 'react-native-reanimated';
-import { useTheme } from '../../styles/context';
 import { withThemeOpacity } from '../../lib/color-utils';
 
 export type SpinnerSize = 'xs' | 'sm' | 'base' | 'lg' | 'xl';
@@ -47,7 +46,10 @@ export const Spinner = ({
   duration = 800,
   style,
 }: SpinnerProps) => {
-  const theme = useTheme();
+  // Setup Unistyles variants first
+  styles.useVariants({ size });
+  
+  const { theme } = useUnistyles();
   const rotation = useSharedValue(0);
 
   const spinnerSize = SIZE_MAP[size];
@@ -91,9 +93,6 @@ export const Spinner = ({
       false
     );
   }, [rotation, duration]);
-
-  // Setup Unistyles variants
-  styles.useVariants({ size });
   
   return (
     <View style={[{ width: spinnerSize, height: spinnerSize }, style]}>

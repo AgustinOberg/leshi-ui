@@ -6,8 +6,7 @@ import {
   type TextInputProps as RNTextInputProps,
   type TextInputFocusEventData,
 } from 'react-native';
-import { StyleSheet } from 'react-native-unistyles';
-import { useTheme } from '../../styles/context';
+import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 import { Label } from './label';
 import { Text, type TextSize } from './text';
 
@@ -49,7 +48,6 @@ export const TextInput = ({
   ...rest
 }: TextInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
-  const theme = useTheme();
 
   const isDisabled = rest.editable === false;
   const isReadOnly = rest.readOnly;
@@ -63,6 +61,8 @@ export const TextInput = ({
     disabled: isDisabled,
     readOnly: isReadOnly,
   });
+
+  const { theme } = useUnistyles();
 
   const handleFocus = useCallback(
     (e: NativeSyntheticEvent<TextInputFocusEventData>) => {

@@ -7,8 +7,7 @@ import {
   type ViewStyle,
   type DimensionValue,
 } from 'react-native';
-import { StyleSheet } from 'react-native-unistyles';
-import { useTheme } from '../../styles/context';
+import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 import { Icon } from './icon';
 
 /*──────────────────── Types */
@@ -71,8 +70,6 @@ export const Checkbox = React.memo<CheckboxProps>(
     onPress,
     ...pressableProps
   }) => {
-    const theme = useTheme();
-
     // Handle controlled vs uncontrolled state
     const [internalChecked, setInternalChecked] =
       React.useState(defaultChecked);
@@ -85,13 +82,15 @@ export const Checkbox = React.memo<CheckboxProps>(
       return checked ? 'checked' : 'unchecked';
     }, [checked, indeterminate]);
 
-    // Setup Unistyles variants  
+    // Setup Unistyles variants first
     styles.useVariants({
       size,
       variant: variant === 'destructive' ? 'destructive' : undefined,
       state,
       disabled: disabled,
     });
+
+    const { theme } = useUnistyles();
 
     // Handle press events
     const handlePress = useCallback(

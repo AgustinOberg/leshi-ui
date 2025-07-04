@@ -139,8 +139,9 @@ async function resolveDependenciesWithPrompt(
     
     Logger.break();
   } else if (options.yes && potentialDependencies.length > 0) {
-    // In silent mode, only install requested components unless they explicitly want dependencies
-    Logger.info(`${icons.info} Installing only requested components. Dependencies will be auto-imported if they exist.`);
+    // In silent mode, automatically install all dependencies
+    componentsToInstall = allResolvedComponents;
+    Logger.info(`${icons.info} Installing components with dependencies automatically.`);
     Logger.break();
   }
   

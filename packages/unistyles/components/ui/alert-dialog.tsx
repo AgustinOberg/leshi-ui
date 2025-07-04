@@ -15,12 +15,11 @@ import {
   type TextStyle,
   type GestureResponderEvent,
 } from 'react-native';
-import { StyleSheet } from 'react-native-unistyles';
+import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 import { Modal, type ModalProps, type ModalSize } from './modal';
 import { Text, type TextProps } from './text';
 import { Button, type ButtonProps } from './button';
 import { Pressable as SlotPressable } from './slot';
-import { useTheme } from '../../styles/context';
 
 /*──────────────────── Types */
 export type AlertDialogVariant = 'default' | 'destructive' | 'warning';
@@ -163,9 +162,10 @@ function AlertDialogContent({
 }: AlertDialogContentProps) {
   const { open, setOpen, size, variant, loading, setLoading } =
     useAlertDialog();
-  const theme = useTheme();
-
+  
   styles.useVariants({ variant: variant as any });
+  
+  const { theme } = useUnistyles();
 
   const handleRequestClose = useCallback(() => {
     // AlertDialog typically doesn't auto-close, but we respect the prop
