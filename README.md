@@ -146,6 +146,7 @@ Over 18 production-ready components with smart dependency resolution:
 | **radio** | Radio group | `icon` | None |
 | **slot** | Component composition | None | None |
 | **spinner** | Loading spinner | None | `react-native-reanimated` |
+| **tabs** | Tabbed navigation | `text` | `react-native-reanimated` |
 
 > **Smart Dependencies**: The CLI automatically installs required components and warns about external dependencies.
 

@@ -649,6 +649,37 @@ import { Spinner } from './components/ui/spinner';
 
 ---
 
+### **Tabs**
+```bash
+leshi-ui add component tabs
+```
+
+Tabbed navigation with animated indicator.
+
+**Dependencies:** `text`
+
+**External Dependencies:** `react-native-reanimated`
+
+**Usage:**
+```typescript
+import { Tabs } from './components/ui/tabs';
+
+<Tabs.Root defaultValue="tab1">
+  <Tabs.List>
+    <Tabs.Trigger value="tab1">Tab 1</Tabs.Trigger>
+    <Tabs.Trigger value="tab2">Tab 2</Tabs.Trigger>
+  </Tabs.List>
+  <Tabs.Content value="tab1">
+    <Text>First tab content</Text>
+  </Tabs.Content>
+  <Tabs.Content value="tab2">
+    <Text>Second tab content</Text>
+  </Tabs.Content>
+</Tabs.Root>
+```
+
+---
+
 ### **Slot**
 ```bash
 leshi-ui add component slot
