@@ -132,6 +132,12 @@
     ],
     "example": "import { Switch } from './components/ui/switch';\n\n<Switch\n  checked={enabled}\n  onCheckedChange={setEnabled}\n  label=\"Enable notifications\"\n/>"
   },
+  "toggle": {
+    "dependencies": [],
+    "externalDeps": [],
+    "setup": [],
+    "example": "import { Toggle } from './components/ui/toggle';\n\n<Toggle onPressedChange={setOn}>\n  Press me\n</Toggle>"
+  },
   "slot": {
     "dependencies": [],
     "externalDeps": [],

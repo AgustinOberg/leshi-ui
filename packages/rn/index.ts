@@ -16,6 +16,7 @@ export { RadioGroup, RadioGroupItem } from './components/ui/radio';
 export { Text } from './components/ui/text';
 export { TextArea } from './components/ui/text-area';
 export { TextInput } from './components/ui/text-input';
+export { Toggle } from './components/ui/toggle';
 export { ThemeProvider } from './styles/context';
 export { themes } from './styles/themes';
 export { useTheme, useThemeMode, useThemeName } from './styles/theme';

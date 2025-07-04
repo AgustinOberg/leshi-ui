@@ -50,6 +50,7 @@ const App = () => {
       <Stack.Screen name="components/Surface" options={{ title: "Surface" }} />
       <Stack.Screen name="components/Modal" options={{ title: "Modal" }} />
       <Stack.Screen name="components/Switch" options={{ title: "Switch" }} />
+      <Stack.Screen name="components/Toggle" options={{ title: "Toggle" }} />
       <Stack.Screen name="components/Text" options={{ title: "Text" }} />
       <Stack.Screen
         name="components/TextArea"
