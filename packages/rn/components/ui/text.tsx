@@ -90,7 +90,6 @@ const createStyles = (theme: Theme) => {
   const baseStyles = StyleSheet.create({
     text: {
       includeFontPadding: false,
-      lineHeight: theme.sizes.fonts.base * 1.2,
       textAlignVertical: 'center',
     },
   });

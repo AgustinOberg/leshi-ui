@@ -1,5 +1,5 @@
 /**
- * Color utility functions for React Native with Unistyles
+ * Color utility functions for React Native
  * Handles color transformations and opacity modifications for any color format
  */
 
@@ -13,12 +13,15 @@ function parseColor(color: string): { r: number; g: number; b: number } | null {
   // Handle hex colors (#fff, #ffffff)
   if (color.startsWith('#')) {
     let hex = color.slice(1);
-    
+
     // Convert 3-digit hex to 6-digit
     if (hex.length === 3) {
-      hex = hex.split('').map(char => char + char).join('');
+      hex = hex
+        .split('')
+        .map((char) => char + char)
+        .join('');
     }
-    
+
     if (hex.length === 6) {
       const r = parseInt(hex.slice(0, 2), 16);
       const g = parseInt(hex.slice(2, 4), 16);
@@ -28,7 +31,9 @@ function parseColor(color: string): { r: number; g: number; b: number } | null {
   }
 
   // Handle rgb() and rgba() colors
-  const rgbMatch = color.match(/rgba?\((\d+),?\s*(\d+),?\s*(\d+)(?:,?\s*[\d.]+)?\)/);
+  const rgbMatch = color.match(
+    /rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*[\d.]+)?\s*\)/,
+  );
   if (rgbMatch) {
     return {
       r: parseInt(rgbMatch[1], 10),
@@ -37,37 +42,51 @@ function parseColor(color: string): { r: number; g: number; b: number } | null {
     };
   }
 
-  // Handle hsl() and hsla() colors
-  const hslMatch = color.match(/hsla?\((\d+),?\s*(\d+)%,?\s*(\d+)%(?:,?\s*[\d.]+)?\)/);
+  // Handle hsl() and hsla() colors - Support both comma and space-separated formats
+  // Modern CSS format: hsl(158 64.4% 51.6%) or hsla(158 64.4% 51.6% / 0.5)
+  // Legacy format: hsl(158, 64.4%, 51.6%) or hsla(158, 64.4%, 51.6%, 0.5)
+  const hslSpaceMatch = color.match(
+    /hsla?\(\s*([\d.]+)\s+([\d.]+)%\s+([\d.]+)%(?:\s*\/\s*([\d.]+))?\s*\)/,
+  );
+  const hslCommaMatch = color.match(
+    /hsla?\(\s*([\d.]+)\s*,\s*([\d.]+)%\s*,\s*([\d.]+)%(?:\s*,\s*([\d.]+))?\s*\)/,
+  );
+
+  const hslMatch = hslSpaceMatch || hslCommaMatch;
   if (hslMatch) {
-    const h = parseInt(hslMatch[1], 10);
-    const s = parseInt(hslMatch[2], 10) / 100;
-    const l = parseInt(hslMatch[3], 10) / 100;
-    
-    // Convert HSL to RGB
-    const c = (1 - Math.abs(2 * l - 1)) * s;
-    const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
-    const m = l - c / 2;
-    
+    const h = parseFloat(hslMatch[1]);
+    const s = parseFloat(hslMatch[2]) / 100;
+    const l = parseFloat(hslMatch[3]) / 100;
+
+    // Convert HSL to RGB using improved algorithm
+    const hueToRgb = (p: number, q: number, t: number): number => {
+      if (t < 0) t += 1;
+      if (t > 1) t -= 1;
+      if (t < 1 / 6) return p + (q - p) * 6 * t;
+      if (t < 1 / 2) return q;
+      if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+      return p;
+    };
+
     let r, g, b;
-    if (h >= 0 && h < 60) {
-      [r, g, b] = [c, x, 0];
-    } else if (h >= 60 && h < 120) {
-      [r, g, b] = [x, c, 0];
-    } else if (h >= 120 && h < 180) {
-      [r, g, b] = [0, c, x];
-    } else if (h >= 180 && h < 240) {
-      [r, g, b] = [0, x, c];
-    } else if (h >= 240 && h < 300) {
-      [r, g, b] = [x, 0, c];
+
+    if (s === 0) {
+      // Achromatic (gray)
+      r = g = b = l;
     } else {
-      [r, g, b] = [c, 0, x];
+      const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+      const p = 2 * l - q;
+      const hNormalized = h / 360;
+
+      r = hueToRgb(p, q, hNormalized + 1 / 3);
+      g = hueToRgb(p, q, hNormalized);
+      b = hueToRgb(p, q, hNormalized - 1 / 3);
     }
-    
+
     return {
-      r: Math.round((r + m) * 255),
-      g: Math.round((g + m) * 255),
-      b: Math.round((b + m) * 255),
+      r: Math.round(r * 255),
+      g: Math.round(g * 255),
+      b: Math.round(b * 255),
     };
   }
 
@@ -96,6 +115,38 @@ function parseColor(color: string): { r: number; g: number; b: number } | null {
   }
 
   return null;
+}
+
+/**
+ * Extracts alpha value from color string if present
+ */
+function extractAlpha(color: string): number {
+  color = color.trim();
+
+  // Extract alpha from rgba()
+  const rgbaMatch = color.match(
+    /rgba\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*,\s*([\d.]+)\s*\)/,
+  );
+  if (rgbaMatch) {
+    return parseFloat(rgbaMatch[1]);
+  }
+
+  // Extract alpha from hsla() - Support both formats
+  const hslaSpaceMatch = color.match(
+    /hsla\(\s*[\d.]+\s+[\d.]+%\s+[\d.]+%\s*\/\s*([\d.]+)\s*\)/,
+  );
+  const hslaCommaMatch = color.match(
+    /hsla\(\s*[\d.]+\s*,\s*[\d.]+%\s*,\s*[\d.]+%\s*,\s*([\d.]+)\s*\)/,
+  );
+
+  if (hslaSpaceMatch) {
+    return parseFloat(hslaSpaceMatch[1]);
+  }
+  if (hslaCommaMatch) {
+    return parseFloat(hslaCommaMatch[1]);
+  }
+
+  return 1; // Default alpha
 }
 
 /**
@@ -158,7 +209,7 @@ export const transparent = 'transparent';
  */
 export const withThemeOpacity = (
   color: string,
-  level: keyof typeof opacity
+  level: keyof typeof opacity,
 ): string => {
   return withOpacity(color, opacity[level]);
 };
@@ -183,6 +234,72 @@ export const isLightColor = (color: string): boolean => {
  * @param backgroundColor - Background color to contrast against
  * @returns 'white' for dark backgrounds, 'black' for light backgrounds
  */
-export const getContrastColor = (backgroundColor: string): 'black' | 'white' => {
+export const getContrastColor = (
+  backgroundColor: string,
+): 'black' | 'white' => {
   return isLightColor(backgroundColor) ? 'black' : 'white';
+};
+
+/**
+ * Converts RGB to HSL
+ * @param r - Red value (0-255)
+ * @param g - Green value (0-255)
+ * @param b - Blue value (0-255)
+ * @returns HSL object with h (0-360), s (0-100), l (0-100)
+ */
+export const rgbToHsl = (
+  r: number,
+  g: number,
+  b: number,
+): { h: number; s: number; l: number } => {
+  r /= 255;
+  g /= 255;
+  b /= 255;
+
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const diff = max - min;
+  const sum = max + min;
+
+  const l = sum / 2;
+
+  if (diff === 0) {
+    return { h: 0, s: 0, l: Math.round(l * 100) };
+  }
+
+  const s = l > 0.5 ? diff / (2 - sum) : diff / sum;
+
+  let h: number;
+  switch (max) {
+    case r:
+      h = ((g - b) / diff + (g < b ? 6 : 0)) / 6;
+      break;
+    case g:
+      h = ((b - r) / diff + 2) / 6;
+      break;
+    case b:
+      h = ((r - g) / diff + 4) / 6;
+      break;
+    default:
+      h = 0;
+  }
+
+  return {
+    h: Math.round(h * 360),
+    s: Math.round(s * 100),
+    l: Math.round(l * 100),
+  };
+};
+
+/**
+ * Converts any color to HSL string
+ * @param color - Any valid React Native color
+ * @returns HSL color string or null if parsing fails
+ */
+export const toHsl = (color: string): string | null => {
+  const parsed = parseColor(color);
+  if (!parsed) return null;
+
+  const { h, s, l } = rgbToHsl(parsed.r, parsed.g, parsed.b);
+  return `hsl(${h}, ${s}%, ${l}%)`;
 };

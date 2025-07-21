@@ -81,7 +81,6 @@ export const Text = ({
 const styles = StyleSheet.create((theme) => ({
   text: {
     includeFontPadding: false,
-    lineHeight: theme.sizes.fonts.base * 1.2,
     textAlignVertical: 'center',
     variants: {
       weight: {
