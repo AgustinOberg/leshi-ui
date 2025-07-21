@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
 import { StyleSheet, useUnistyles } from 'react-native-unistyles';
 import Animated, {
@@ -11,7 +11,12 @@ import Animated, {
 import { withThemeOpacity } from '../../lib/color-utils';
 
 export type SpinnerSize = 'xs' | 'sm' | 'base' | 'lg' | 'xl';
-export type SpinnerVariant = 'default' | 'primary' | 'secondary' | 'destructive' | 'muted';
+export type SpinnerVariant =
+  | 'default'
+  | 'primary'
+  | 'secondary'
+  | 'destructive'
+  | 'muted';
 
 export interface SpinnerProps {
   size?: SpinnerSize;
@@ -48,16 +53,16 @@ export const Spinner = ({
 }: SpinnerProps) => {
   // Setup Unistyles variants first
   styles.useVariants({ size });
-  
+
   const { theme } = useUnistyles();
   const rotation = useSharedValue(0);
 
   const spinnerSize = SIZE_MAP[size];
   const defaultStrokeWidth = strokeWidth ?? STROKE_WIDTH_MAP[size];
-  
+
   const spinnerColor = useMemo(() => {
     if (color) return color;
-    
+
     switch (variant) {
       case 'primary':
         return theme.colors.primary;
@@ -90,10 +95,10 @@ export const Spinner = ({
         easing: Easing.linear,
       }),
       -1,
-      false
+      false,
     );
   }, [rotation, duration]);
-  
+
   return (
     <View style={[{ width: spinnerSize, height: spinnerSize }, style]}>
       <Animated.View style={[styles.container, animatedStyle]}>
